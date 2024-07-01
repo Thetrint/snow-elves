@@ -1,0 +1,17 @@
+/* styles.qss */
+
+#listWidget {
+    border: 1px solid gray;
+    color: black;
+}
+
+#listWidget::item {
+    padding-top: 20px;
+    padding-bottom: 4px;
+
+}
+
+
+#listWidget:focus {
+    outline: none;
+}
