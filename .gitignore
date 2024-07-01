@@ -1,0 +1,9 @@
+# 忽略构建文件夹
+build/
+cmake-build-debug
+cmake-build-release
+
+
+# 忽略 .idea
+.idea/
+
