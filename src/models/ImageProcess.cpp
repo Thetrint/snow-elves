@@ -3,38 +3,28 @@
 //
 #include "models/ImageProcess.h"
 #include <unordered_map>
+#include "resources/images.h"
 using namespace std;
 
 
 
-// 使用 unordered_map 将中文字符串映射到拼音字符串
-unordered_map<wstring, string> chineseToPinyin = {
-    { L"活动", "err" },
-    { L"羡慕", "xianmu" },
-    { L"约会", "yuehui" }
-};
-
-// 函数，接受中文字符串并返回对应的拼音字符串
-string ImageProcessor::getPinyinString(const wstring& chinese) {
-    if (auto it = chineseToPinyin.find(chinese); it != chineseToPinyin.end()) {
-        return it->second;
-    } else {
-        return "Unknown";
-    }
-}
-
 /**
  * 读取指定路径图片
- * @param filename 图片路径
+ * @param templ_name 模板图片名称
  * @return
  */
-cv::Mat ImageProcessor::imread(const std::wstring& filename) {
+cv::Mat ImageProcessor::imread(const std::wstring& templ_name) {
 
-    std::string name = getPinyinString(filename);
+    std::vector<unsigned char> buffer(Images[templ_name], Images[templ_name] + Images_size[templ_name + L"_size"]);
+    cv::Mat image = cv::imdecode(buffer, cv::IMREAD_COLOR);
 
-    string filepath = "D:/Desktop/ChronoSnowDemo/cmake-build-release/" + name + ".bmp";
-    // 使用 cv::imread 读取图片
-    cv::Mat image = cv::imread(filepath, cv::IMREAD_COLOR);
+    // std::string name = getPinyinString(filename);
+    //
+    // string filepath = "D:/Desktop/ChronoSnowDemo/cmake-build-release/" + name + ".bmp";
+    //
+    //
+    // // 使用 cv::imread 读取图片
+    // cv::Mat image = cv::imread(":/resources/images/image1.png", cv::IMREAD_COLOR);
 
 
     return image;

@@ -5,9 +5,9 @@
 #include "models//Tasks/LessonTask.h"
 
 void LessonTask::implementation() {
-    if (!unbind_event.try_acquire()) {
-        std::cout << "解码后的值: 1"  << std::endl;
-    }
+
+    ClickImageMatch(TM_SQDIFF_NORMED, L"活动", L"包裹");
+
 
     // while (true) {
     //     // 休眠 2000 毫秒（即2秒）

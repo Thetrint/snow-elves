@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
 project(SnowElves VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_COMPILER "E:/MinGW/bin/g++.exe")
 set(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_CXX_COMPILER "E:/MinGW/bin/g++.exe")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
@@ -15,10 +15,68 @@ set(CMAKE_PREFIX_PATH "E:/Qt/6.7.2/mingw_64/lib/cmake")
 set(JSONCPP_DIR "C:/Program Files (x86)/jsoncpp")
 
 
+# 遍历 BMP 图像文件夹并生成图片资源的头文件
+file(GLOB IMAGE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/resources/images/*.bmp")
+
+# 设置输出的头文件路径
+set(OUTPUT_HEADER "${CMAKE_CURRENT_BINARY_DIR}/resources/images.h")
+
+# 清空头文件内容并添加预处理器保护
+file(WRITE ${OUTPUT_HEADER} "#ifndef IMAGE_RESOURCES_H_\n")
+file(APPEND ${OUTPUT_HEADER} "#define IMAGE_RESOURCES_H_\n\n")
+
+# 定义存储映射的列表
+set(IMAGE_MAP_CONTENT "")
+set(IMAGE_SIZE_MAP_CONTENT "")
+
+foreach(img ${IMAGE_FILES})
+    # 从文件路径中提取图片名称
+    get_filename_component(img_name ${img} NAME_WE)
+
+    # 将中文图片名称转换为有效的 C++ 标识符
+    string(MD5 img_hash ${img_name})
+    set(img_var_name "img_${img_hash}")
+
+    # 打印图片名称
+    message(STATUS "Processing image: ${img_name}")
+
+    # 读取 BMP 图像文件内容的 HEX 形式
+    file(READ ${img} img_content HEX)
+
+    # 转换 HEX 到 C++ 数组格式
+    string(REGEX REPLACE "(..)" "0x\\1, " img_content "${img_content}")
+    string(REGEX REPLACE ", $" "" img_content "${img_content}")
+
+    # 获取文件大小
+    file(READ ${img} IMG_FILE_CONTENT HEX)
+    string(LENGTH ${IMG_FILE_CONTENT} IMG_FILE_SIZE)
+
+    # 将映射添加到列表中
+    list(APPEND IMAGE_MAP_CONTENT "    { L\"${img_name}\", ${img_var_name} },\n")
+    list(APPEND IMAGE_SIZE_MAP_CONTENT "    { L\"${img_name}_size\", ${img_var_name}_size },\n")
+
+    # 写入到头文件中
+    file(APPEND ${OUTPUT_HEADER} "const unsigned char ${img_var_name}[] = { ${img_content} };\n\n")
+    file(APPEND ${OUTPUT_HEADER} "const size_t ${img_var_name}_size = sizeof(${img_var_name});\n\n")
+endforeach()
+
+# 写入映射到头文件中
+file(APPEND ${OUTPUT_HEADER} "static std::map<std::wstring, const unsigned char*> Images = {\n")
+foreach(entry ${IMAGE_MAP_CONTENT})
+    file(APPEND ${OUTPUT_HEADER} "${entry}")
+endforeach()
+file(APPEND ${OUTPUT_HEADER} "};\n\n")
+
+file(APPEND ${OUTPUT_HEADER} "static std::map<std::wstring, const size_t> Images_size = {\n")
+foreach(entry ${IMAGE_SIZE_MAP_CONTENT})
+    file(APPEND ${OUTPUT_HEADER} "${entry}")
+endforeach()
+file(APPEND ${OUTPUT_HEADER} "};\n\n")
+
+file(APPEND ${OUTPUT_HEADER} "#endif // IMAGE_RESOURCES_H_\n")
+
 # 设置OpenCV的路径，修改为你的OpenCV安装路径
-set(OpenCV_DIR E:/opencv-4.10.0/install)
-
-
+set(OpenCV_DIR "E:/opencv-4.10.0/install")
 
 find_package(OpenCV REQUIRED)
 
@@ -44,6 +102,7 @@ qt6_add_binary_resources(RESOURCE
         -no-compress
         -verbose
 )
+
 
 # 添加库目录
 link_directories(
@@ -84,6 +143,7 @@ add_executable(SnowElves WIN32
         include/utils/LoadJsonFile.h
         src/utils/FunctionLibrary.cpp
         include/utils/FunctionLibrary.h
+        ${OUTPUT_HEADER}
 )
 
 
@@ -96,6 +156,10 @@ target_link_libraries(SnowElves
         jsoncpp
 )
 
+
+
+# 设置 include 目录，使生成的头文件可以被找到
+target_include_directories(SnowElves PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)
