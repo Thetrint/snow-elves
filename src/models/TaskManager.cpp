@@ -6,15 +6,11 @@
 #include "models//TaskManager.h"
 
 #include <codecvt>
-
 #include "models/WindowManager.h"
-#include "models/ImageProcess.h"
 #include "models/TaskSchedul.h"
-#include <opencv2/opencv.hpp>
 #include "utils/Factory.h"
 #include "utils/LoadJsonFile.h"
 #include "utils/FunctionLibrary.h"
-#include "resources/images.h"
 
 TaskManager::TaskManager(int id, HWND hwnd)
     : id(id), hwnd(hwnd), pause_event(1), unbind_event(1) {
@@ -35,6 +31,8 @@ void TaskManager::resume() {
 }
 
 void TaskManager::start(){
+
+
 
     // WindowManager::CaptureAndSaveImage(hwnd, L"1.bmp");
 

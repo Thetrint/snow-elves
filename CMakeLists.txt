@@ -1,66 +1,53 @@
 cmake_minimum_required(VERSION 3.28)
-project(SnowElves VERSION 1.0.0 LANGUAGES CXX)
+project(SnowElvesScript)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_CXX_COMPILER "E:/MinGW/bin/g++.exe")
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-
 set(CMAKE_PREFIX_PATH "E:/Qt/6.7.2/mingw_64/lib/cmake")
 
-# 设置 jsoncpp 的安装路径
-set(JSONCPP_DIR "C:/Program Files (x86)/jsoncpp")
+# 设置CMake找到OpenCV的路径
+set(OpenCV_DIR "E:/opencv")
+find_package(OpenCV REQUIRED)
+
+# 设置jsoncpp的路径
+set(JSONCPP_DIR "E:/jsoncpp")
+
 
 
 # 遍历 BMP 图像文件夹并生成图片资源的头文件
 file(GLOB IMAGE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/resources/images/*.bmp")
-
-# 设置输出的头文件路径
 set(OUTPUT_HEADER "${CMAKE_CURRENT_BINARY_DIR}/resources/images.h")
 
-# 清空头文件内容并添加预处理器保护
-file(WRITE ${OUTPUT_HEADER} "#ifndef IMAGE_RESOURCES_H_\n")
-file(APPEND ${OUTPUT_HEADER} "#define IMAGE_RESOURCES_H_\n\n")
-
-# 定义存储映射的列表
+# 生成图片资源的头文件
+file(WRITE ${OUTPUT_HEADER} "#ifndef IMAGE_RESOURCES_H_\n#define IMAGE_RESOURCES_H_\n\n")
 set(IMAGE_MAP_CONTENT "")
 set(IMAGE_SIZE_MAP_CONTENT "")
 
 foreach(img ${IMAGE_FILES})
-    # 从文件路径中提取图片名称
     get_filename_component(img_name ${img} NAME_WE)
-
-    # 将中文图片名称转换为有效的 C++ 标识符
     string(MD5 img_hash ${img_name})
     set(img_var_name "img_${img_hash}")
 
-    # 打印图片名称
     message(STATUS "Processing image: ${img_name}")
 
-    # 读取 BMP 图像文件内容的 HEX 形式
     file(READ ${img} img_content HEX)
-
-    # 转换 HEX 到 C++ 数组格式
     string(REGEX REPLACE "(..)" "0x\\1, " img_content "${img_content}")
     string(REGEX REPLACE ", $" "" img_content "${img_content}")
 
-    # 获取文件大小
     file(READ ${img} IMG_FILE_CONTENT HEX)
     string(LENGTH ${IMG_FILE_CONTENT} IMG_FILE_SIZE)
 
-    # 将映射添加到列表中
     list(APPEND IMAGE_MAP_CONTENT "    { L\"${img_name}\", ${img_var_name} },\n")
     list(APPEND IMAGE_SIZE_MAP_CONTENT "    { L\"${img_name}_size\", ${img_var_name}_size },\n")
 
-    # 写入到头文件中
     file(APPEND ${OUTPUT_HEADER} "const unsigned char ${img_var_name}[] = { ${img_content} };\n\n")
     file(APPEND ${OUTPUT_HEADER} "const size_t ${img_var_name}_size = sizeof(${img_var_name});\n\n")
 endforeach()
 
-# 写入映射到头文件中
 file(APPEND ${OUTPUT_HEADER} "static std::map<std::wstring, const unsigned char*> Images = {\n")
 foreach(entry ${IMAGE_MAP_CONTENT})
     file(APPEND ${OUTPUT_HEADER} "${entry}")
@@ -72,13 +59,16 @@ foreach(entry ${IMAGE_SIZE_MAP_CONTENT})
     file(APPEND ${OUTPUT_HEADER} "${entry}")
 endforeach()
 file(APPEND ${OUTPUT_HEADER} "};\n\n")
-
 file(APPEND ${OUTPUT_HEADER} "#endif // IMAGE_RESOURCES_H_\n")
 
-# 设置OpenCV的路径，修改为你的OpenCV安装路径
-set(OpenCV_DIR "E:/opencv-4.10.0/install")
-
-find_package(OpenCV REQUIRED)
+# 包含目录
+include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/ui
+        ${OpenCV_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${JSONCPP_DIR}/include
+)
 
 
 find_package(Qt6 COMPONENTS
@@ -88,14 +78,7 @@ find_package(Qt6 COMPONENTS
         REQUIRED
 )
 
-# Set include directories for the project
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/ui
-        ${JSONCPP_DIR}/include
-        ${OpenCV_DIR}
-)
-
+# Qt 资源
 qt6_add_binary_resources(RESOURCE
         resources/snowelves.qrc
         OPTIONS
@@ -103,13 +86,8 @@ qt6_add_binary_resources(RESOURCE
         -verbose
 )
 
-
-# 添加库目录
-link_directories(
-        ${JSONCPP_DIR}/lib
-)
-
-add_executable(SnowElves WIN32
+# 可执行文件
+add_executable(SnowElvesScript WIN32
         src/main.cpp
         tests/tests.cpp
         src/views/MainWindow.cpp
@@ -124,7 +102,7 @@ add_executable(SnowElves WIN32
         include/models/TaskManager.h
         src/models/ImageProcess.cpp
         include/models/ImageProcess.h
-        src/views/ScriptWIndow.cpp
+        src/views/ScriptWindow.cpp
         include/views/ScriptWindow.h
         src/models/Tasks/LessonTask.cpp
         include/models/Tasks/LessonTask.h
@@ -134,7 +112,6 @@ add_executable(SnowElves WIN32
         include/models/Tasks/FactionTask.h
         src/models/TaskSchedul.cpp
         include/models/TaskSchedul.h
-        ${RESOURCE}
         src/utils/signals.cpp
         include/utils/signals.h
         include/utils/Factory.h
@@ -143,24 +120,22 @@ add_executable(SnowElves WIN32
         include/utils/LoadJsonFile.h
         src/utils/FunctionLibrary.cpp
         include/utils/FunctionLibrary.h
+        ${RESOURCE}
         ${OUTPUT_HEADER}
 )
 
 
-
-target_link_libraries(SnowElves
+target_link_libraries(SnowElvesScript
         Qt::Core
         Qt::Gui
         Qt::Widgets
         ${OpenCV_LIBS}
-        jsoncpp
+        ${JSONCPP_DIR}/lib/libjsoncpp.a
 )
 
 
 
-# 设置 include 目录，使生成的头文件可以被找到
-target_include_directories(SnowElves PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-
+# 处理 Windows 平台的特定设置
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)
     if (MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")

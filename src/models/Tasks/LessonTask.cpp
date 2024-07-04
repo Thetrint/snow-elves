@@ -6,6 +6,7 @@
 
 void LessonTask::implementation() {
 
+    ClickImageMatch(TM_CCORR_NORMED, L"活动", L"包裹");
     ClickImageMatch(TM_SQDIFF_NORMED, L"活动", L"包裹");
 
 

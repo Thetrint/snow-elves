@@ -7,6 +7,7 @@
 #include "models/ImageProcess.h"
 #include <Windows.h>
 #include <semaphore>
+#include <httprequestid.h>
 
 
 class BasicTask {

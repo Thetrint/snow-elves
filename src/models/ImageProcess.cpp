@@ -93,7 +93,7 @@ vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_SQDIFF_NORMED(con
     for (int y = 0; y < result_rows; ++y) {
         for (int x = 0; x < result_cols; ++x) {
             float score = result.at<float>(y, x);
-            if (constexpr double threshold = 0.1; score <= threshold) {
+            if (constexpr double threshold = 0.01; score <= threshold) {
                 Match match;
                 match.location = cv::Point(x, y);
                 match.score = score;
@@ -146,7 +146,7 @@ vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_CCORR_NORMED(cons
     for (int y = 0; y < result_rows; ++y) {
         for (int x = 0; x < result_cols; ++x) {
             float score = result.at<float>(y, x);
-            if (constexpr double threshold = 0.7; score >= threshold) {
+            if (constexpr double threshold = 0.99; score >= threshold) {
                 Match match;
                 match.location = cv::Point(x, y);
                 match.score = score;
