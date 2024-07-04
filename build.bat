@@ -1,12 +1,61 @@
 @echo off
-REM è·å–å½“å‰è„šæœ¬çš„ç›®å½•
+REM »ñÈ¡µ±Ç°½Å±¾µÄÄ¿Â¼
 set "CURRENT_DIR=%~dp0"
 
-REM å¤åˆ¶æ–‡ä»¶åˆ°å½“å‰ç›®å½•
-copy "D:\Desktop\SnowElves\cmake-build-release\SnowElves.exe" "%CURRENT_DIR%"
-copy "D:\Desktop\SnowElves\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
+REM ¸´ÖÆÎÄ¼şµ½µ±Ç°Ä¿Â¼
+copy "D:\Desktop\SnowElvesScript\cmake-build-release\SnowElvesScript.exe" "%CURRENT_DIR%"
+copy "D:\Desktop\SnowElvesScript\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
+
+REM Ê¹ÓÃ windeployqt6.exe ´¦Àí SnowElves.exe
+E:\Qt\6.7.2\mingw_64\bin\windeployqt6.exe SnowElvesScript.exe
 
 
-E:\Qt\6.7.2\mingw_64\bin\windeployqt6.exe SnowElves.exe
+REM »ñÈ¡ SnowElves.exe µÄÒÀÀµÏî
+REM ½« dumpbin µÄÂ·¾¶Ìæ»»ÎªÄãµÄÊµ¼ÊÂ·¾¶
+set "DUMPBIN_PATH="E:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\Hostx64\x64\dumpbin.exe""
+set "EXE_PATH=%CURRENT_DIR%\SnowElvesScript.exe"
+set "DLL_PATH=%CURRENT_DIR%"
+
+%DUMPBIN_PATH% /dependents %EXE_PATH% | findstr "\.dll$" > .\_dependent_dll_log.txt
+
+echo ½âÎöÍê±Ï£¬×Ü¼Æ
+type .\_dependent_dll_log.txt | find /v /c ""
+
+type .\_dependent_dll_log.txt
+
+REM Ñ­»·´¦ÀíÒÀÀµ DLL ÁĞ±í
+for /f %%i in (.\_dependent_dll_log.txt) do (
+    REM ¼ì²éÊÇ·ñÄÜÕÒµ½ DLL ÎÄ¼ş
+    if exist "%CURRENT_DIR%\%%i" (
+        echo ¿ÉÒÔÕÒµ½%%i
+    ) else (
+        REM ÕÒ²»µ½Ê±¼ÇÂ¼µ½ÁÙÊ±ÎÄ¼ş
+        echo ÕÒ²»µ½%%i£¬¼ÇÂ¼ÓÚ .\temp.txt
+        echo %%i>>.\temp.txt
+    )
+)
+
+
+REM ´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡ DLL ÎÄ¼şÃû£¬²¢²éÕÒÂ·¾¶¸´ÖÆµ½µ±Ç°Ä¿Â¼
+for /f %%j in (.\temp.txt) do (
+    REM Ê¹ÓÃ WHERE ÃüÁî²éÕÒ DLL ÎÄ¼şµÄÍêÕûÂ·¾¶
+    for /f "delims=" %%p in ('WHERE "%%j"') do (
+        set "dll_path=%%p"
+        
+        REM ¼ì²éÕÒµ½µÄÂ·¾¶ÊÇ·ñÎª¿Õ
+        if not "!dll_path!"=="" (
+            echo ¿ªÊ¼¸´ÖÆ£¬¸´ÖÆ¶ÔÏó£º%%p
+            copy "%%p" "%CURRENT_DIR%"
+        ) else (
+            echo ÕÒ²»µ½ÎÄ¼ş: %%j
+        )
+    )
+)
+
+REM ÇåÀíÁÙÊ±ÎÄ¼ş
+del .\_dependent_dll_log.txt
+del .\temp.txt
+
+echo ¸´ÖÆ¹¤×÷½áÊø
 
 pause
