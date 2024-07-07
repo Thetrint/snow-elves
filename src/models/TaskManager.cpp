@@ -42,11 +42,12 @@ void TaskManager::start(){
     std::vector<std::wstring> tasks;
 
     // 遍历数组元素并解码 Unicode 转义序列
-    for (const auto& value : LoadJsonFile::instance().file_0["执行任务"]) {
-        // std::wstring decodedValue = FunctionLibrary::decodeUnicode(value.asString());
-        // std::cout << "解码后的值: " << value.asString() << std::endl;
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-        tasks.push_back(converter.from_bytes(value.asString()));
+    for (const auto& value : LoadJsonFile::instance().file_0.value("执行任务").toArray()) {
+        if (value.isString()) {
+            QString qs = value.toString();
+            std::wstring ws = qs.toStdWString();
+            tasks.push_back(ws);
+        }
     }
 
 

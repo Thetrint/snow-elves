@@ -2,21 +2,16 @@ cmake_minimum_required(VERSION 3.28)
 project(SnowElvesScript)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")
-set(CMAKE_CXX_COMPILER "E:/MinGW/bin/g++.exe")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(THREADS_PREFER_PTHREAD_FLAG OFF)
-set(CMAKE_PREFIX_PATH "E:/Qt/6.7.2/mingw_64/lib/cmake")
+set(CMAKE_PREFIX_PATH "D:/Qt/6.7.2/mingw_64/lib/cmake")
 
 # 设置CMake找到OpenCV的路径
-set(OpenCV_DIR "E:/opencv")
+set(OpenCV_DIR "D:/opencv")
 find_package(OpenCV REQUIRED)
-
-# 设置jsoncpp的路径
-set(JSONCPP_DIR "E:/jsoncpp")
-
 
 
 # 遍历 BMP 图像文件夹并生成图片资源的头文件
@@ -62,13 +57,13 @@ endforeach()
 file(APPEND ${OUTPUT_HEADER} "};\n\n")
 file(APPEND ${OUTPUT_HEADER} "#endif // IMAGE_RESOURCES_H_\n")
 
+
 # 包含目录
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/ui
         ${OpenCV_INCLUDE_DIRS}
         ${CMAKE_CURRENT_BINARY_DIR}
-        ${JSONCPP_DIR}/include
 )
 
 
@@ -87,12 +82,12 @@ qt6_add_binary_resources(RESOURCE
         -verbose
 )
 
+
+
 # 可执行文件
 add_executable(SnowElvesScript WIN32
         src/main.cpp
         tests/tests.cpp
-        src/views/MainWindow.cpp
-        include/views/MainWindow.h
         src/views/HomeWindow.cpp
         include/views/HomeWindow.h
         src/views/RunWindow.cpp
@@ -123,15 +118,31 @@ add_executable(SnowElvesScript WIN32
         include/utils/FunctionLibrary.h
         ${RESOURCE}
         ${OUTPUT_HEADER}
+        src/views/LoginWindow.cpp
+        include/views/LoginWindow.h
+        src/views/MainWindow.cpp
+        include/views/MainWindow.h
+        src/views/RenewWindow.cpp
+        include/views/RenewWindow.h
+        src/models/DownloadThread.cpp
+        include/models/DownloadThread.h
+
+
 )
 
 
-target_link_libraries(SnowElvesScript
+
+include(FetchContent)
+FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
+        GIT_TAG 3b15fa82ea74739b574d705fea44959b58142eb8) # Replace with your desired git commit from: https://github.com/libcpr/cpr/releases
+FetchContent_MakeAvailable(cpr)
+
+target_link_libraries(SnowElvesScript PRIVATE
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        cpr::cpr
         ${OpenCV_LIBS}
-        ${JSONCPP_DIR}/lib/libjsoncpp.a
 )
 
 

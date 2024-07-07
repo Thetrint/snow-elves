@@ -23,7 +23,7 @@ public:
 
      // ~MainWindow();
 private slots:
-    void writewinconfig(int id) const;
+    void writewinconfig(const int id) const;
 //     void switchToPage(int index) const;
 
 private:
