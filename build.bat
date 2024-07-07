@@ -2,17 +2,32 @@
 REM 获取当前脚本的目录
 set "CURRENT_DIR=%~dp0"
 
+REM 删除所有文件除了Update.bat和build.bat
+for %%i in ("%CURRENT_DIR%*") do (
+    if not "%%~nxi" == "Update.bat" if not "%%~nxi" == "build.bat" (
+        del "%%i"
+    )
+)
+
+REM 删除所有文件夹及其内容
+for /d %%d in ("%CURRENT_DIR%*") do (
+    rd /s /q "%%d"
+)
+
+
 REM 复制文件到当前目录
-copy "D:\Desktop\SnowElvesScript\cmake-build-release\SnowElvesScript.exe" "%CURRENT_DIR%"
-copy "D:\Desktop\SnowElvesScript\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
+copy "E:\Desktop\SnowElvesScript\cmake-build-release\SnowElvesScript.exe" "%CURRENT_DIR%"
+copy "E:\Desktop\SnowElvesScript\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
+copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcpr.dll" "%CURRENT_DIR%"
+copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcurl-d.dll" "%CURRENT_DIR%"
 
 REM 使用 windeployqt6.exe 处理 SnowElves.exe
-E:\Qt\6.7.2\mingw_64\bin\windeployqt6.exe SnowElvesScript.exe
+D:\Qt\6.7.2\mingw_64\bin\windeployqt6.exe SnowElvesScript.exe
 
 
 REM 获取 SnowElves.exe 的依赖项
 REM 将 dumpbin 的路径替换为你的实际路径
-set "DUMPBIN_PATH="E:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\Hostx64\x64\dumpbin.exe""
+set "DUMPBIN_PATH="D:\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\Hostx64\x64\dumpbin.exe""
 set "EXE_PATH=%CURRENT_DIR%\SnowElvesScript.exe"
 set "DLL_PATH=%CURRENT_DIR%"
 
