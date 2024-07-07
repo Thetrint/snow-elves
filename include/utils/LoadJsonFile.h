@@ -4,7 +4,8 @@
 
 #ifndef LOADJSONFILE_H
 #define LOADJSONFILE_H
-#include <json/json.h>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class LoadJsonFile {
 public:
@@ -12,16 +13,16 @@ public:
 
     void LoadFile(int id);
 
-    Json::Value file_0;
-    Json::Value file_1;
-    Json::Value file_2;
-    Json::Value file_3;
-    Json::Value file_4;
-    Json::Value file_5;
-    Json::Value file_6;
-    Json::Value file_7;
-    Json::Value file_8;
-    Json::Value file_9;
+    QJsonObject  file_0;
+    QJsonObject  file_1;
+    QJsonObject  file_2;
+    QJsonObject  file_3;
+    QJsonObject  file_4;
+    QJsonObject  file_5;
+    QJsonObject  file_6;
+    QJsonObject  file_7;
+    QJsonObject  file_8;
+    QJsonObject  file_9;
 
 private:
 

@@ -11,10 +11,14 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QSpacerItem>
-#include <json/json.h>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <QFile>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent):
     QWidget(parent)
@@ -81,41 +85,41 @@ int MainWindow::getSpacerIndex(const QSpacerItem *spacer) const {
 //写入json
 
 
-void MainWindow::writewinconfig(int id) const {
+void MainWindow::writewinconfig(const int id) const {
 
     // 创建 JSON 数组并将 QListWidget 中的项直接写入
-    Json::Value jsonArray(Json::arrayValue);
+    QJsonArray jsonArray;
     for (int i = 0; i < script->ui.listWidget_2->count(); ++i) {
-        QListWidgetItem* item = script->ui.listWidget_2->item(i);
-        jsonArray.append(item->text().toStdString());  // 转换为 std::string
+        const QListWidgetItem* item = script->ui.listWidget_2->item(i);
+        jsonArray.append(item->text());
     }
 
-    // 创建一个 JSON 对象并添加键值对
-    Json::Value root;
+    // 创建 JSON 对象并添加键值对
+    QJsonObject root;
     root["执行任务"] = jsonArray;
     root["keyu"] = 30;
     root["city"] = "New York";
 
-    // 将 JSON 对象序列化为字符串
-    Json::StreamWriterBuilder writer;
-    writer["emitUTF8"] = true;
-    std::string jsonString = Json::writeString(writer, root);
+    // 创建 JSON 文档
+    const QJsonDocument jsonDoc(root);
+
+    // 将 JSON 文档转换为字符串
+    const QByteArray jsonData = jsonDoc.toJson();
 
     // 获取临时目录路径并设置文件路径
-    std::filesystem::path tempDir = std::filesystem::temp_directory_path();
-    std::filesystem::path filePath = tempDir / ("ElvesConfig_" + std::to_string(id) + ".json");
+    const QString tempDir = QDir::tempPath();
+    const QString filePath = tempDir + "/ElvesConfig_" + QString::number(id) + ".json";
 
-    // 打开一个文件以写入 JSON 字符串
-    std::ofstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file for writing." << std::endl;
+    // 打开文件以写入 JSON 字符串
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << jsonData << Qt::endl;
+        file.close();
+        qDebug() << "JSON data written to file:" << filePath;
+    } else {
+        qWarning() << "Failed to open file for writing:" << file.errorString();
     }
-
-    // 将 JSON 字符串写入文件
-    file << jsonString;
-
-    // 关闭文件
-    file.close();
 
 
 }

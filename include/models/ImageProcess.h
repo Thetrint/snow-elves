@@ -9,6 +9,7 @@
 #include <string>
 #include <windows.h>
 #include <vector>
+#include "resources/images.h"
 
 
 class ImageProcessor {
@@ -39,9 +40,6 @@ public:
     static cv::Mat HBITMAPToMat(HBITMAP hBitmap);
 
 private:
-    //中文图片名称映射-字符串映射
-    static std::string getPinyinString(const std::wstring &chinese);
-
 
 
 
