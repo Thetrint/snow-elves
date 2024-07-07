@@ -16,6 +16,8 @@ signals:
     // 定义公共信号
     void writejson(int id);
     void itemSelected(const QString &itemName);
+    void Update(std::string name);
+
 
 private:
     // 私有构造函数以防止直接实例化

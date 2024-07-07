@@ -19,16 +19,7 @@ class TaskManager {
 public:
     explicit TaskManager(int id, HWND hwnd);
 
-    // 定义一个枚举类型
-    enum FunctionType {
-        TM_CCORR_NORMED,
-        TM_SQDIFF_NORMED,
 
-    };
-
-
-
-    [[nodiscard]] std::vector<ImageProcessor::Match> ImageMatch(FunctionType funcType) const;
 
     void start();
 

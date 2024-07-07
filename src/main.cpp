@@ -1,15 +1,22 @@
+
 #include "views/MainWindow.h"
 
 #include "models/ImageProcess.h"
 #include "models/WindowManager.h"
+#include "views/LoginWindow.h"
+#include "views/RenewWindow.h"
 #include <QStyleFactory>
+
 
 #include <iostream>
 #include <QFile>
 #include <QResource>
+#include <utils/signals.h>
+
 
 int main(int argc, char *argv[])
 {
+
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create("windowsvita"));
 
@@ -34,8 +41,35 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
-    w.show();
+    RenewWindow Renew;
+    LoginWindow Login;
 
-    QResource::unregisterResource("resources/snowelves.qrc");
+    // 连接 loginSuccess 信号到主窗口的 show 槽
+    QObject::connect(&Renew, &RenewWindow::login, [&]() {
+        Login.show();
+    });
+
+    Renew.checkupdae();
+
+    // 连接 loginSuccess 信号到主窗口的 show 槽
+    QObject::connect(&Login, &LoginWindow::loginSuccess, [&]() {
+        w.show();
+    });
+
+    // 连接 loginSuccess 信号到主窗口的 show 槽
+    QObject::connect(Signals::instance(), &Signals::Update, [&](const std::string &name) {
+        const std::string command = "start /B Update.bat " + name;
+        std::system(command.c_str());
+
+        w.close();
+        Login.close();
+        Renew.close();
+
+    });
+
+
+
+    QResource::unregisterResource("RESOURCE.rcc");
     return QApplication::exec();
 }
+
