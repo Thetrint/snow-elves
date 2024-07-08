@@ -71,6 +71,10 @@ REM 清理临时文件
 del .\_dependent_dll_log.txt
 del .\temp.txt
 
+git add .
+git commit -m "update"
+git push
+
 echo 复制工作结束
 
-pause
+exit
