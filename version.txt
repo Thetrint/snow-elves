@@ -13,3 +13,4 @@ v0.0.1  Error: [Errno 2] No such file or directory: 'E:/Desktop/SnowElvesScript/
 v0.0.1  Error: partially initialized module 'json' has no attribute 'load' (most likely due to a circular import) 
 v0.0.1  Error: partially initialized module 'json' has no attribute 'load' (most likely due to a circular import) 
 v0.0.1  Error: partially initialized module 'json' has no attribute 'load' (most likely due to a circular import) 
+v0.0.1  416471 
