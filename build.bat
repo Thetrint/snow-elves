@@ -4,7 +4,7 @@ set "CURRENT_DIR=%~dp0"
 
 REM 删除所有文件除了Update.bat和build.bat
 for %%i in ("%CURRENT_DIR%*") do (
-    if not "%%~nxi" == "Update.bat" if not "%%~nxi" == "build.bat" if not "%%~nxi" == "version.txt" if not "%%~nxi" == ".gitignore" (
+    if not "%%~nxi" == "Update.bat" if not "%%~nxi" == "build.bat" if not "%%~nxi" == ".gitignore" (
         del "%%i"
     )
 )
