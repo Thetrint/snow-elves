@@ -4,7 +4,7 @@ set "CURRENT_DIR=%~dp0"
 
 REM 删除所有文件除了Update.bat和build.bat
 for %%i in ("%CURRENT_DIR%*") do (
-    if not "%%~nxi" == "Update.bat" if not "%%~nxi" == "build.bat" if not "%%~nxi" == ".gitignore" (
+    if not "%%~nxi" == "Update.bat" if not "%%~nxi" == "build.bat" (
         del "%%i"
     )
 )
@@ -20,6 +20,7 @@ copy "E:\Desktop\SnowElvesScript\cmake-build-release\SnowElvesScript.exe" "%CURR
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcpr.dll" "%CURRENT_DIR%"
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcurl-d.dll" "%CURRENT_DIR%"
+copy "E:\Desktop\ElvesRelease\resources" "%CURRENT_DIR%"
 
 REM 使用 windeployqt6.exe 处理 SnowElves.exe
 D:\Qt\6.7.2\mingw_64\bin\windeployqt6.exe SnowElvesScript.exe
