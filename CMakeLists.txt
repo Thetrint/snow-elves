@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(SnowElvesScript)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+#set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -82,7 +82,10 @@ qt6_add_binary_resources(RESOURCE
         -verbose
 )
 
-
+include(FetchContent)
+FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
+        GIT_TAG 3b15fa82ea74739b574d705fea44959b58142eb8) # Replace with your desired git commit from: https://github.com/libcpr/cpr/releases
+FetchContent_MakeAvailable(cpr)
 
 # 可执行文件
 add_executable(SnowElvesScript WIN32
@@ -130,12 +133,12 @@ add_executable(SnowElvesScript WIN32
 
 )
 
+# 添加资源文件
+target_sources(SnowElvesScript PRIVATE resources/main.rc)
 
 
-include(FetchContent)
-FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
-        GIT_TAG 3b15fa82ea74739b574d705fea44959b58142eb8) # Replace with your desired git commit from: https://github.com/libcpr/cpr/releases
-FetchContent_MakeAvailable(cpr)
+add_subdirectory(tests)
+
 
 target_link_libraries(SnowElvesScript PRIVATE
         Qt::Core
@@ -144,7 +147,6 @@ target_link_libraries(SnowElvesScript PRIVATE
         cpr::cpr
         ${OpenCV_LIBS}
 )
-
 
 
 # 处理 Windows 平台的特定设置

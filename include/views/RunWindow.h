@@ -23,7 +23,7 @@ public:
     //
 private slots:
     void StartTask();
-
+    void Stop();
 
 private:
     int getrowindex() const;

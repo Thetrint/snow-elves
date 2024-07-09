@@ -57,8 +57,9 @@ int main(int argc, char *argv[])
     });
 
     // 连接 loginSuccess 信号到主窗口的 show 槽
-    QObject::connect(Signals::instance(), &Signals::Update, [&](const std::string &name) {
-        const std::string command = "start /B Update.bat " + name;
+    QObject::connect(Signals::instance(), &Signals::Update, [&](const std::string& name, const std::string& version) {
+        std::cout << version << std::endl;
+        const std::string command = "start /B Update.bat " + name + " " + version;
         std::system(command.c_str());
 
         w.close();

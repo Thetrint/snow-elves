@@ -13,21 +13,22 @@
 #include "utils/FunctionLibrary.h"
 
 TaskManager::TaskManager(int id, HWND hwnd)
-    : id(id), hwnd(hwnd), pause_event(1), unbind_event(1) {
+    : id(id), hwnd(hwnd), unbind_event(true) {
 }
 
 
 void TaskManager::stop() {
-    unbind_event.acquire();
-    pause_event.release(); // 解除任何可能的暂停状态
+    std::cout << "解绑" << std::endl;
+    unbind_event = false;
+    pause_event.unlock(); // 解除任何可能的暂停状态
 }
 
 void TaskManager::pause() {
-    pause_event.acquire();
+    pause_event.lock();
 }
 
 void TaskManager::resume() {
-    pause_event.release();
+    pause_event.unlock();
 }
 
 void TaskManager::start(){
@@ -52,7 +53,8 @@ void TaskManager::start(){
 
 
     TaskSchedul schedul(tasks);
-    unbind_event.acquire();
+
+
     std::wstring task;
     while ((task = schedul.get_task()).empty() == false) {
         auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event);

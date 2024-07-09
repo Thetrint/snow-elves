@@ -14,8 +14,8 @@ class DownloadThread final : public QThread {
     Q_OBJECT
 
 public:
-    explicit DownloadThread(const std::string &name, const int id, QObject* parent = nullptr)
-        : QThread(parent), name(name), id(id){
+    explicit DownloadThread(const std::string& name, const int id, const std::string& version, QObject* parent = nullptr)
+        : QThread(parent), name(name), id(id), version(version){
         // 可以在这里进行其他初始化工作
     }
     void run() override;
@@ -27,6 +27,7 @@ signals:
 private:
     std::string name;
     int id;
+    std::string version;
 };
 
 
