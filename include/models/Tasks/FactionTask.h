@@ -11,16 +11,16 @@ class FactionTask final : public BasicTask{
 protected:
     int id; // 任务ID
     HWND hwnd; //
-    std::counting_semaphore<1>& pause_event;
-    std::counting_semaphore<1>& unbind_event;
+    std::mutex& pause_event;
+    bool& unbind_event;
 
 public:
-    FactionTask(int id, HWND hwnd, std::counting_semaphore<1>& pause_event, std::counting_semaphore<1>& unbind_event) : BasicTask(id, hwnd, pause_event, unbind_event), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
+    FactionTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) : BasicTask(id, hwnd, pause_event, unbind_event), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
 
     // 实现基类的纯虚函数
-    void implementation() override;
+    int implementation() override;
 
-    void objective() override;
+    void objective(std::string) override;
 
     int determine() override;
 

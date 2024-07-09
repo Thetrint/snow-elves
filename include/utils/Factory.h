@@ -14,7 +14,7 @@
 // 工厂类
 class Factory {
 public:
-    using CreateFunc = std::function<std::unique_ptr<BasicTask>(int, HWND, std::counting_semaphore<1>&, std::counting_semaphore<1>&)>;
+    using CreateFunc = std::function<std::unique_ptr<BasicTask>(int, HWND, std::mutex&, bool&)>;
 
     static Factory& instance() {
         static Factory factory;
@@ -25,7 +25,7 @@ public:
         registry_[className] = func;
     }
 
-    std::unique_ptr<BasicTask> create(const std::wstring& className, int id, HWND hwnd, std::counting_semaphore<1>& pause_event, std::counting_semaphore<1>& unbind_event) const {
+    std::unique_ptr<BasicTask> create(const std::wstring& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) const {
         if (auto it = registry_.find(className); it != registry_.end()) {
             return it->second(id, hwnd, pause_event, unbind_event);
         }
@@ -34,7 +34,7 @@ public:
 
     template <typename T>
     void autoRegister(const std::wstring& className) {
-        registerClass(className, [](int id, HWND hwnd, std::counting_semaphore<1>& pause_event, std::counting_semaphore<1>& unbind_event) {
+        registerClass(className, [](int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) {
             return std::make_unique<T>(id, hwnd, pause_event, unbind_event);
         });
     }

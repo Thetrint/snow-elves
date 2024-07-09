@@ -4,18 +4,17 @@
 #include "models/Tasks/FactionTask.h"
 #include <iostream>
 
-void FactionTask::implementation() {
-    if (!unbind_event.try_acquire()) {
-        std::cout << "解码后的值: 2"  << std::endl;
-    }
+int FactionTask::implementation() {
+    key_down_up("B");
 
+    return 0;
     // while (true) {
     //     // 休眠 2000 毫秒（即2秒）
     //     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     // }
 }
 
-void FactionTask::objective() {
+void FactionTask::objective(std::string ve) {
 
 }
 

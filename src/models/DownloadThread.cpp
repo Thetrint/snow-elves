@@ -37,7 +37,7 @@ void DownloadThread::run(){
             outfile << d.text;
             outfile.close();
 
-            emit Signals::instance()->Update(name);
+            emit Signals::instance()->Update(name, version);
 
         }
 
@@ -95,7 +95,7 @@ void DownloadThread::run(){
             std::ofstream outfile(filePath.toStdString(), std::ofstream::binary);
             outfile << d.text;
             outfile.close();
-            emit Signals::instance()->Update(name);
+            emit Signals::instance()->Update(name, version);
         }
 
     }
