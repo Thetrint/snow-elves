@@ -18,8 +18,8 @@ for /d %%d in ("%CURRENT_DIR%*") do (
 REM 复制文件到当前目录
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\SnowElvesScript.exe" "%CURRENT_DIR%"
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
-copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcpr.dll" "%CURRENT_DIR%"
-copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcurl.dll" "%CURRENT_DIR%"
+copy "E:\Desktop\ElvesRelease\gcc\*" "%CURRENT_DIR%"
+
 xcopy "E:\Desktop\ElvesRelease\resources\icon" "%CURRENT_DIR%\resources\icon" /I
 
 REM 使用 windeployqt6.exe 处理 SnowElves.exe
