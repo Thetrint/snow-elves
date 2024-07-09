@@ -19,8 +19,8 @@ REM 复制文件到当前目录
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\SnowElvesScript.exe" "%CURRENT_DIR%"
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\RESOURCE.rcc" "%CURRENT_DIR%"
 copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcpr.dll" "%CURRENT_DIR%"
-copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcurl-d.dll" "%CURRENT_DIR%"
-copy "E:\Desktop\ElvesRelease\resources\icon" "%CURRENT_DIR%\resources\icon"
+copy "E:\Desktop\SnowElvesScript\cmake-build-release\libcurl.dll" "%CURRENT_DIR%"
+xcopy "E:\Desktop\ElvesRelease\resources\icon" "%CURRENT_DIR%\resources\icon" /I
 
 REM 使用 windeployqt6.exe 处理 SnowElves.exe
 D:\Qt\6.7.2\mingw_64\bin\windeployqt6.exe SnowElvesScript.exe
