@@ -5,8 +5,10 @@ ping 127.0.0.1
 
 rem 接收第一个参数
 set PARAM1=%1
+set PARAM2=%2
+set PARAM3=%3
 
-echo %3 > version.txt
+echo %PARAM3% > version.txt
 
 rem 根据参数执行相应操作
 if "%PARAM1%"=="Incremental" (
