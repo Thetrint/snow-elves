@@ -9,7 +9,7 @@ set PARAM2=%2
 set PARAM3=%3
 
 echo %PARAM3% > version.txt
-
+pause
 rem 根据参数执行相应操作
 if "%PARAM1%"=="Incremental" (
     echo Executing Incremental Update
