@@ -72,9 +72,22 @@ REM 清理临时文件
 del .\_dependent_dll_log.txt
 del .\temp.txt
 
-git add .
-git commit -m "update"
-git push
+echo [1] 启动构建任务
+echo [2] 不启动构建任务
+
+REM 使用 choice 命令获取用户输入
+choice /c 12 /n /m "输入选项: "
+
+REM 判断输入值是否为1，如果是则启动构建任务
+if errorlevel 2 (
+    echo 不启动构建任务.
+) else if errorlevel 1 (
+    echo 启动构建任务...
+    git add .
+    git commit -m "update"
+    git push
+)
+
 
 echo 复制工作结束
 
