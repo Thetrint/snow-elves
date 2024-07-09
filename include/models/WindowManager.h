@@ -22,8 +22,13 @@ public:
 
     static void MouseDownUp(HWND hwnd, int x, int y);
 
-private:
+    static int GetVkCode(const std::string &key);
 
+    static void KeyDownUp(HWND hwnd, const std::string& key);
+
+private:
+    // 键值到虚拟键码的映射
+    static std::map<std::string, int> VkCode;
     // 私有成员变量和函数
 };
 

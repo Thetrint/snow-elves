@@ -9,9 +9,70 @@
 #include <iostream>
 #include <windows.h>
 
-#pragma comment(lib, "gdi32.lib")
+// #pragma comment(lib, "gdi32.lib")
 
 
+std::map<std::string, int> WindowManager::VkCode = {
+    {"back", 0x08},
+    {"Tab", 0x09},
+    {"return", 0x0D},
+    {"shift", 0x10},
+    {"control", 0x11},
+    {"menu", 0x12},
+    {"pause", 0x13},
+    {"capital", 0x14},
+    {"ESC", 0x1B},
+    {"space", 0x20},
+    {"end", 0x23},
+    {"home", 0x24},
+    {"left", 0x25},
+    {"up", 0x26},
+    {"right", 0x27},
+    {"down", 0x28},
+    {"print", 0x2A},
+    {"snapshot", 0x2C},
+    {"insert", 0x2D},
+    {"delete", 0x2E},
+    {"lwin", 0x5B},
+    {"rwin", 0x5C},
+    {"Num0", 0x60},
+    {"Num1", 0x61},
+    {"Num2", 0x62},
+    {"Num3", 0x63},
+    {"Num4", 0x64},
+    {"Num5", 0x65},
+    {"Num6", 0x66},
+    {"Num7", 0x67},
+    {"Num8", 0x68},
+    {"Num9", 0x69},
+    {"multiply", 0x6A},
+    {"add", 0x6B},
+    {"separator", 0x6C},
+    {"subtract", 0x6D},
+    {"decimal", 0x6E},
+    {"divide", 0x6F},
+    {"f1", 0x70},
+    {"f2", 0x71},
+    {"f3", 0x72},
+    {"f4", 0x73},
+    {"f5", 0x74},
+    {"f6", 0x75},
+    {"f7", 0x76},
+    {"f8", 0x77},
+    {"f9", 0x78},
+    {"f10", 0x79},
+    {"f11", 0x7A},
+    {"f12", 0x7B},
+    {"numlock", 0x90},
+    {"scroll", 0x91},
+    {"lshift", 0xA0},
+    {"rshift", 0xA1},
+    {"lcontrol", 0xA2},
+    {"rcontrol", 0xA3},
+    {"lmenu", 0xA4},
+    {"rmenu", 0xA5},
+    {"Enter", 0x0D}
+};
 
 HWND WindowManager::getWindowHandle()
 {
@@ -209,6 +270,34 @@ void WindowManager::MouseDownUp(HWND hwnd, int x, int y) {
     // 模拟鼠标按下
     PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
     PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+}
+
+int WindowManager::GetVkCode(const std::string &key) {
+    if (key.length() == 1) {
+        return VkKeyScanA(key[0]) & 0xFF;
+    } else {
+        const auto it = VkCode.find(key);
+        if (it != VkCode.end()) {
+            return it->second;
+        } else {
+            return 0; // 无效键值
+        }
+    }
+}
+
+void WindowManager::KeyDownUp(HWND hwnd, const std::string &key) {
+    const int vk_code = GetVkCode(key);
+    if (vk_code == 0) {
+        std::cerr << "Invalid key: " << key << std::endl;
+        return; // 无效键值
+    }
+
+    const UINT scan_code = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
+    const WPARAM wparam = vk_code;
+    const LPARAM lparam = (scan_code << 16) | 1;
+
+    PostMessage(hwnd, WM_KEYDOWN, wparam, lparam);
+    PostMessageW(hwnd, WM_KEYUP, wparam, lparam);
 }
 
 

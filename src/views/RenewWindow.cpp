@@ -69,28 +69,43 @@ void RenewWindow::checkupdae() {
     const QJsonObject jsonObj = jsonDoc.object();
     if (const QString version = jsonObj.value("tag_name").toString(); compareVersions(version.toStdString(), local_version)) {
         // 创建一个消息框
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("更新窗口");
-        msgBox.setText(jsonObj.value("body").toString());
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::Yes);
-
+        auto msgBox = std::make_unique<QMessageBox>();
+        msgBox->setWindowTitle("更新窗口");
+        msgBox->setText(jsonObj.value("body").toString());
+        msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox->setDefaultButton(QMessageBox::Yes);
 
         // 定时器在5秒后检查用户是否已经响应
-        QTimer::singleShot(5000, [&msgBox]() {
-            if (msgBox.isVisible()) {
+        QTimer::singleShot(5000, msgBox.get(), [msgBoxPtr = msgBox.get()]() {
+            if (msgBoxPtr->isVisible()) {
                 // 如果用户没有响应，自动选择 "Yes"
-                msgBox.button(QMessageBox::Yes)->click();
+                msgBoxPtr->button(QMessageBox::Yes)->click();
             }
         });
 
-        if (const int ret = msgBox.exec(); ret == QMessageBox::Yes) {
+
+        if (const int ret = msgBox->exec(); ret == QMessageBox::Yes) {
+            msgBox->deleteLater();
             std::cout << "name: " << jsonObj.value("name").toString().toStdString() << std::endl;
             std::cout << "id: " << jsonObj.value("id").toInt() << std::endl;
 
+            // // 创建一个输出文件流对象
+            // std::ofstream outFile("version.txt");
+            //
+            // // 检查文件是否成功打开
+            // if (!outFile) {
+            //     std::cerr << "无法打开文件" << std::endl;
+            // }
+            //
+            // // 写入数据到文件
+            // outFile << jsonObj.value("tag_name").toString().toStdString() << std::endl;
+            //
+            // // 关闭文件
+            // outFile.close();
+
             show();
 
-            auto* downloadThread = new DownloadThread(jsonObj.value("name").toString().toStdString(), jsonObj.value("id").toInt(), this);
+            auto* downloadThread = new DownloadThread(jsonObj.value("name").toString().toStdString(), jsonObj.value("id").toInt(), jsonObj.value("tag_name").toString().toStdString(), this);
 
             connect(downloadThread, &DownloadThread::SetProgressBarSignal, this, [=](const int max) {
                 ui.progressBar->setRange(0, max);
@@ -103,7 +118,7 @@ void RenewWindow::checkupdae() {
             emit login();
         }
 
-
+        msgBox->deleteLater();
     }else {
         emit login();
     }

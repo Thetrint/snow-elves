@@ -75,7 +75,7 @@ cv::Mat ImageProcessor::HBITMAPToMat(HBITMAP hBitmap) {
 
 }
 
-vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_SQDIFF_NORMED(const cv::Mat& image, const cv::Mat &templ) {
+vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_SQDIFF_NORMED(const cv::Mat& image, const cv::Mat &templ, ImageProcessor::MatchParams& match) {
     // 创建结果矩阵，用于存储模板匹配的结果
     cv::Mat result;
     int result_cols = image.cols - templ.cols + 1;
@@ -92,43 +92,63 @@ vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_SQDIFF_NORMED(con
     // 遍历结果矩阵，找到所有满足条件的匹配位置和得分
     for (int y = 0; y < result_rows; ++y) {
         for (int x = 0; x < result_cols; ++x) {
+            // ReSharper disable once CppLocalVariableMayBeConst
             float score = result.at<float>(y, x);
-            if (constexpr double threshold = 0.01; score <= threshold) {
-                Match match;
-                match.location = cv::Point(x, y);
-                match.score = score;
-                matches.push_back(match);
+            // ReSharper disable once CppLocalVariableMayBeConst
+            if (float threshold = match.similar; score <= threshold) {
+                Match match1;
+                match1.location = cv::Point(x, y);
+                match1.score = score;
+                matches.push_back(match1);
             }
         }
     }
 
-    // 打印匹配结果
-    cout << "Found " << matches.size() << " matches:" << endl;
-    for (size_t i = 0; i < matches.size(); ++i) {
-        auto [location, score] = matches[i];
-        cout << "Match " << i + 1 << ": Location (" << location.x << ", " << location.y << "), Score: " << score << endl;
-    }
 
+    //计算中心坐标
     // // 在大图像上绘制标记
     cv::Mat largeImageCopy;
     image.copyTo(largeImageCopy); // 复制一份大图像用于标记
 
     for (const auto [location, score] : matches) {
-        rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(0, 255, 255), 2);
+        rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
     }
 
+    //计算中心坐标
+    for (auto& [location, score] : matches) {
+
+        // 计算中心点
+        const cv::Point center(location.x + templ.cols / 2, location.y + templ.rows / 2);
+        // std::cout << "Location: " << location << ", Center: " << center << ", Score: " << score << std::endl;
+        location = center;
+
+
+    }
+    nonMaxSuppression(matches, 22);
+
+
+    //
+    // // 打印匹配结果
+    // cout << "Found " << matches.size() << " matches:" << endl;
+    // for (size_t i = 0; i < matches.size(); ++i) {
+    //     auto [location, score] = matches[i];
+    //     cout << "Match " << i + 1 << ": Location (" << location.x << ", " << location.y << "), Score: " << score << endl;
+    // }
+    //
+
+    //
     cv::imshow("Source Image", largeImageCopy);
     cv::waitKey(0);
-
-    cv::imshow("Source Image", image);
-    cv::waitKey(0);
-
-    cv::imshow("Source Image", templ);
-    cv::waitKey(0);
+    //
+    // cv::imshow("Source Image", image);
+    // cv::waitKey(0);
+    //
+    // cv::imshow("Source Image", templ);
+    // cv::waitKey(0);
     return matches;
 }
 
-vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_CCORR_NORMED(const cv::Mat& image, const cv::Mat &templ) {
+vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_CCORR_NORMED(const cv::Mat& image, const cv::Mat &templ, ImageProcessor::MatchParams& match) {
     // 创建结果矩阵，用于存储模板匹配的结果
     cv::Mat result;
     int result_cols = image.cols - templ.cols + 1;
@@ -145,49 +165,87 @@ vector<ImageProcessor::Match> ImageProcessor::matchTemplate_TM_CCORR_NORMED(cons
     // 遍历结果矩阵，找到所有满足条件的匹配位置和得分
     for (int y = 0; y < result_rows; ++y) {
         for (int x = 0; x < result_cols; ++x) {
+            // ReSharper disable once CppLocalVariableMayBeConst
             float score = result.at<float>(y, x);
-            if (constexpr double threshold = 0.99; score >= threshold) {
-                Match match;
-                match.location = cv::Point(x, y);
-                match.score = score;
-                matches.push_back(match);
+            // ReSharper disable once CppLocalVariableMayBeConst
+            if (float threshold = match.similar; score >= threshold) {
+                Match match1;
+                match1.location = cv::Point(x, y);
+                match1.score = score;
+                matches.push_back(match1);
             }
         }
     }
 
-    // 打印匹配结果
-    cout << "Found " << matches.size() << " matches:" << endl;
-    for (size_t i = 0; i < matches.size(); ++i) {
-        auto [location, score] = matches[i];
-        cout << "Match " << i + 1 << ": Location (" << location.x << ", " << location.y << "), Score: " << score << endl;
-    }
 
     // // 在大图像上绘制标记
     cv::Mat largeImageCopy;
     image.copyTo(largeImageCopy); // 复制一份大图像用于标记
 
     for (const auto [location, score] : matches) {
-        rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(0, 255, 255), 2);
+        rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
     }
 
+    //计算中心坐标
+    for (auto& [location, score] : matches) {
+
+        // 计算中心点
+        const cv::Point center(location.x + templ.cols / 2, location.y + templ.rows / 2);
+        // std::cout << "Location: " << location << ", Center: " << center << ", Score: " << score << std::endl;
+        location = center;
+
+
+    }
+    nonMaxSuppression(matches, 22);
+
+
+    //
+    // // 打印匹配结果
+    // cout << "Found " << matches.size() << " matches:" << endl;
+    // for (size_t i = 0; i < matches.size(); ++i) {
+    //     auto [location, score] = matches[i];
+    //     cout << "Match " << i + 1 << ": Location (" << location.x << ", " << location.y << "), Score: " << score << endl;
+    // }
+    //
+
+    //
     cv::imshow("Source Image", largeImageCopy);
     cv::waitKey(0);
-
-    cv::imshow("Source Image", image);
-    cv::waitKey(0);
-
-    cv::imshow("Source Image", templ);
-    cv::waitKey(0);
+    //
+    // cv::imshow("Source Image", image);
+    // cv::waitKey(0);
+    //
+    // cv::imshow("Source Image", templ);
+    // cv::waitKey(0);
     return matches;
 }
 
 
 
 
-vector<ImageProcessor::Match> ImageProcessor::matchTemplate(const cv::Mat& image, const cv::Mat &templ, FunctionPointer funcPtr) {
+vector<ImageProcessor::Match> ImageProcessor::matchTemplate(const cv::Mat& image, const cv::Mat &templ, ImageProcessor::MatchParams& match, const FunctionPointer funcPtr) {
 
 
-    vector<Match> matches = funcPtr(image, templ);
+    vector<Match> matches = funcPtr(image, templ, match);
 
     return matches;
+}
+
+// 自定义的非最大值抑制函数
+void ImageProcessor::nonMaxSuppression(std::vector<Match>& matches, const double distanceThreshold) {
+    std::vector<Match> suppressedMatches;
+
+    for (const auto& match : matches) {
+        bool keep = true;
+        for (const auto&[location, score] : suppressedMatches) {
+            if (cv::norm(match.location - location) < distanceThreshold) {
+                keep = false;
+                break;
+            }
+        }
+        if (keep) {
+            suppressedMatches.push_back(match);
+        }
+    }
+    matches = std::move(suppressedMatches);
 }

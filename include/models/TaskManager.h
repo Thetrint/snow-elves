@@ -20,7 +20,6 @@ public:
     explicit TaskManager(int id, HWND hwnd);
 
 
-
     void start();
 
     void stop();
@@ -34,8 +33,8 @@ private:
     int id;
     HWND hwnd;
 
-    std::counting_semaphore<1> pause_event;
-    std::counting_semaphore<1> unbind_event;
+    std::mutex pause_event;
+    bool unbind_event;
 };
 #endif //TASKMANAGER_H
 

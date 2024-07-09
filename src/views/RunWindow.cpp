@@ -14,6 +14,7 @@ RunWindow::RunWindow(QWidget *parent):
 {
     ui.setupUi(this);  // 初始化界面布局和元素
     connect(ui.pushButton_7, &QPushButton::clicked, this, &RunWindow::StartTask);
+    connect(ui.pushButton_5, &QPushButton::clicked, this, &RunWindow::Stop);
 
     ui.tableWidget->setRowCount(10);  // 设置行数为10行
     ui.tableWidget->setColumnCount(2);  // 设置列数为2列
@@ -35,6 +36,8 @@ RunWindow::RunWindow(QWidget *parent):
     ui.widget->setMinimumSize(minSize);
     ui.widget->setMaximumSize(maxSize);
 
+
+
 }
 
 int RunWindow::getrowindex() const {
@@ -45,6 +48,11 @@ int RunWindow::getrowindex() const {
         return rowIndex;
     }
     return 0;
+}
+
+void RunWindow::Stop() {
+    const int id = getrowindex();
+    instances[id]->stop();
 }
 
 void RunWindow::StartTask() {
