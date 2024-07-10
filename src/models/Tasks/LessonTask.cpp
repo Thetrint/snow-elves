@@ -8,27 +8,27 @@
 
 int LessonTask::implementation() {
 
-    std::vector<ImageProcessor::Match> matchs;
-    // ClickImageMatch(ImageProcessor::MatchParams{.similar = 0.95}, matchs, L"活动");
-
-
-
-    // ClickImageMatch(ImageProcessor::MatchParams{.similar = 0.95}, matchs, L"活动");
-
+    std::vector<Match> matchs;
 
     objective("位置检测");
+
     while (unbind_event) {
-
-        int sw = determine();
-
-        switch (sw) {
+        switch (int sw = determine()) {
             case 0:
                 return 0;
             case -1:
-
                 break;
             case 1:
-                // ClickImageMatch(ImageProcessor::MatchParams{.similar = 0.98}, matchs, L"活动");
+                LocationDetection();
+                objective("队伍检测");
+                break;
+            case 2:
+                OpenTeam();
+                if (CoortImageMatch(MatchParams{.similar = 0.75}, "按钮队伍创建").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, "按钮队伍退出");
+                    ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, "按钮确定");
+                }
+                ClickImageMatch({.similar = 0.5}, "按钮关闭");
                 break;
             default:
                 break;;
@@ -94,7 +94,7 @@ int LessonTask::determine() {
 }
 
 int LessonTask::detect() {
-    if (std::vector<ImageProcessor::Match> matchs; CoortImageMatch(ImageProcessor::MatchParams{.similar = 0.75}, matchs, L"主界面") && !matchs.empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.75, .applyGaussianBlur = false}, "界面大世界").empty()) {
         return 1;
     }
 

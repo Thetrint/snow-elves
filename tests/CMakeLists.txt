@@ -10,8 +10,10 @@ find_package(Qt6 COMPONENTS
 # 添加可执行文件
 add_executable(test_exec
         tests.cpp
+
         ../src/models/WindowManager.cpp
         ../include/models/WindowManager.h
+
 )
 
 target_link_libraries(test_exec PRIVATE

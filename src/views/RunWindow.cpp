@@ -63,6 +63,7 @@ void RunWindow::StartTask() {
 
     HWND hwnd = WindowManager::getWindowHandle();
     std::cout << hwnd << std::endl;
+    WindowManager::setWinodw(hwnd);
     std::lock_guard<std::mutex> lock(mtx);
     // 检查是否已经存在指定 ID 的实例
     if (!instances.contains(id)) {

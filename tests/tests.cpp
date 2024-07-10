@@ -7,7 +7,8 @@
 
 int main() {
 
-    WindowManager::CaptureAndSaveImage(WindowManager::getWindowHandle(), L"1.bmp");
+    WindowManager::setWinodw(WindowManager::getWindowHandle());
+    WindowManager::CaptureAndSaveImage(WindowManager::getWindowHandle(), "1.bmp");
 
     return 0;
 }
