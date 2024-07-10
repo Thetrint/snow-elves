@@ -2,6 +2,7 @@
 #define SIGNALS_H
 
 #include <QObject>
+#include <qwindowdefs_win.h>
 
 class Signals final : public QObject {
     Q_OBJECT

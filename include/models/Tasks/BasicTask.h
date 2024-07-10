@@ -4,10 +4,10 @@
 
 #ifndef BASICTASK_H
 #define BASICTASK_H
+#include "main.h"
 #include "models/ImageProcess.h"
-#include <Windows.h>
-#include <semaphore>
-#include <httprequestid.h>
+
+
 
 
 class BasicTask {
@@ -40,45 +40,102 @@ protected:
     // 定义一个枚举类型
 
 
-    void ImageMatch(const std::wstring& templ_name, std::vector<ImageProcessor::Match>& matches, ImageProcessor::MatchParams& match) const;
+    bool OpenMap();
+
+    bool OpenTeam();
+
+    void LocationDetection();
+
+    void Arrive();
+
+    void ImageMatch(const std::string &templ_name, std::vector<Match> &matches, MatchParams &match) const;
 
     void mouse_down_up(const cv::Point &location) const;
 
     void key_down_up(const std::string &key) const;
 
+    void input_text(const std::string &text) const;
+
 
     template<class ... Args>
-    void ClickImageMatch(ImageProcessor::MatchParams match, std::vector<ImageProcessor::Match>& matches, Args... templ_names);
+    std::vector<Match> ClickImageMatch(MatchParams match, Args... templ_names);
 
     template<class ... Args>
-    bool CoortImageMatch(ImageProcessor::MatchParams match, std::vector<ImageProcessor::Match>& matches, Args... templ_names);
+    std::vector<Match> CoortImageMatch(MatchParams match, Args... templ_names);
 
 
 };
 
 template<typename... Args>
-void BasicTask::ClickImageMatch(ImageProcessor::MatchParams match, std::vector<ImageProcessor::Match>& matches, Args... templ_names) {
+std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, Args... templ_names) {
+    std::vector<Match> matches;
+    //定义循环控制匹配失败最大匹配次数
+    for(int i = 1; i <= match.matchCount && unbind_event; i++) {
+        ((std::cout << std::forward<Args>(templ_names) << std::endl), ...);
+        (ImageMatch(templ_names, matches, match), ...);
 
-    (ImageMatch(templ_names, matches, match), ...);
+        for (const auto&[location, score] : matches) {
+            std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
+
+        }
+
+        if (!matches.empty()) {
+            //不为空直接返回
+            switch (match.click) {
+                case RANDOM: {
+                    // 初始化随机数种子
+                    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+                    // 随机取出一个元素
+                    const auto& [location, score] = matches[std::rand() % matches.size()];
+                    mouse_down_up(location);
+                    break;
+                }
+                case FORWARD:
+                    for (const auto& [location, score] : matches) {
+                        mouse_down_up(location);
+                    }
+                break;
+                case BACKWARD:
+                    for (auto it = matches.rbegin(); it != matches.rend(); ++it) {
+                        mouse_down_up(it->location);
+                    }
+                break;
+            }
+
+            return matches;
+        }
 
 
-    for (const auto&[location, score] : matches) {
-        std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
-        mouse_down_up(location);
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+
     }
+
+    return matches;
+
 
 }
 
 template<typename... Args>
-bool BasicTask::CoortImageMatch(ImageProcessor::MatchParams match, std::vector<ImageProcessor::Match>& matches, Args... templ_names) {
+std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, Args... templ_names) {
+    std::vector<Match> matches;
 
-    (ImageMatch(templ_names, matches, match), ...);
+    if(unbind_event) {
+        ((std::cout << std::forward<Args>(templ_names) << std::endl), ...);
+        (ImageMatch(templ_names, matches, match), ...);
 
-    for (const auto&[location, score] : matches) {
-        std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
+        //如果不为空打印一下匹配信息
+        if (!matches.empty()) {
+            for (const auto&[location, score] : matches) {
+                std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
+            }
+        }
+
     }
 
-    return true;
+
+    return matches;
 }
 
 #endif //BASICTASK_H
+

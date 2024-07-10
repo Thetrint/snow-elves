@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'RunWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.7.1
+** Created by: Qt User Interface Compiler version 6.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,7 +12,6 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTableWidget>
@@ -25,7 +24,10 @@ QT_BEGIN_NAMESPACE
 class Ui_RunWindow
 {
 public:
-    QHBoxLayout *hboxLayout;
+    QGridLayout *gridLayout_3;
+    QWidget *widget_2;
+    QGridLayout *gridLayout_2;
+    QTextEdit *textEdit;
     QWidget *widget;
     QVBoxLayout *verticalLayout;
     QTableWidget *tableWidget;
@@ -38,52 +40,72 @@ public:
     QPushButton *pushButton_5;
     QPushButton *pushButton_6;
     QPushButton *pushButton_7;
-    QWidget *widget_2;
-    QHBoxLayout *horizontalLayout;
-    QTextEdit *textEdit;
 
     void setupUi(QWidget *RunWindow)
     {
         if (RunWindow->objectName().isEmpty())
             RunWindow->setObjectName("RunWindow");
-        RunWindow->resize(828, 564);
+        RunWindow->resize(828, 655);
         QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
         sizePolicy.setHorizontalStretch(1);
         sizePolicy.setVerticalStretch(1);
         sizePolicy.setHeightForWidth(RunWindow->sizePolicy().hasHeightForWidth());
         RunWindow->setSizePolicy(sizePolicy);
-        hboxLayout = new QHBoxLayout(RunWindow);
-        hboxLayout->setSpacing(0);
-        hboxLayout->setObjectName("hboxLayout");
-        hboxLayout->setContentsMargins(5, 5, 0, 0);
+        gridLayout_3 = new QGridLayout(RunWindow);
+        gridLayout_3->setObjectName("gridLayout_3");
+        widget_2 = new QWidget(RunWindow);
+        widget_2->setObjectName("widget_2");
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy1.setHorizontalStretch(2);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(widget_2->sizePolicy().hasHeightForWidth());
+        widget_2->setSizePolicy(sizePolicy1);
+        gridLayout_2 = new QGridLayout(widget_2);
+        gridLayout_2->setObjectName("gridLayout_2");
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        textEdit = new QTextEdit(widget_2);
+        textEdit->setObjectName("textEdit");
+        QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
+        sizePolicy2.setHorizontalStretch(4);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(textEdit->sizePolicy().hasHeightForWidth());
+        textEdit->setSizePolicy(sizePolicy2);
+
+        gridLayout_2->addWidget(textEdit, 0, 0, 1, 1);
+
+
+        gridLayout_3->addWidget(widget_2, 0, 1, 3, 1);
+
         widget = new QWidget(RunWindow);
         widget->setObjectName("widget");
-        QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy1.setHorizontalStretch(1);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
-        widget->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy);
+        widget->setMinimumSize(QSize(249, 0));
+        widget->setMaximumSize(QSize(249, 16777215));
+        widget->setSizeIncrement(QSize(0, 0));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         tableWidget = new QTableWidget(widget);
         tableWidget->setObjectName("tableWidget");
-        QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(1);
-        sizePolicy2.setHeightForWidth(tableWidget->sizePolicy().hasHeightForWidth());
-        tableWidget->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(1);
+        sizePolicy3.setHeightForWidth(tableWidget->sizePolicy().hasHeightForWidth());
+        tableWidget->setSizePolicy(sizePolicy3);
+        tableWidget->setMinimumSize(QSize(248, 260));
+        tableWidget->setMaximumSize(QSize(248, 260));
 
         verticalLayout->addWidget(tableWidget);
 
         widget_3 = new QWidget(widget);
         widget_3->setObjectName("widget_3");
-        QSizePolicy sizePolicy3(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(1);
-        sizePolicy3.setHeightForWidth(widget_3->sizePolicy().hasHeightForWidth());
-        widget_3->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(8);
+        sizePolicy4.setHeightForWidth(widget_3->sizePolicy().hasHeightForWidth());
+        widget_3->setSizePolicy(sizePolicy4);
         gridLayout = new QGridLayout(widget_3);
         gridLayout->setObjectName("gridLayout");
         pushButton = new QPushButton(widget_3);
@@ -125,26 +147,7 @@ public:
         verticalLayout->addWidget(widget_3);
 
 
-        hboxLayout->addWidget(widget);
-
-        widget_2 = new QWidget(RunWindow);
-        widget_2->setObjectName("widget_2");
-        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy4.setHorizontalStretch(2);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(widget_2->sizePolicy().hasHeightForWidth());
-        widget_2->setSizePolicy(sizePolicy4);
-        horizontalLayout = new QHBoxLayout(widget_2);
-        horizontalLayout->setSpacing(0);
-        horizontalLayout->setObjectName("horizontalLayout");
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        textEdit = new QTextEdit(widget_2);
-        textEdit->setObjectName("textEdit");
-
-        horizontalLayout->addWidget(textEdit);
-
-
-        hboxLayout->addWidget(widget_2);
+        gridLayout_3->addWidget(widget, 0, 0, 1, 1);
 
 
         retranslateUi(RunWindow);

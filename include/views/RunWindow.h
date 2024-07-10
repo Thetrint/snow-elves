@@ -21,9 +21,6 @@ public:
     Ui::RunWindow ui{};
     // ~MainWindow();
     //
-private slots:
-    void StartTask();
-    void Stop();
 
 private:
     int getrowindex() const;

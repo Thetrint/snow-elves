@@ -14,6 +14,8 @@ set(OpenCV_DIR "D:/opencv")
 find_package(OpenCV REQUIRED)
 
 
+
+
 # 遍历 BMP 图像文件夹并生成图片资源的头文件
 file(GLOB IMAGE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/resources/images/*.bmp")
 set(OUTPUT_HEADER "${CMAKE_CURRENT_BINARY_DIR}/resources/images.h")
@@ -37,20 +39,20 @@ foreach(img ${IMAGE_FILES})
     file(READ ${img} IMG_FILE_CONTENT HEX)
     string(LENGTH ${IMG_FILE_CONTENT} IMG_FILE_SIZE)
 
-    list(APPEND IMAGE_MAP_CONTENT "    { L\"${img_name}\", ${img_var_name} },\n")
-    list(APPEND IMAGE_SIZE_MAP_CONTENT "    { L\"${img_name}_size\", ${img_var_name}_size },\n")
+    list(APPEND IMAGE_MAP_CONTENT "    { \"${img_name}\", ${img_var_name} },\n")
+    list(APPEND IMAGE_SIZE_MAP_CONTENT "    { \"${img_name}_size\", ${img_var_name}_size },\n")
 
     file(APPEND ${OUTPUT_HEADER} "const unsigned char ${img_var_name}[] = { ${img_content} };\n\n")
     file(APPEND ${OUTPUT_HEADER} "const size_t ${img_var_name}_size = sizeof(${img_var_name});\n\n")
 endforeach()
 
-file(APPEND ${OUTPUT_HEADER} "static std::map<std::wstring, const unsigned char*> Images = {\n")
+file(APPEND ${OUTPUT_HEADER} "static std::map<std::string, const unsigned char*> Images = {\n")
 foreach(entry ${IMAGE_MAP_CONTENT})
     file(APPEND ${OUTPUT_HEADER} "${entry}")
 endforeach()
 file(APPEND ${OUTPUT_HEADER} "};\n\n")
 
-file(APPEND ${OUTPUT_HEADER} "static std::map<std::wstring, const size_t> Images_size = {\n")
+file(APPEND ${OUTPUT_HEADER} "static std::map<std::string, const size_t> Images_size = {\n")
 foreach(entry ${IMAGE_SIZE_MAP_CONTENT})
     file(APPEND ${OUTPUT_HEADER} "${entry}")
 endforeach()
@@ -64,6 +66,7 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/ui
         ${OpenCV_INCLUDE_DIRS}
         ${CMAKE_CURRENT_BINARY_DIR}
+
 )
 
 
@@ -129,6 +132,7 @@ add_executable(SnowElvesScript WIN32
         include/views/RenewWindow.h
         src/models/DownloadThread.cpp
         include/models/DownloadThread.h
+        include/main.h
 
 
 )
@@ -146,6 +150,7 @@ target_link_libraries(SnowElvesScript PRIVATE
         Qt::Widgets
         cpr::cpr
         ${OpenCV_LIBS}
+
 )
 
 
