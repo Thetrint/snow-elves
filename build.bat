@@ -72,8 +72,8 @@ REM 清理临时文件
 del .\_dependent_dll_log.txt
 del .\temp.txt
 
-echo [1] 启动构建任务
-echo [2] 不启动构建任务
+echo [1] 启动推送功能
+echo [2] 不启推送功能
 
 REM 使用 choice 命令获取用户输入
 choice /c 12 /n /m "输入选项: "

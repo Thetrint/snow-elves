@@ -37,9 +37,9 @@ if "%PARAM1%"=="Incremental" (
 
         rem 启动程序
         echo start "" ".\SnowElvesScript.exe"
-
-        echo exit
         echo del "%%~f0"
+        echo exit
+
     ) > "%CD%\temp_update.bat"
 
     rem 启动临时批处理文件并关闭当前窗口
@@ -56,8 +56,8 @@ if "%PARAM1%"=="Incremental" (
         echo xcopy /Y %%TEMP%%\FullUpdate\* %%CD%%\ /E /H /C /I /exclude:%~nx0
         echo rmdir /S /Q %%TEMP%%\FullUpdate
         echo start "" ".\SnowElvesScript.exe"
-        echo exit
         echo del "%%~f0"
+        echo exit
     ) > "%CD%\temp_update.bat"
 
     rem 启动临时批处理文件并关闭当前窗口
