@@ -153,6 +153,9 @@ bool RenewWindow::compareVersions(const std::string& version1, const std::string
         if (num1 > num2) {
             return true;
         }
+        if(num1 < num2) {
+            return false;
+        }
 
         // 跳过点号
         ss1 >> dot;

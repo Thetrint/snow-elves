@@ -115,7 +115,7 @@ void WindowManager::setWinodw(HWND const &hwnd) {
     while (true) {
         HBITMAP const &hBitmap = CaptureAnImage(hwnd);
         GetObject(hBitmap, sizeof(BITMAP), &bmp);
-        if ((1333 <= bmp.bmWidth <= 1335 && 749 <= bmp.bmHeight <= 751)) {
+        if (1333 <= bmp.bmWidth <= 1335 && 749 <= bmp.bmHeight <= 751) {
             break;
         }
 

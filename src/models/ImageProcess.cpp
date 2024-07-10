@@ -35,32 +35,39 @@ cv::Mat ImageProcessor::HBITMAPToMat(HBITMAP hBitmap) {
     GetObject(hBitmap, sizeof(BITMAP), &bitmap);
 
     // 确保位图信息正确设置
-    BITMAPINFOHEADER bih;
-    bih.biSize = sizeof(BITMAPINFOHEADER);
-    bih.biWidth = bitmap.bmWidth;
-    bih.biHeight = -bitmap.bmHeight; // 设置为负值，确保从顶部到底部排列
-    bih.biPlanes = 1;
-    bih.biBitCount = bitmap.bmBitsPixel; // 假设为 32 位图像，如果不是，请根据实际情况修改
-    bih.biCompression = BI_RGB;
-    bih.biSizeImage = 0;
-    bih.biXPelsPerMeter = 0;
-    bih.biYPelsPerMeter = 0;
-    bih.biClrUsed = 0;
-    bih.biClrImportant = 0;
+    BITMAPINFOHEADER bi;
+    bi.biSize = sizeof(BITMAPINFOHEADER);
+    bi.biWidth = bitmap.bmWidth;
+    bi.biHeight = -bitmap.bmHeight; // 设置为负值，确保从顶部到底部排列
+    bi.biPlanes = 1;
+    bi.biBitCount = bitmap.bmBitsPixel; // 假设为 32 位图像，如果不是，请根据实际情况修改
+    bi.biCompression = BI_RGB;
+    bi.biSizeImage = 0;
+    bi.biXPelsPerMeter = 0;
+    bi.biYPelsPerMeter = 0;
+    bi.biClrUsed = 0;
+    bi.biClrImportant = 0;
+    // bih.biSize = sizeof(BITMAPINFOHEADER);
+    // bih.biWidth = bitmap.bmWidth;
+    // bih.biHeight = -bitmap.bmHeight; // 设置为负值，确保从顶部到底部排列
+    // bih.biPlanes = 1;
+    // bih.biBitCount = bitmap.bmBitsPixel; // 假设为 32 位图像，如果不是，请根据实际情况修改
+    // bih.biCompression = BI_RGB;
+    // bih.biSizeImage = 0;
+    // bih.biXPelsPerMeter = 0;
+    // bih.biYPelsPerMeter = 0;
+    // bih.biClrUsed = 0;
+    // bih.biClrImportant = 0;
 
     // 分配内存保存图像数据
+
     std::vector<uchar> buffer(bitmap.bmWidth * bitmap.bmHeight * 4); // 4 bytes per pixel (assuming 32-bit)
 
     // 获取设备上下文和图像数据
     HDC hdc = GetDC(nullptr);
-    int result = GetDIBits(hdc, hBitmap, 0, bitmap.bmHeight, buffer.data(), (BITMAPINFO *)&bih, DIB_RGB_COLORS);
+    int result = GetDIBits(hdc, hBitmap, 0, bitmap.bmHeight, buffer.data(), (BITMAPINFO *)&bi, DIB_RGB_COLORS);
     ReleaseDC(nullptr, hdc);
 
-    if (result == 0) {
-        // 处理错误的方式，比如输出错误信息
-        DWORD err = GetLastError();
-        // 可以输出错误代码以便调试
-    }
 
     // 创建 OpenCV 的 Mat 对象
     cv::Mat mat(bitmap.bmHeight, bitmap.bmWidth, CV_8UC4, buffer.data());
