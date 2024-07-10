@@ -22,7 +22,7 @@ if "%PARAM1%"=="Incremental" (
         echo echo File name is %%file_name%%
 
         rem 构建完整的源文件路径和目标文件路径
-        echo set "source=%temp_dir%\%%file_name%%"
+        echo set "source=%%TEMP%%\%%file_name%%"
         echo set "destination=%CD%\%%file_name%%"
         echo echo Source path is %%source%%
         echo echo Destination path is %%destination%%
