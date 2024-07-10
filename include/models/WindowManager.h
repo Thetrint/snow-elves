@@ -22,6 +22,8 @@ public:
     // Capture an image from the specified window and save it to the given file path
     static int CaptureAndSaveImage(HWND hWnd, const std::string &filePath);
 
+    static void GetFactor();
+
     static void MouseDownUp(HWND hwnd, int x, int y);
 
     static int GetVkCode(const std::string &key);

@@ -75,7 +75,10 @@ cv::Mat ImageProcessor::HBITMAPToMat(HBITMAP hBitmap) {
 
     cv::Mat matRGB;
     cv::cvtColor(mat, matRGB, cv::COLOR_BGRA2BGR); // Convert from BGRA to BGR
-    return matRGB.clone();   // 返回克隆的图像，确保 Mat 对象拥有独立的数据
+
+    const cv::Rect roi(0, 0, 1335, 750);
+    cv::Mat persionImage = matRGB(roi);
+    return persionImage.clone();   // 返回克隆的图像，确保 Mat 对象拥有独立的数据
 
 }
 

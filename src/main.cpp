@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
     RenewWindow Renew;
     LoginWindow Login;
 
+    //获取屏幕缩放
+    WindowManager::GetFactor();
+
     // 连接 loginSuccess 信号到主窗口的 show 槽
     QObject::connect(&Renew, &RenewWindow::login, [&]() {
         Login.show();

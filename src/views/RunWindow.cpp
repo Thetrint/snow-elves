@@ -26,7 +26,6 @@ RunWindow::RunWindow(QWidget *parent):
         const cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
         const cv::Rect roi(120, 730, 115, 20);
         cv::Mat persionImage = image(roi);
-        // cv::imshow("11", image_1);
         // cv::imshow("12", image);
         // cv::imshow("13", persionImage);
         // cv::waitKey(0);
