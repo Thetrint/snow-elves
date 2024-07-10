@@ -1,6 +1,6 @@
 
 #include "views/MainWindow.h"
-
+#include "main.h"
 #include "models/ImageProcess.h"
 #include "models/WindowManager.h"
 #include "views/LoginWindow.h"

@@ -18,7 +18,6 @@ TaskManager::TaskManager(int id, HWND hwnd)
 
 
 void TaskManager::stop() {
-    std::cout << "解绑" << std::endl;
     unbind_event = false;
     pause_event.unlock(); // 解除任何可能的暂停状态
 }
@@ -28,12 +27,12 @@ void TaskManager::pause() {
 }
 
 void TaskManager::resume() {
+    WindowManager::setWinodw(hwnd);
     pause_event.unlock();
 }
 
+
 void TaskManager::start(){
-
-
 
     // WindowManager::CaptureAndSaveImage(hwnd, L"1.bmp");
 
