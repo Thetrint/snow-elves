@@ -55,7 +55,6 @@ RunWindow::RunWindow(QWidget *parent):
         ui.tableWidget->setItem(id, 0, item);
 
 
-        std::lock_guard<std::mutex> lock(mtx);
         // 检查是否已经存在指定 ID 的实例
         if (!instances.contains(id)) {
             // 如果不存在，创建一个新的 MyClass 实例并存储在共享指针中
@@ -64,9 +63,7 @@ RunWindow::RunWindow(QWidget *parent):
             // 将新创建的实例存储在 instances 容器中
             instances[id] = instance;
 
-            // 创建一个新线程来运行该实例的 operator() 函数
             threads[id] = std::jthread(&TaskManager::start, instance);
-
         }
     });
 
@@ -79,7 +76,9 @@ RunWindow::RunWindow(QWidget *parent):
 
         if (instances.contains(id)) {
             instances[id]->stop();
+            instances.erase(id);
         }
+
     });
 
 

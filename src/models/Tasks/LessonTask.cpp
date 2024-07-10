@@ -29,6 +29,19 @@ int LessonTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, "按钮确定");
                 }
                 ClickImageMatch({.similar = 0.5}, "按钮关闭");
+                objective("开始任务");
+                break;
+            case 3:
+                OpenKnapsack();
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮物品综合入口");
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮物品活动");
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮活动江湖");
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮活动濯剑");
+                if (ClickImageMatch(MatchParams{.similar = 0.6}, "按钮活动濯剑").empty()) {
+                    objective("任务退出");
+                    continue;
+                }
+
                 break;
             default:
                 break;;

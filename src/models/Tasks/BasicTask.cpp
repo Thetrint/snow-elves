@@ -29,6 +29,16 @@ bool BasicTask::OpenTeam() {
 
 }
 
+bool BasicTask::OpenKnapsack() {
+    key_down_up("B");
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, "界面队伍").empty()) {
+        return true;
+    }
+
+    return false;
+
+}
+
 /**
  * 基础功能 位置检查 重置位置
  */

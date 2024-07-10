@@ -44,6 +44,8 @@ protected:
 
     bool OpenTeam();
 
+    bool OpenKnapsack();
+
     void LocationDetection();
 
     void Arrive();
