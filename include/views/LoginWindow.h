@@ -17,7 +17,7 @@ class LoginWindow final: public QWidget
 public:
     explicit LoginWindow(QWidget *parent = nullptr);
 
-
+    Ui::LoginWindow ui{};
 signals:
     void loginSuccess();
 
@@ -25,7 +25,7 @@ private slots:
     void onLoginClicked();
 
 private:
-    Ui::LoginWindow ui{};
+
 };
 
 #endif //LOGINWINDOW_H

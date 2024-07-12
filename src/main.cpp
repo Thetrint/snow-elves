@@ -1,6 +1,7 @@
 
-#include "views/MainWindow.h"
 #include "main.h"
+#include "views/MainWindow.h"
+
 #include "models/ImageProcess.h"
 #include "models/WindowManager.h"
 #include "views/LoginWindow.h"
@@ -16,12 +17,15 @@
 
 int main(int argc, char *argv[])
 {
+    //获取屏幕缩放
+    WindowManager::GetFactor();
 
     QApplication app(argc, argv);
-    QApplication::setStyle(QStyleFactory::create("windowsvita"));
+    // QApplication::setStyle(QStyleFactory::create("windowsvita"));
+
 
     // 注册资源文件
-    if (bool resourceRegistered = QResource::registerResource("RESOURCE.rcc")) {
+    if (QResource::registerResource("RESOURCE.rcc")) {
         std::cout << "Resource file snowelves.rcc registered successfully." << std::endl;
     } else {
         std::cerr << "Failed to register resource file snowelves.qrc!" << std::endl;
@@ -29,14 +33,15 @@ int main(int argc, char *argv[])
     }
 
 
-
     // 读取样式表文件
-    if (QFile styleFile(":/styles/style.qss"); styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (QFile styleFile(":/styles/style.qss"); styleFile.open(QFile::ReadOnly)) {
         std::cout << "Opened style.qss file successfully." << std::endl;
-        QString styleSheet = QLatin1String(styleFile.readAll());
-        app.setStyleSheet(styleSheet);
+        const QString styleSheet = QLatin1String(styleFile.readAll());
+
+        app.setStyleSheet(styleSheet); // 把文件内容传参
+
         styleFile.close();
-    }else {
+    } else {
         std::cerr << "Failed to load style.qss file!" << std::endl;
     }
 
@@ -44,8 +49,7 @@ int main(int argc, char *argv[])
     RenewWindow Renew;
     LoginWindow Login;
 
-    //获取屏幕缩放
-    WindowManager::GetFactor();
+
 
     // 连接 loginSuccess 信号到主窗口的 show 槽
     QObject::connect(&Renew, &RenewWindow::login, [&]() {
@@ -73,7 +77,7 @@ int main(int argc, char *argv[])
 
 
 
-    QResource::unregisterResource("RESOURCE.rcc");
+    // QResource::unregisterResource("RESOURCE.rcc");
     return QApplication::exec();
 }
 

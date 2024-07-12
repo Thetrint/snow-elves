@@ -28,11 +28,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     setMinimumSize(961, 652);
 
-    menu_layout = new QVBoxLayout(this);
-    ui.widget->setLayout(menu_layout);
 
-    spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    menu_layout->addSpacerItem(spacer);
 
     home = new HomeWindow(this);
     addPageAndButton("主页", home);
@@ -45,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent):
     addPageAndButton("运行", run);
 
     // connect(RunWindow)
+    buttonGroup.setExclusive(true);
 
     connect(Signals::instance(), &Signals::writejson, this, &MainWindow::writewinconfig);
 
@@ -58,24 +55,26 @@ MainWindow::MainWindow(QWidget *parent):
 //容器添加界面
 void MainWindow::addPageAndButton(const QString &buttonText, QWidget *page) {
 
-    const int index = getSpacerIndex(spacer);
+    const int index = getSpacerIndex(ui.verticalSpacer);
 
     // 创建一个QPushButton并将其添加到ui.widget的布局中
     auto *button = new QPushButton(buttonText, this);
-    menu_layout->insertWidget(index, button);
+    button->setCheckable(true);
+    ui.verticalLayout->insertWidget(index, button);
 
     // 将按钮的点击信号连接到槽函数，切换到相应的页面
     connect(button, &QPushButton::clicked, this, [this, page]() {
-        ui.stackedWidget_2->setCurrentWidget(page);
+        ui.stackedWidget->setCurrentWidget(page);
     });
 
-    ui.stackedWidget_2->addWidget(page);
+    buttonGroup.addButton(button);
+    ui.stackedWidget->addWidget(page);
 }
 
 //获取弹簧索引
 int MainWindow::getSpacerIndex(const QSpacerItem *spacer) const {
-    for (int i = 0; i < menu_layout->count(); ++i) {
-        if (menu_layout->itemAt(i)->spacerItem() == spacer) {
+    for (int i = 0; i < ui.verticalLayout->count(); ++i) {
+        if (ui.verticalLayout->itemAt(i)->spacerItem() == spacer) {
             return i;
         }
     }

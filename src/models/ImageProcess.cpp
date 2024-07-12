@@ -2,8 +2,9 @@
 // Created by y1726 on 2024/6/28.
 //
 #include "models/ImageProcess.h"
-
 using namespace std;
+
+
 
 
 /**
@@ -76,7 +77,7 @@ cv::Mat ImageProcessor::HBITMAPToMat(HBITMAP hBitmap) {
     cv::Mat matRGB;
     cv::cvtColor(mat, matRGB, cv::COLOR_BGRA2BGR); // Convert from BGRA to BGR
 
-    const cv::Rect roi(0, 0, 1335, 750);
+    const cv::Rect roi(0, 0, 1334, 750);
     cv::Mat persionImage = matRGB(roi);
     return persionImage.clone();   // 返回克隆的图像，确保 Mat 对象拥有独立的数据
 
@@ -121,26 +122,14 @@ vector<Match> ImageProcessor::matchTemplate_TM_SQDIFF_NORMED(const cv::Mat& imag
     //     rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
     // }
 
-    //计算中心坐标
-    for (auto& [location, score] : matches) {
-
-        // 计算中心点
-        const cv::Point center(location.x + templ.cols / 2, location.y + templ.rows / 2);
-        // std::cout << "Location: " << location << ", Center: " << center << ", Score: " << score << std::endl;
-        location = center;
-
-
-    }
-    nonMaxSuppression(matches, 22);
-
 
 
     // 打印匹配结果
-    cout << "Found " << matches.size() << " matches:" << endl;
-    for (size_t i = 0; i < matches.size(); ++i) {
-        auto [location, score] = matches[i];
-        cout << "Match " << i + 1 << ": Location (" << location.x << ", " << location.y << "), Score: " << score << endl;
-    }
+    // cout << "Found " << matches.size() << " matches:" << endl;
+    // for (size_t i = 0; i < matches.size(); ++i) {
+    //     auto [location, score] = matches[i];
+    //     cout << "Match " << i + 1 << ": Location (" << location.x << ", " << location.y << "), Score: " << score << endl;
+    // }
 
 
     //
@@ -196,17 +185,6 @@ vector<Match> ImageProcessor::matchTemplate_TM_CCORR_NORMED(const cv::Mat& image
     // }
 
     //计算中心坐标
-    for (auto& [location, score] : matches) {
-
-        // 计算中心点
-        const cv::Point center(location.x + templ.cols / 2, location.y + templ.rows / 2);
-        // std::cout << "Location: " << location << ", Center: " << center << ", Score: " << score << std::endl;
-        location = center;
-
-
-    }
-    nonMaxSuppression(matches, 22);
-
 
 
     // // 打印匹配结果
@@ -236,6 +214,17 @@ vector<Match> ImageProcessor::matchTemplate(const cv::Mat& image, const cv::Mat 
 
 
     vector<Match> matches = funcPtr(image, templ, match);
+
+    for (auto& [location, score] : matches) {
+        // 计算中心点
+        const cv::Point center( match.scope.x1 + location.x + templ.cols / 2, match.scope.y1 + location.y + templ.rows / 2);
+        // std::cout << "Location: " << location << ", Center: " << center << ", Score: " << score << std::endl;
+        location = center;
+
+    }
+
+    nonMaxSuppression(matches, 22);
+
 
     return matches;
 }

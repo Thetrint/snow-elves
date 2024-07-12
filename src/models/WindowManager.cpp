@@ -113,10 +113,20 @@ void WindowManager::setWinodw(HWND const &hwnd) {
     int height = static_cast<int>(750 / FACTOR);
 
     while (true) {
+
+        try {
+            MoveWindow(hwnd, rect.left, rect.top, static_cast<int>(width), static_cast<int>(height), TRUE);
+            // MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
+        } catch (const std::exception& e) {
+            std::cerr << "设置游戏窗口大小: " << e.what() << std::endl;
+        }
+
         HBITMAP const &hBitmap = CaptureAnImage(hwnd);
         GetObject(hBitmap, sizeof(BITMAP), &bmp);
-        if (1334 <= bmp.bmWidth && bmp.bmWidth <= 1336 && 749 <= bmp.bmHeight && bmp.bmHeight <= 751) {
+        if (1335 <= bmp.bmWidth && bmp.bmWidth <= 1336 && 750 <= bmp.bmHeight && bmp.bmHeight <= 751) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
             break;
+
         }
 
         if (bmp.bmWidth > 1335) {
@@ -129,13 +139,6 @@ void WindowManager::setWinodw(HWND const &hwnd) {
             height--;
         }else if(bmp.bmHeight < 750) {
             height++;
-        }
-
-        try {
-            MoveWindow(hwnd, rect.left, rect.top, static_cast<int>(width), static_cast<int>(height), TRUE);
-            // MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
-        } catch (const std::exception& e) {
-            std::cerr << "设置游戏窗口大小: " << e.what() << std::endl;
         }
 
     }
@@ -321,8 +324,8 @@ void WindowManager::GetFactor() {
     GetMonitorInfo(hMonitor, &miex);
 
     // 获取监视器逻辑尺寸
-    const int cxLogical = miex.rcMonitor.right - miex.rcMonitor.left;
-    const int cyLogical = miex.rcMonitor.bottom - miex.rcMonitor.top;
+    int cxLogical = miex.rcMonitor.right - miex.rcMonitor.left;
+    int cyLogical = miex.rcMonitor.bottom - miex.rcMonitor.top;
 
     // 获取监视器物理尺寸
     DEVMODE dm;
@@ -331,12 +334,12 @@ void WindowManager::GetFactor() {
         std::cerr << "Failed to get display settings." << std::endl;
         return;
     }
-    const DWORD cxPhysical = dm.dmPelsWidth;
-    const DWORD cyPhysical = dm.dmPelsHeight;
+    DWORD cxPhysical = dm.dmPelsWidth;
+    DWORD cyPhysical = dm.dmPelsHeight;
 
     // 计算缩放比例
-    const double scalingFactorX = static_cast<double>(cxPhysical) / static_cast<double>(cxLogical);
-    const double scalingFactorY = static_cast<double>(cyPhysical) / static_cast<double>(cyLogical);
+    double scalingFactorX = static_cast<double>(cxPhysical) / static_cast<double>(cxLogical);
+    double scalingFactorY = static_cast<double>(cyPhysical) / static_cast<double>(cyLogical);
 
 
     // 输出结果

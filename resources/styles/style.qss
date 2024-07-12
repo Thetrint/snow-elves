@@ -1,17 +1,88 @@
 /* styles.qss */
 
-#listWidget {
+
+#listWidget{
     border: 1px solid gray;
     color: black;
 }
 
-#listWidget::item {
+#listWidget::item{
     padding-top: 20px;
     padding-bottom: 4px;
 
 }
 
 
-#listWidget:focus {
+#listWidget:focus{
     outline: none;
 }
+
+/* 主窗口 */
+#MainWindow {
+    background-color: white;
+
+}
+
+/* 主窗口菜单*/
+#MainWindow #menu {
+    background-color: #f9f7f7; /* 深蓝色背景 */
+}
+
+/* 所有按钮 */
+#MainWindow #menu QPushButton{
+    height: 25;
+}
+
+#MainWindow #menu QPushButton:checked{
+    color: #abef9;
+    background:#a7e6ff;
+    border-right:0px solid #aaaaaa;
+    border-bottom:0px solid #aaaaaa;
+    border-left:0px solid #aaaaaa;
+    border-top:0px solid #aaaaaa;
+    border-top-left-radius:10px;
+    border-bottom-left-radius:10px;
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+
+}
+
+#MainWindow #menu QPushButton:!checked:hover{
+    color: #ffffff;
+    background-color: #a7e6ff;
+    border-right:0px solid #aaaaaa;
+    border-bottom:0px solid #aaaaaa;
+    border-left:0px solid #aaaaaa;
+    border-top:0px solid #aaaaaa;
+    border-top-left-radius:10px;
+    border-bottom-left-radius:10px;
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+}
+
+
+#MainWindow #menu QPushButton:!checked{
+    color: #abef9;
+    background-color: #ffffff;
+    border-right:0px solid #aaaaaa;
+    border-bottom:0px solid #aaaaaa;
+    border-left:0px solid #aaaaaa;
+    border-top:0px solid #aaaaaa;
+    border-top-left-radius:10px;
+    border-bottom-left-radius:10px;
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+}
+
+/* 主窗口界面容器 */
+#MainWindow #stackedWidget {
+    background-color: #dbe2ef; /* 深灰色背景 */
+    border-top-left-radius: 10px;
+}
+
+#MainWindow #ScriptWindow #widget {
+    background-color: white;
+}
+
+
+

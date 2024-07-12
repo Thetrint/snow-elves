@@ -46,13 +46,15 @@ protected:
 
     bool OpenKnapsack();
 
+    bool Close(const MatchParams &match, const std::string& templ_name);
+
     void LocationDetection();
 
     void Arrive();
 
     void ImageMatch(const std::string &templ_name, std::vector<Match> &matches, MatchParams &match) const;
 
-    void mouse_down_up(const cv::Point &location) const;
+    void mouse_down_up(const MatchParams &match, const cv::Point &location) const;
 
     void key_down_up(const std::string &key) const;
 
@@ -90,17 +92,17 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, Args... templ_n
 
                     // 随机取出一个元素
                     const auto& [location, score] = matches[std::rand() % matches.size()];
-                    mouse_down_up(location);
+                    mouse_down_up(match, location);
                     break;
                 }
                 case FORWARD:
                     for (const auto& [location, score] : matches) {
-                        mouse_down_up(location);
+                        mouse_down_up(match, location);
                     }
                 break;
                 case BACKWARD:
                     for (auto it = matches.rbegin(); it != matches.rend(); ++it) {
-                        mouse_down_up(it->location);
+                        mouse_down_up(match, it->location);
                     }
                 break;
             }
