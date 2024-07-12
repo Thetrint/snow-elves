@@ -39,22 +39,17 @@ void TaskManager::start(){
     LoadJsonFile::instance().LoadFile(id);
 
     // 创建一个 vector 用于存储解码后的值
-    std::vector<std::wstring> tasks;
+    std::vector<std::string> tasks;
 
-    // 遍历数组元素并解码 Unicode 转义序列
-    for (const auto& value : LoadJsonFile::instance().file_0.value("执行任务").toArray()) {
-        if (value.isString()) {
-            QString qs = value.toString();
-            std::wstring ws = qs.toStdWString();
-            tasks.push_back(ws);
-        }
+    for (const auto& task : LoadJsonFile::instance().file_0.value("执行任务").toArray()) {
+        tasks.push_back(task.toString().toStdString());
+        std::cout << task.toString().toStdString() << std::endl;
     }
 
-
     TaskSchedul schedul(tasks);
+    schedul.init();
 
-
-    std::wstring task;
+    std::string task;
     while ((task = schedul.get_task()).empty() == false) {
         auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event);
         obj->implementation();

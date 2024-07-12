@@ -4,7 +4,7 @@
 
 #ifndef MAIN_H
 #define MAIN_H
-
+#include <winsock2.h>
 #include <Windows.h>
 #include <iostream>
 #include <opencv2/opencv.hpp>
@@ -18,7 +18,7 @@
 #include "resources/images.h"
 
 
-
+inline double FACTOR;
 inline int DELAY  = 1500;
 
 

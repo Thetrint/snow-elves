@@ -3,7 +3,10 @@
 //
 #include "views/LoginWindow.h"
 
+#include <iostream>
+#include <QFile>
 #include <QMessageBox>
+
 
 LoginWindow::LoginWindow(QWidget *parent):
     QWidget(parent)

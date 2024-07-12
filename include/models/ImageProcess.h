@@ -24,11 +24,21 @@ struct EdgeThreshold {
     int threshold2; // 边缘检测的第二个阈值
 };
 
+struct MatchScope {
+    int x1; // 匹配左上角顶点 x坐标
+    int y1; // 匹配左上角顶点 y坐标
+    int x2;  // 匹配右下角顶点 x坐标
+    int y2;  // 匹配右下角顶点 y坐标
+};
+
 struct MatchParams {
     cv::TemplateMatchModes modes = cv::TM_CCORR_NORMED; // 默认值
     float similar{}; // 相似度
     int matchCount = 3;
     ClickType click = RANDOM;
+    int x = 0; //偏移坐标x
+    int y = 0; //偏移坐标y
+    MatchScope scope = {0, 0, 1334, 750}; // 匹配范围
     bool convertToGray = true; // 默认值
     bool applyGaussianBlur = true; // 控制高斯模糊的开关
     bool applyEdgeDetection  = true; // 控制边缘检测

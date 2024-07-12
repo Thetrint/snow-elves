@@ -9,6 +9,8 @@
 #include "views/HomeWindow.h"
 #include "views/ScriptWindow.h"
 #include "views/RunWindow.h"
+#include <QButtonGroup>
+
 
 namespace Ui {
     class MainWindow;
@@ -27,19 +29,20 @@ private slots:
 //     void switchToPage(int index) const;
 
 private:
+
+    Ui::MainWindow ui{};
+
     //窗口页面
     HomeWindow *home;
     ScriptWindow *script;
     RunWindow *run;
-    // 菜单布局
-    QVBoxLayout *menu_layout;
-    QSpacerItem *spacer;
+
+    QButtonGroup buttonGroup{ui.menu};
     void addPageAndButton(const QString &buttonText, QWidget *page);
     int getSpacerIndex(const QSpacerItem *spacer) const;
 
 
 
-    Ui::MainWindow ui{};
 };
 
 #endif // MAINWINDOW_H

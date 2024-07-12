@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.7.1
+** Created by: Qt User Interface Compiler version 6.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -12,7 +12,9 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -21,8 +23,10 @@ class Ui_MainWindow
 {
 public:
     QHBoxLayout *horizontalLayout;
-    QWidget *widget;
-    QStackedWidget *stackedWidget_2;
+    QWidget *menu;
+    QVBoxLayout *verticalLayout;
+    QSpacerItem *verticalSpacer;
+    QStackedWidget *stackedWidget;
 
     void setupUi(QWidget *MainWindow)
     {
@@ -30,30 +34,36 @@ public:
             MainWindow->setObjectName("MainWindow");
         MainWindow->resize(755, 535);
         horizontalLayout = new QHBoxLayout(MainWindow);
-        horizontalLayout->setSpacing(0);
+        horizontalLayout->setSpacing(2);
         horizontalLayout->setObjectName("horizontalLayout");
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        widget = new QWidget(MainWindow);
-        widget->setObjectName("widget");
+        menu = new QWidget(MainWindow);
+        menu->setObjectName("menu");
         QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
         sizePolicy.setHorizontalStretch(2);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
-        widget->setSizePolicy(sizePolicy);
-        widget->setMinimumSize(QSize(100, 0));
-        widget->setMaximumSize(QSize(150, 16777215));
+        sizePolicy.setHeightForWidth(menu->sizePolicy().hasHeightForWidth());
+        menu->setSizePolicy(sizePolicy);
+        menu->setMinimumSize(QSize(100, 0));
+        menu->setMaximumSize(QSize(150, 16777215));
+        verticalLayout = new QVBoxLayout(menu);
+        verticalLayout->setObjectName("verticalLayout");
+        verticalSpacer = new QSpacerItem(20, 514, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 
-        horizontalLayout->addWidget(widget);
+        verticalLayout->addItem(verticalSpacer);
 
-        stackedWidget_2 = new QStackedWidget(MainWindow);
-        stackedWidget_2->setObjectName("stackedWidget_2");
+
+        horizontalLayout->addWidget(menu);
+
+        stackedWidget = new QStackedWidget(MainWindow);
+        stackedWidget->setObjectName("stackedWidget");
         QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
         sizePolicy1.setHorizontalStretch(8);
         sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(stackedWidget_2->sizePolicy().hasHeightForWidth());
-        stackedWidget_2->setSizePolicy(sizePolicy1);
+        sizePolicy1.setHeightForWidth(stackedWidget->sizePolicy().hasHeightForWidth());
+        stackedWidget->setSizePolicy(sizePolicy1);
 
-        horizontalLayout->addWidget(stackedWidget_2);
+        horizontalLayout->addWidget(stackedWidget);
 
 
         retranslateUi(MainWindow);

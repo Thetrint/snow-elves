@@ -81,6 +81,7 @@ find_package(Qt6 COMPONENTS
 qt6_add_binary_resources(RESOURCE
         resources/snowelves.qrc
         OPTIONS
+        -binary
         -no-compress
         -verbose
 )
