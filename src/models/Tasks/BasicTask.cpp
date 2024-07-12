@@ -1,6 +1,7 @@
 //
 // Created by y1726 on 2024/6/30.
 //
+#include "main.h"
 #include "models//Tasks/BasicTask.h"
 #include "models/WindowManager.h"
 
@@ -27,6 +28,21 @@ bool BasicTask::OpenTeam() {
 
     return false;
 
+}
+
+bool BasicTask::OpenKnapsack() {
+    key_down_up("B");
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, "界面队伍").empty()) {
+        return true;
+    }
+
+    return false;
+
+}
+
+bool BasicTask::Close(const MatchParams &match, const std::string& templ_name) {
+    ClickImageMatch(match, templ_name);
+    return false;
 }
 
 /**
@@ -86,7 +102,10 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
     cv::Mat templ = ImageProcessor::imread(templ_name);
 
     //模板匹配 数据转换类型
-    cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
+    const cv::Mat img = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
+
+    const cv::Rect roi(match.scope.x1, match.scope.y1, match.scope.x2 - match.scope.x1, match.scope.y2 - match.scope.y1);
+    cv::Mat image = img(roi);
 
     //灰度处理
     if (match.convertToGray) {
@@ -127,10 +146,10 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
     matches.insert(matches.end(), matche.begin(), matche.end());
 }
 
-void BasicTask::mouse_down_up(const cv::Point& location) const {
+void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& location) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
-        WindowManager::MouseDownUp(hwnd, location.x, location.y);
+        WindowManager::MouseDownUp(hwnd, location.x + match.x, location.y + match.y);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }

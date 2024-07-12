@@ -26,9 +26,37 @@ int LessonTask::implementation() {
                 OpenTeam();
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, "按钮队伍创建").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, "按钮队伍退出");
-                    ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, "按钮确定");
+                    ClickImageMatch(MatchParams{.similar = 0.6}, "按钮确定");
                 }
                 ClickImageMatch({.similar = 0.5}, "按钮关闭");
+                objective("开始任务");
+                break;
+            case 3:
+                OpenKnapsack();
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮物品综合入口");
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮物品活动");
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮活动江湖");
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮活动濯剑");
+                if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, "按钮活动濯剑").empty()) {
+                    objective("任务退出");
+                    continue;
+                }
+                ClickImageMatch(MatchParams{.similar = 0.6, .scope = {170, 127, 404, 582}}, "按钮前往");
+                Arrive();
+                ClickImageMatch(MatchParams{.similar = 0.6}, "按钮大世界课业");
+                ClickImageMatch(MatchParams{.similar = 0.5}, "按钮课业确定");
+                for (int i = 0; i <= 8; i++) {
+                    if (ClickImageMatch(MatchParams{.similar = 0.6}, "按钮课业困难").empty()) {
+                        ClickImageMatch(MatchParams{.similar = 0.6}, "按钮课业刷新");
+                        ClickImageMatch(MatchParams{.similar = 0.5}, "按钮确定");
+                    }else {
+                        break;
+                    }
+                }
+                Close({.similar = 0.75}, "按钮关闭");
+                objective("等待完成");
+                break;
+            case 4:
                 break;
             default:
                 break;;
@@ -37,9 +65,6 @@ int LessonTask::implementation() {
     }
 
     return 0;
-    //
-    // ClickImageMatch(TM_CCORR_NORMED, L"活动", L"包裹");
-    // ClickImageMatch(TM_SQDIFF_NORMED, L"活动", L"包裹");
 
 
     // while (true) {
@@ -90,6 +115,16 @@ int LessonTask::determine() {
                 return -3;
         }
     }
+
+    if (cause == "等待完成") {
+        switch (sw) {
+            case 1:
+                return 4;
+            default:
+                return -3;
+        }
+    }
+
     return -6;
 }
 

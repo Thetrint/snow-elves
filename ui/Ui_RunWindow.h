@@ -51,6 +51,7 @@ public:
         sizePolicy.setVerticalStretch(1);
         sizePolicy.setHeightForWidth(RunWindow->sizePolicy().hasHeightForWidth());
         RunWindow->setSizePolicy(sizePolicy);
+        RunWindow->setStyleSheet(QString::fromUtf8("url(:/styles/style.qss)"));
         gridLayout_3 = new QGridLayout(RunWindow);
         gridLayout_3->setObjectName("gridLayout_3");
         widget_2 = new QWidget(RunWindow);
@@ -110,6 +111,7 @@ public:
         gridLayout->setObjectName("gridLayout");
         pushButton = new QPushButton(widget_3);
         pushButton->setObjectName("pushButton");
+        pushButton->setStyleSheet(QString::fromUtf8("url(:/styles/style.qss)"));
 
         gridLayout->addWidget(pushButton, 0, 0, 1, 1);
 

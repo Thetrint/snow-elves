@@ -109,19 +109,29 @@ void WindowManager::setWinodw(HWND const &hwnd) {
 
     GetWindowRect(hwnd, &rect);
 
-    int width = static_cast<int>(1334 / 1.25);
-    int height = static_cast<int>(750 / 1.25);
+    int width = static_cast<int>(1335 / FACTOR);
+    int height = static_cast<int>(750 / FACTOR);
 
     while (true) {
-        HBITMAP const &hBitmap = CaptureAnImage(hwnd);
-        GetObject(hBitmap, sizeof(BITMAP), &bmp);
-        if (1333 <= bmp.bmWidth <= 1335 && 749 <= bmp.bmHeight <= 751) {
-            break;
+
+        try {
+            MoveWindow(hwnd, rect.left, rect.top, static_cast<int>(width), static_cast<int>(height), TRUE);
+            // MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
+        } catch (const std::exception& e) {
+            std::cerr << "设置游戏窗口大小: " << e.what() << std::endl;
         }
 
-        if (bmp.bmWidth > 1334) {
+        HBITMAP const &hBitmap = CaptureAnImage(hwnd);
+        GetObject(hBitmap, sizeof(BITMAP), &bmp);
+        if (1335 <= bmp.bmWidth && bmp.bmWidth <= 1336 && 750 <= bmp.bmHeight && bmp.bmHeight <= 751) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            break;
+
+        }
+
+        if (bmp.bmWidth > 1335) {
             width--;
-        }else if(bmp.bmWidth < 1334) {
+        }else if(bmp.bmWidth < 1335) {
             width++;
         }
 
@@ -129,13 +139,6 @@ void WindowManager::setWinodw(HWND const &hwnd) {
             height--;
         }else if(bmp.bmHeight < 750) {
             height++;
-        }
-
-        try {
-            // MoveWindow(hwnd, rect.left, rect.top, static_cast<int>(width), static_cast<int>(height), TRUE);
-            MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
-        } catch (const std::exception& e) {
-            std::cerr << "设置游戏窗口大小: " << e.what() << std::endl;
         }
 
     }
@@ -173,8 +176,8 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     // int height = static_cast<int>(rcClient.bottom - rcClient.top);
 
 
-    int width = static_cast<int>((rcClient.right - rcClient.left) * 1.25);
-    int height = static_cast<int>((rcClient.bottom - rcClient.top) * 1.25);
+    int width = static_cast<int>((rcClient.right - rcClient.left) * FACTOR);
+    int height = static_cast<int>((rcClient.bottom - rcClient.top) * FACTOR);
 
 
 
@@ -204,8 +207,8 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     }
 
     // 使用 StretchBlt 将窗口DC的内容缩放到位图中
-    int scaledWidth = static_cast<int>(width / 1.25);
-    int scaledHeight = static_cast<int>(height / 1.25);
+    int scaledWidth = static_cast<int>(width / FACTOR);
+    int scaledHeight = static_cast<int>(height / FACTOR);
 
     // StretchBlt(hdcMemDC, 0, 0, scaledWidth, scaledHeight, hdcWindow, 0, 0, width, height, SRCCOPY);
 
@@ -233,43 +236,6 @@ void WindowManager::SaveBitmapToFile(HBITMAP &hBitmap, const wchar_t* filePath)
     char* lpbitmap = nullptr;
     HANDLE hDIB = nullptr;
     DWORD dwBmpSize = 0;
-
-
-    // 获取当前桌面窗口的句柄
-    HWND hWnd = GetDesktopWindow();
-
-    // 获取最近的监视器句柄
-    HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
-
-    // 获取监视器信息
-    MONITORINFOEX miex;
-    miex.cbSize = sizeof(miex);
-    GetMonitorInfo(hMonitor, &miex);
-
-    // 获取监视器逻辑尺寸
-    int cxLogical = miex.rcMonitor.right - miex.rcMonitor.left;
-    int cyLogical = miex.rcMonitor.bottom - miex.rcMonitor.top;
-
-    // 获取监视器物理尺寸
-    DEVMODE dm;
-    dm.dmSize = sizeof(dm);
-    if (!EnumDisplaySettings(miex.szDevice, ENUM_CURRENT_SETTINGS, &dm)) {
-        std::cerr << "Failed to get display settings." << std::endl;
-        return;
-    }
-    DWORD cxPhysical = dm.dmPelsWidth;
-    DWORD cyPhysical = dm.dmPelsHeight;
-
-    // 计算缩放比例
-    double scalingFactorX = static_cast<double>(cxPhysical) / static_cast<double>(cxLogical);
-    double scalingFactorY = static_cast<double>(cyPhysical) / static_cast<double>(cyLogical);
-
-
-    // 输出结果
-
-    std::cout << scalingFactorX << std::endl;
-    std::cout << scalingFactorY << std::endl;
-
 
 
     // 获取位图对象
@@ -320,7 +286,7 @@ void WindowManager::SaveBitmapToFile(HBITMAP &hBitmap, const wchar_t* filePath)
     bmfHeader.bfType = 0x4D42; // BM
 
     // 写入文件
-    WriteFile(hFile, (LPSTR)&bmfHeader, sizeof(BITMAPFILEHEADER), &dwBytesWritten, NULL);
+    WriteFile(hFile, (LPSTR)&bmfHeader, sizeof(BITMAPFILEHEADER), &dwBytesWritten, nullptr);
     WriteFile(hFile, (LPSTR)&bi, sizeof(BITMAPINFOHEADER), &dwBytesWritten, nullptr);
     WriteFile(hFile, (LPSTR)lpbitmap, dwBmpSize, &dwBytesWritten, nullptr);
 
@@ -344,6 +310,45 @@ int WindowManager::CaptureAndSaveImage(HWND hWnd, const std::string &filePath)
     }
     return -1;
 }
+
+void WindowManager::GetFactor() {
+    // 获取当前桌面窗口的句柄
+    HWND hWnd = GetDesktopWindow();
+
+    // 获取最近的监视器句柄
+    HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
+
+    // 获取监视器信息
+    MONITORINFOEX miex;
+    miex.cbSize = sizeof(miex);
+    GetMonitorInfo(hMonitor, &miex);
+
+    // 获取监视器逻辑尺寸
+    int cxLogical = miex.rcMonitor.right - miex.rcMonitor.left;
+    int cyLogical = miex.rcMonitor.bottom - miex.rcMonitor.top;
+
+    // 获取监视器物理尺寸
+    DEVMODE dm;
+    dm.dmSize = sizeof(dm);
+    if (!EnumDisplaySettings(miex.szDevice, ENUM_CURRENT_SETTINGS, &dm)) {
+        std::cerr << "Failed to get display settings." << std::endl;
+        return;
+    }
+    DWORD cxPhysical = dm.dmPelsWidth;
+    DWORD cyPhysical = dm.dmPelsHeight;
+
+    // 计算缩放比例
+    double scalingFactorX = static_cast<double>(cxPhysical) / static_cast<double>(cxLogical);
+    double scalingFactorY = static_cast<double>(cyPhysical) / static_cast<double>(cyLogical);
+
+
+    // 输出结果
+    FACTOR = scalingFactorY;
+    std::cout << scalingFactorX << std::endl;
+    std::cout << scalingFactorY << std::endl;
+
+}
+
 
 /**
  * MouseDown()-对指定句柄窗口发送鼠标单击指令

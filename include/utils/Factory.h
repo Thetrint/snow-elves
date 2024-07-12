@@ -21,11 +21,11 @@ public:
         return factory;
     }
 
-    void registerClass(const std::wstring& className, const CreateFunc& func) {
+    void registerClass(const std::string& className, const CreateFunc& func) {
         registry_[className] = func;
     }
 
-    std::unique_ptr<BasicTask> create(const std::wstring& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) const {
+    std::unique_ptr<BasicTask> create(const std::string& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) const {
         if (auto it = registry_.find(className); it != registry_.end()) {
             return it->second(id, hwnd, pause_event, unbind_event);
         }
@@ -33,7 +33,7 @@ public:
     }
 
     template <typename T>
-    void autoRegister(const std::wstring& className) {
+    void autoRegister(const std::string& className) {
         registerClass(className, [](int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) {
             return std::make_unique<T>(id, hwnd, pause_event, unbind_event);
         });
@@ -42,11 +42,11 @@ public:
 private:
     Factory() {
         // 在构造函数中注册所有需要的类
-        autoRegister<LessonTask>(L"课业任务");
-        autoRegister<FactionTask>(L"帮派任务");
+        autoRegister<LessonTask>("课业任务");
+        autoRegister<FactionTask>("帮派任务");
     }
 
-    std::map<std::wstring, CreateFunc> registry_;
+    std::map<std::string, CreateFunc> registry_;
 };
 
 #endif // FACTORY_H

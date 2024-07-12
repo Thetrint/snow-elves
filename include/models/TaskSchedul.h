@@ -4,26 +4,35 @@
 
 #ifndef TASKSCHEDUL_H
 #define TASKSCHEDUL_H
+#include <mutex>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
 class TaskSchedul {
 
 public:
-    explicit TaskSchedul(const std::vector<std::wstring>& array);
+    explicit TaskSchedul(const std::vector<std::string> &array) :array(array) {};
+    void init();
 
-    std::wstring get_task();
+    void task_schedul();
+
+    std::string get_task();
 
 private:
     // 定义一个结构体，每个结构体包含两个整数
     struct Task {
-        std::wstring taskname;
+        std::string taskname;
         int priority;
 
         // explicit Task(std::wstring  task, int priority = 1) : task(std::move(task)), priority(priority) {}
     };
 
+    std::mutex mtx;
+    bool running_ = true;
+    std::thread thread_;
+    std::vector<std::string> array;
     std::vector<Task> tasks;
 
 };

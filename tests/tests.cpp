@@ -6,7 +6,7 @@
 
 
 int main() {
-
+    WindowManager::GetFactor();
     WindowManager::setWinodw(WindowManager::getWindowHandle());
     WindowManager::CaptureAndSaveImage(WindowManager::getWindowHandle(), "1.bmp");
 
