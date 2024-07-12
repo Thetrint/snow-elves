@@ -6,6 +6,8 @@
 #include "models//TaskManager.h"
 
 #include <codecvt>
+#include <utils/signals.h>
+
 #include "models/WindowManager.h"
 #include "models/TaskSchedul.h"
 #include "utils/Factory.h"
@@ -31,7 +33,11 @@ void TaskManager::resume() {
     pause_event.unlock();
 }
 
+void TaskManager::setState(const std::string &task) const {
 
+    emit Signals::instance()->Log(id, task);
+
+}
 void TaskManager::start(){
 
     // WindowManager::CaptureAndSaveImage(hwnd, L"1.bmp");
@@ -51,6 +57,7 @@ void TaskManager::start(){
 
     std::string task;
     while ((task = schedul.get_task()).empty() == false) {
+        setState(task);
         auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event);
         obj->implementation();
         obj.reset();

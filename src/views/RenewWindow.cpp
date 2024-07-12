@@ -61,7 +61,7 @@ void RenewWindow::checkupdae() {
 
     // 输出版本号到控制台
     std::cout << "Version: " << local_version << std::endl;
-
+    emit Signals::instance()->Log(-1, "当前版本：" + local_version);
     // 关闭文件流
     input_file.close();
 
@@ -69,7 +69,7 @@ void RenewWindow::checkupdae() {
     const QJsonObject jsonObj = jsonDoc.object();
     if (const QString version = jsonObj.value("tag_name").toString(); compareVersions(version.toStdString(), local_version)) {
         // 创建一个消息框
-        auto msgBox = std::make_unique<QMessageBox>();
+        const auto msgBox = std::make_unique<QMessageBox>();
         msgBox->setWindowTitle("更新窗口");
         msgBox->setText(jsonObj.value("body").toString());
         msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);

@@ -29,6 +29,7 @@ public:
 
 private:
     std::string cause;
+    std::vector<std::chrono::steady_clock::time_point>
 };
 
 #endif //LESSONTASK_H

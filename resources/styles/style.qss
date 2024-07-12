@@ -80,8 +80,19 @@
     border-top-left-radius: 10px;
 }
 
+/* 脚本窗口*/
 #MainWindow #ScriptWindow #widget {
     background-color: white;
+}
+
+/* 运行窗口 */
+#MainWindow #RunWindow #textEdit {
+    background-color: black; /* 设置背景颜色 */
+    border: 1px solid #ccc; /* 设置边框 */
+    border-radius: 4px; /* 设置圆角 */
+    padding: 8px; /* 设置内边距 */
+    font-size: 15px; /* 设置字体大小 */
+    color: #9AC8CD; /* 设置字体颜色 */
 }
 
 

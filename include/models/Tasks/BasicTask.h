@@ -4,6 +4,7 @@
 
 #ifndef BASICTASK_H
 #define BASICTASK_H
+
 #include "main.h"
 #include "models/ImageProcess.h"
 
@@ -60,22 +61,28 @@ protected:
 
     void input_text(const std::string &text) const;
 
+    void Log(const std::string &message) const;
 
-    template<class ... Args>
-    std::vector<Match> ClickImageMatch(MatchParams match, Args... templ_names);
+    // 定义回调函数类型，包含一个字符串参数
+    typedef std::function<void()> CallbackFunc;
 
-    template<class ... Args>
-    std::vector<Match> CoortImageMatch(MatchParams match, Args... templ_names);
+    template <typename... Args>
+    std::vector<Match> ClickImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names);
+
+    template <typename... Args>
+    std::vector<Match> CoortImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names);
 
 
 };
 
-template<typename... Args>
-std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, Args... templ_names) {
+template <typename... Args>
+std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names) {
     std::vector<Match> matches;
+    
+
     //定义循环控制匹配失败最大匹配次数
     for(int i = 1; i <= match.matchCount && unbind_event; i++) {
-        ((std::cout << std::forward<Args>(templ_names) << std::endl), ...);
+
         (ImageMatch(templ_names, matches, match), ...);
 
         for (const auto&[location, score] : matches) {
@@ -88,10 +95,12 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, Args... templ_n
             switch (match.click) {
                 case RANDOM: {
                     // 初始化随机数种子
-                    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
 
                     // 随机取出一个元素
-                    const auto& [location, score] = matches[std::rand() % matches.size()];
+                    std::random_device rd;
+                    std::uniform_int_distribution<std::vector<Match>::size_type> dis(0, matches.size() - 1);
+                    const auto& [location, score] = matches[dis(rd)];
                     mouse_down_up(match, location);
                     break;
                 }
@@ -101,8 +110,8 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, Args... templ_n
                     }
                 break;
                 case BACKWARD:
-                    for (auto it = matches.rbegin(); it != matches.rend(); ++it) {
-                        mouse_down_up(match, it->location);
+                    for (auto &[location, score] : std::ranges::reverse_view(matches)) {
+                        mouse_down_up(match, location);
                     }
                 break;
             }
@@ -115,28 +124,35 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, Args... templ_n
 
     }
 
+    if (callback) {
+        (*callback)(); // 不满足条件时调用回调函数
+    }
+
     return matches;
 
 
 }
 
-template<typename... Args>
-std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, Args... templ_names) {
+template <typename... Args>
+std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names) {
     std::vector<Match> matches;
 
     if(unbind_event) {
-        ((std::cout << std::forward<Args>(templ_names) << std::endl), ...);
+
         (ImageMatch(templ_names, matches, match), ...);
 
-        //如果不为空打印一下匹配信息
-        if (!matches.empty()) {
-            for (const auto&[location, score] : matches) {
-                std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
-            }
+
+        for (const auto&[location, score] : matches) {
+            std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
+
         }
+
 
     }
 
+    if (callback) {
+        (*callback)(); // 不满足条件时调用回调函数
+    }
 
     return matches;
 }

@@ -13,7 +13,8 @@
 #include <chrono>
 #include <unordered_map>
 #include <semaphore>
-
+#include <random>
+#include <ranges>
 
 #include "resources/images.h"
 

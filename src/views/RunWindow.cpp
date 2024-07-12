@@ -14,6 +14,7 @@ RunWindow::RunWindow(QWidget *parent):
 {
     ui.setupUi(this);  // 初始化界面布局和元素
 
+
     //任务开始
     connect(ui.pushButton_7, &QPushButton::clicked, this, [&]() {
         const int id = getrowindex();
@@ -128,6 +129,26 @@ RunWindow::RunWindow(QWidget *parent):
                 instances[id]->resume();
             }
         }
+    });
+
+    connect(Signals::instance(), &Signals::Log, this, [&](const int id, const std::string& message) {
+        // 获取当前时间
+        const auto now = std::chrono::system_clock::now();
+        const std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+        const std::tm* now_tm = std::localtime(&now_time);
+
+        // 格式化时间为 "12:34:34"
+        std::ostringstream oss;
+        oss << std::put_time(now_tm, "%H:%M:%S");
+        const std::string time_str = oss.str();
+        std::string text = "[" +time_str + "]" + "[窗口 " + std::to_string(id + 1) + "]" + " " + ">>> " + message;
+        if (id == -1) {
+            text = "[" +time_str + "]"  + " >>> " + message;
+        }
+
+        ui.textEdit->append(QString::fromUtf8(text.c_str()));
+
+
     });
 
     ui.tableWidget->setRowCount(10);  // 设置行数为10行
