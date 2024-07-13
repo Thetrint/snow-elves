@@ -37,7 +37,6 @@ if "%PARAM1%"=="Incremental" (
 
         rem Æô¶¯³ÌÐò
         echo start "" ".\SnowElvesScript.exe"
-        echo del "%%~f0"
         echo exit
 
     ) > "%CD%\temp_update.bat"
@@ -56,7 +55,6 @@ if "%PARAM1%"=="Incremental" (
         echo xcopy /Y %%TEMP%%\FullUpdate\* %%CD%%\ /E /H /C /I /exclude:%~nx0
         echo rmdir /S /Q %%TEMP%%\FullUpdate
         echo start "" ".\SnowElvesScript.exe"
-        echo del "%%~f0"
         echo exit
     ) > "%CD%\temp_update.bat"
 
