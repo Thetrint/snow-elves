@@ -28,6 +28,7 @@ public:
 
     void resume();
 
+    void setState(const std::string &task) const;
 
 private:
     int id;

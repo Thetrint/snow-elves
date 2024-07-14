@@ -18,6 +18,9 @@ signals:
     void writejson(int id);
     void itemSelected(const QString &itemName);
     void Update(std::string name, std::string version);
+    void Log(int id, std::string message);
+    void setPersion(int id, HWND hwnd);
+    void Start();
 
 
 private:

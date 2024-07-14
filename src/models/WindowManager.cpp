@@ -3,6 +3,7 @@
 //
 
 
+#include "models/ImageProcess.h"
 #ifdef _WIN32
 #include "models/WindowManager.h"
 #include <fstream>
@@ -92,6 +93,7 @@ HWND WindowManager::getWindowHandle()
         GetWindowText(hwnd, title, sizeof(title));
 
         if(std::wstring(title) == L"一梦江湖") {
+            std::cout << hwnd << std::endl;
             return hwnd;
         }
 
@@ -109,35 +111,51 @@ void WindowManager::setWinodw(HWND const &hwnd) {
 
     GetWindowRect(hwnd, &rect);
 
-    int width = static_cast<int>(1335 / FACTOR);
-    int height = static_cast<int>(750 / FACTOR);
+    int width = static_cast<int>(1335);
+    int height = static_cast<int>(750);
 
-    while (true) {
+    for (int i = 1; i <= 300; i++) {
 
         try {
-            MoveWindow(hwnd, rect.left, rect.top, static_cast<int>(width), static_cast<int>(height), TRUE);
-            // MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
+            MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
         } catch (const std::exception& e) {
             std::cerr << "设置游戏窗口大小: " << e.what() << std::endl;
         }
 
-        HBITMAP const &hBitmap = CaptureAnImage(hwnd);
-        GetObject(hBitmap, sizeof(BITMAP), &bmp);
-        if (1335 <= bmp.bmWidth && bmp.bmWidth <= 1336 && 750 <= bmp.bmHeight && bmp.bmHeight <= 751) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        HBITMAP hBitmap = CaptureAnImage(hwnd);
+
+        const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
+
+        BITMAP bitmap;
+        GetObject(hBitmap, sizeof(BITMAP), &bitmap);
+        // cv::imshow("Source Image", mat);
+        // cv::waitKey(0);
+        DeleteObject(hBitmap);
+        std::cout << "Image Size: " << mat.cols << " x " << mat.rows << std::endl;
+        std::cout << "Image: " << bitmap.bmWidth << " x " << bitmap.bmHeight << std::endl;
+
+        if (1335 <= mat.cols && mat.cols <= 1336 && 750 <= mat.rows && mat.rows <= 751) {
+            // HBITMAP hBitmap1 = CaptureAnImage(hwnd);
+            //
+            // const cv::Mat mat1 = ImageProcessor::HBITMAPToMat(hBitmap1);
+            // cv::imshow("Source Image", mat1);
+            // cv::waitKey(0);
+            // cv::imwrite("2.bmp", mat);
+            // SaveBitmapToFile(hBitmap1, L"1.bmp");
+            // DeleteObject(hBitmap1);
             break;
 
         }
 
-        if (bmp.bmWidth > 1335) {
+        if (mat.cols > 1335) {
             width--;
-        }else if(bmp.bmWidth < 1335) {
+        }else if(mat.cols < 1335) {
             width++;
         }
 
-        if (bmp.bmHeight > 750) {
+        if (mat.rows > 750) {
             height--;
-        }else if(bmp.bmHeight < 750) {
+        }else if(mat.rows < 750) {
             height++;
         }
 
@@ -150,19 +168,17 @@ void WindowManager::setWinodw(HWND const &hwnd) {
 
 HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
 {
+    HDC hdcScreen = nullptr;
+    HDC hdcWindow = nullptr;
     HDC hdcMemDC = nullptr;
     HBITMAP hbmScreen = nullptr;
-    BITMAP bmpScreen;
 
     // 获取屏幕和窗口的设备上下文句柄
-    // ReSharper disable once CppLocalVariableMayBeConst
-    HDC hdcScreen = GetDC(nullptr);
-    // ReSharper disable once CppLocalVariableMayBeConst
-    HDC hdcWindow = GetDC(hWnd);
+    hdcScreen = GetDC(nullptr);
+    hdcWindow = GetDC(hWnd);
 
     // 创建与窗口DC兼容的内存DC
     hdcMemDC = CreateCompatibleDC(hdcWindow);
-
     if (!hdcMemDC)
     {
         MessageBox(hWnd, L"CreateCompatibleDC has failed", L"Failed", MB_OK);
@@ -172,23 +188,8 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     RECT rcClient;
     GetClientRect(hWnd, &rcClient);
 
-    // int width = static_cast<int>(rcClient.right - rcClient.left);
-    // int height = static_cast<int>(rcClient.bottom - rcClient.top);
-
-
-    int width = static_cast<int>((rcClient.right - rcClient.left) * FACTOR);
-    int height = static_cast<int>((rcClient.bottom - rcClient.top) * FACTOR);
-
-
-
-    // 设置最佳拉伸模式
-    // SetStretchBltMode(hdcWindow, HALFTONE);
-
-    // 进行位块传送（BitBlt），将窗口DC的内容传送到内存DC
-    if (!BitBlt(hdcMemDC, 0, 0, width, height, hdcWindow, 0, 0, SRCCOPY))
-    {
-        MessageBox(hWnd, L"BitBlt has failed", L"Failed", MB_OK);
-    }
+    int width = static_cast<int>((rcClient.right - rcClient.left));
+    int height = static_cast<int>((rcClient.bottom - rcClient.top));
 
     // 创建与窗口DC兼容的位图
     hbmScreen = CreateCompatibleBitmap(hdcWindow, width, height);
@@ -200,36 +201,33 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     // 选择兼容的位图到内存DC
     SelectObject(hdcMemDC, hbmScreen);
 
-    // 再次进行位块传送（BitBlt），将窗口DC的内容传送到内存DC
-    if (!BitBlt(hdcMemDC, 0, 0, width, height, hdcWindow, 0, 0, SRCCOPY))
-    {
-        MessageBox(hWnd, L"BitBlt has failed", L"Failed", MB_OK);
-    }
+    // 设置最佳拉伸模式
+    SetStretchBltMode(hdcMemDC, HALFTONE);
 
     // 使用 StretchBlt 将窗口DC的内容缩放到位图中
-    int scaledWidth = static_cast<int>(width / FACTOR);
-    int scaledHeight = static_cast<int>(height / FACTOR);
-
-    // StretchBlt(hdcMemDC, 0, 0, scaledWidth, scaledHeight, hdcWindow, 0, 0, width, height, SRCCOPY);
-
+    // if (!StretchBlt(hdcMemDC, 0, 0, static_cast<int>(width * FACTOR), static_cast<int>(height * FACTOR), hdcWindow, 0, 0, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SRCCOPY))
+    // {
+    //     MessageBox(hWnd, L"StretchBlt has failed", L"Failed", MB_OK);
+    // }
+    if (!StretchBlt(hdcMemDC, 0, 0, width, height, hdcWindow, 0, 0, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SRCCOPY))
+    {
+        MessageBox(hWnd, L"StretchBlt has failed", L"Failed", MB_OK);
+    }
 
     // 清理
-    DeleteObject(hdcMemDC);
+    DeleteDC(hdcMemDC);
     ReleaseDC(nullptr, hdcScreen);
     ReleaseDC(hWnd, hdcWindow);
-
-
 
     return hbmScreen;
 }
 
+
 void WindowManager::SaveBitmapToFile(HBITMAP &hBitmap, const wchar_t* filePath)
 {
-
-
     BITMAP bmpScreen;
-    BITMAPFILEHEADER   bmfHeader;
-    BITMAPINFOHEADER   bi;
+    BITMAPFILEHEADER bmfHeader;
+    BITMAPINFOHEADER bi;
     DWORD dwBytesWritten = 0;
     DWORD dwSizeofDIB = 0;
     HANDLE hFile = nullptr;
@@ -237,16 +235,18 @@ void WindowManager::SaveBitmapToFile(HBITMAP &hBitmap, const wchar_t* filePath)
     HANDLE hDIB = nullptr;
     DWORD dwBmpSize = 0;
 
-
     // 获取位图对象
-    GetObject(hBitmap, sizeof(BITMAP), &bmpScreen);
-
+    if (!GetObject(hBitmap, sizeof(BITMAP), &bmpScreen))
+    {
+        // 错误处理
+        return;
+    }
 
     bi.biSize = sizeof(BITMAPINFOHEADER);
     bi.biWidth = bmpScreen.bmWidth;
-    bi.biHeight = bmpScreen.bmHeight; // 设置为负值，确保从顶部到底部排列
+    bi.biHeight = bmpScreen.bmHeight; // 不要缩放
     bi.biPlanes = 1;
-    bi.biBitCount = bmpScreen.bmBitsPixel; // 假设为 32 位图像，如果不是，请根据实际情况修改
+    bi.biBitCount = bmpScreen.bmBitsPixel; // 假设为32位图像，如果不是，请根据实际情况修改
     bi.biCompression = BI_RGB;
     bi.biSizeImage = 0;
     bi.biXPelsPerMeter = 0;
@@ -254,48 +254,84 @@ void WindowManager::SaveBitmapToFile(HBITMAP &hBitmap, const wchar_t* filePath)
     bi.biClrUsed = 0;
     bi.biClrImportant = 0;
 
-
     // 计算位图大小
-    dwBmpSize = ((bi.biWidth * bi.biBitCount + 31) / bmpScreen.bmBitsPixel) * 4 * bi.biHeight;
+    dwBmpSize = ((bi.biWidth * bi.biBitCount + 31) / 32) * 4 * abs(bi.biHeight);
 
     // 分配内存
     hDIB = GlobalAlloc(GHND, dwBmpSize);
+    if (hDIB == nullptr)
+    {
+        // 错误处理
+        return;
+    }
+
     lpbitmap = static_cast<char *>(GlobalLock(hDIB));
+    if (lpbitmap == nullptr)
+    {
+        // 错误处理
+        GlobalFree(hDIB);
+        return;
+    }
 
     // 获取位图数据
-    GetDIBits(GetDC(nullptr), hBitmap, 0,
-        static_cast<UINT>(bmpScreen.bmHeight),
-        lpbitmap,
-        reinterpret_cast<BITMAPINFO *>(&bi), DIB_RGB_COLORS);
+    HDC hdc = GetDC(nullptr);
+    HDC hdcMem = CreateCompatibleDC(hdc);
+    SelectObject(hdcMem, hBitmap);
+
+    if (!GetDIBits(hdcMem, hBitmap, 0, bmpScreen.bmHeight, lpbitmap, reinterpret_cast<BITMAPINFO *>(&bi), DIB_RGB_COLORS))
+    {
+        // 错误处理
+        GlobalUnlock(hDIB);
+        GlobalFree(hDIB);
+        ReleaseDC(nullptr, hdc);
+        DeleteDC(hdcMem);
+        return;
+    }
 
     // 创建文件
-    hFile = CreateFile(filePath,
-        GENERIC_WRITE,
-        0,
-        nullptr,
-        CREATE_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL,
-        nullptr);
+    hFile = CreateFile(filePath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+    // 检查文件句柄是否有效
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        // 错误处理
+        GlobalUnlock(hDIB);
+        GlobalFree(hDIB);
+        ReleaseDC(nullptr, hdc);
+        DeleteDC(hdcMem);
+        return;
+    }
 
     // 计算文件大小
     dwSizeofDIB = dwBmpSize + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
 
     // 填充BITMAPFILEHEADER结构
-    bmfHeader.bfOffBits = static_cast<DWORD>(sizeof(BITMAPFILEHEADER)) + static_cast<DWORD>(sizeof(BITMAPINFOHEADER));
+    bmfHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
     bmfHeader.bfSize = dwSizeofDIB;
     bmfHeader.bfType = 0x4D42; // BM
 
     // 写入文件
-    WriteFile(hFile, (LPSTR)&bmfHeader, sizeof(BITMAPFILEHEADER), &dwBytesWritten, nullptr);
-    WriteFile(hFile, (LPSTR)&bi, sizeof(BITMAPINFOHEADER), &dwBytesWritten, nullptr);
-    WriteFile(hFile, (LPSTR)lpbitmap, dwBmpSize, &dwBytesWritten, nullptr);
+    if (!WriteFile(hFile, &bmfHeader, sizeof(BITMAPFILEHEADER), &dwBytesWritten, nullptr) ||
+        !WriteFile(hFile, &bi, sizeof(BITMAPINFOHEADER), &dwBytesWritten, nullptr) ||
+        !WriteFile(hFile, lpbitmap, dwBmpSize, &dwBytesWritten, nullptr))
+    {
+        // 错误处理
+        GlobalUnlock(hDIB);
+        GlobalFree(hDIB);
+        CloseHandle(hFile);
+        ReleaseDC(nullptr, hdc);
+        DeleteDC(hdcMem);
+        return;
+    }
 
     // 释放内存
     GlobalUnlock(hDIB);
     GlobalFree(hDIB);
-
-    // 关闭文件句柄
     CloseHandle(hFile);
+
+    // 释放DC
+    ReleaseDC(nullptr, hdc);
+    DeleteDC(hdcMem);
 }
 
 
@@ -303,7 +339,12 @@ int WindowManager::CaptureAndSaveImage(HWND hWnd, const std::string &filePath)
 {
     if (HBITMAP hBitmap = CaptureAnImage(hWnd))
     {
+        cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
+        std::cout << "Image Size: " << mat.cols << " x " << mat.rows << std::endl;
 
+        cv::imshow("Source Image", mat);
+        cv::waitKey(0);
+        cv::imwrite("2.bmp", mat);
         SaveBitmapToFile(hBitmap, L"1.bmp");
         DeleteObject(hBitmap);
         return 0;
@@ -313,10 +354,19 @@ int WindowManager::CaptureAndSaveImage(HWND hWnd, const std::string &filePath)
 
 void WindowManager::GetFactor() {
     // 获取当前桌面窗口的句柄
-    HWND hWnd = GetDesktopWindow();
+    HWND hWnd = GetForegroundWindow();
+    if (!hWnd) {
+        std::cerr << "Failed to get foreground window." << std::endl;
+        return;
+    }
 
-    // 获取最近的监视器句柄
+    // 获取窗口所在的监视器句柄
     HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
+    if (!hMonitor) {
+        std::cerr << "Failed to get monitor from window." << std::endl;
+        return;
+    }
+
 
     // 获取监视器信息
     MONITORINFOEX miex;
@@ -337,15 +387,16 @@ void WindowManager::GetFactor() {
     DWORD cxPhysical = dm.dmPelsWidth;
     DWORD cyPhysical = dm.dmPelsHeight;
 
+
     // 计算缩放比例
     double scalingFactorX = static_cast<double>(cxPhysical) / static_cast<double>(cxLogical);
     double scalingFactorY = static_cast<double>(cyPhysical) / static_cast<double>(cyLogical);
 
-
-    // 输出结果
     FACTOR = scalingFactorY;
+    // 输出结果
     std::cout << scalingFactorX << std::endl;
     std::cout << scalingFactorY << std::endl;
+    // return scalingFactorY;
 
 }
 

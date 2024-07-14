@@ -11,7 +11,7 @@ int FactionTask::implementation() {
     auto start = std::chrono::high_resolution_clock::now();
 
     // 执行函数
-    CoortImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false, .edgeThreshold = {100, 200}}, "自动寻路中");
+    CoortImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false, .edgeThreshold = {100, 200}}, nullptr, "自动寻路中");
 
     // 记录结束时间
     auto end = std::chrono::high_resolution_clock::now();

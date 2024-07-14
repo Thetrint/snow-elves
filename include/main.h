@@ -13,13 +13,14 @@
 #include <chrono>
 #include <unordered_map>
 #include <semaphore>
-
+#include <random>
+#include <ranges>
 
 #include "resources/images.h"
 
 
 inline double FACTOR;
-inline int DELAY  = 1500;
+inline int DELAY  = 800;
 
 
 
