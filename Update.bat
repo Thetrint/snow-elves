@@ -18,27 +18,22 @@ if "%PARAM1%"=="Incremental" (
     (
         echo @echo off
         rem 设置文件名
-        echo set "file_name=SnowElvesScript.exe"
-        echo echo File name is %%file_name%%
 
         rem 构建完整的源文件路径和目标文件路径
-        echo set "source=%%TEMP%%\%%file_name%%"
-        echo set "destination=%CD%\%%file_name%%"
-        echo echo Source path is %%source%%
-        echo echo Destination path is %%destination%%
+        echo set "source=%%TEMP%%\SnowElvesScript.exe"
+        echo set "destination=%CD%\SnowElvesScript.exe"
 
         rem 执行复制操作
         echo copy /Y "%%source%%" "%%destination%%"
-        echo echo Copy completed with errorlevel %%errorlevel%%
 
         rem 删除源文件
         echo del "%%source%%"
-        echo echo Source file removed with errorlevel %%errorlevel%%
 
         rem 启动程序
         echo start "" ".\SnowElvesScript.exe"
-        echo exit
 
+        echo exit
+        echo del "%%~f0"
     ) > "%CD%\temp_update.bat"
 
     rem 启动临时批处理文件并关闭当前窗口
@@ -56,6 +51,7 @@ if "%PARAM1%"=="Incremental" (
         echo rmdir /S /Q %%TEMP%%\FullUpdate
         echo start "" ".\SnowElvesScript.exe"
         echo exit
+        echo del "%%~f0"
     ) > "%CD%\temp_update.bat"
 
     rem 启动临时批处理文件并关闭当前窗口
