@@ -20,6 +20,13 @@ public:
     Ui::RenewWindow ui{};
     void checkupdae();
 
+    struct ReleaseInfo {
+        std::string version;
+        int id;
+        std::string name;
+        std::string body;
+    };
+
 signals:
     void login();
 

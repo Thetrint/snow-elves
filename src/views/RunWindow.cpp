@@ -16,43 +16,17 @@ RunWindow::RunWindow(QWidget *parent):
 
 
     //任务开始
+    connect(Signals::instance(), &Signals::Start, this, [&]() {
+        emit ui.pushButton_7->click();
+    });
+
     connect(ui.pushButton_7, &QPushButton::clicked, this, [&]() {
+
         const int id = getrowindex();
         Signals::instance()->emitWriteJson(id);
         HWND hwnd = WindowManager::getWindowHandle();
-        std::cout << hwnd << std::endl;
+
         WindowManager::setWinodw(hwnd);
-
-
-        const cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
-        const cv::Rect roi(120, 730, 115, 20);
-        cv::Mat persionImage = image(roi);
-        // cv::imshow("12", image);
-        // cv::imshow("13", persionImage);
-        // cv::waitKey(0);
-        // 将 cv::Mat 转换为 QImage
-        QImage qImage;
-        if (persionImage.type() == CV_8UC3) {
-            cv::cvtColor(persionImage, persionImage, cv::COLOR_BGR2RGB);
-            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
-                            static_cast<int>(persionImage.step), QImage::Format_RGB888);
-        } else if (persionImage.type() == CV_8UC1) {
-            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
-                            static_cast<int>(persionImage.step), QImage::Format_Grayscale8);
-        } else if (persionImage.type() == CV_8UC4) {
-            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
-                            static_cast<int>(persionImage.step), QImage::Format_ARGB32);
-        }
-
-        // 将 QImage 转换为 QPixmap
-        const QPixmap pixmap = QPixmap::fromImage(qImage);
-
-        // 创建一个 QTableWidgetItem 并设置图像数据
-        const auto item = new QTableWidgetItem();
-        item->setData(Qt::DecorationRole, pixmap);
-
-        // 将 QTableWidgetItem 添加到 QTableWidget
-        ui.tableWidget->setItem(id, 0, item);
 
 
         // 检查是否已经存在指定 ID 的实例
@@ -91,6 +65,7 @@ RunWindow::RunWindow(QWidget *parent):
             }
             if (instances.contains(id)) {
                 instances[id]->stop();
+                instances.erase(id);
             }
         }
 
@@ -131,6 +106,7 @@ RunWindow::RunWindow(QWidget *parent):
         }
     });
 
+    //日志更新
     connect(Signals::instance(), &Signals::Log, this, [&](const int id, const std::string& message) {
         // 获取当前时间
         const auto now = std::chrono::system_clock::now();
@@ -149,6 +125,53 @@ RunWindow::RunWindow(QWidget *parent):
         ui.textEdit->append(QString::fromUtf8(text.c_str()));
 
 
+    });
+
+    //设置角色信息
+    connect(Signals::instance(), &Signals::setPersion, this, [&](const int id, HWND hwnd) {
+
+        const cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
+        const cv::Rect roi(120, 730, 115, 20);
+        cv::Mat persionImage = image(roi);
+        // cv::imshow("12", image);
+        // cv::imshow("13", persionImage);
+        // cv::waitKey(0);
+        // 将 cv::Mat 转换为 QImage
+        QImage qImage;
+        if (persionImage.type() == CV_8UC3) {
+            cv::cvtColor(persionImage, persionImage, cv::COLOR_BGR2RGB);
+            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
+                            static_cast<int>(persionImage.step), QImage::Format_RGB888);
+        } else if (persionImage.type() == CV_8UC1) {
+            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
+                            static_cast<int>(persionImage.step), QImage::Format_Grayscale8);
+        } else if (persionImage.type() == CV_8UC4) {
+            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
+                            static_cast<int>(persionImage.step), QImage::Format_ARGB32);
+        }
+
+        // 将 QImage 转换为 QPixmap
+        const QPixmap pixmap = QPixmap::fromImage(qImage);
+
+        // 创建一个 QTableWidgetItem 并设置图像数据
+        const auto item = new QTableWidgetItem();
+        item->setData(Qt::DecorationRole, pixmap);
+
+        // 将 QTableWidgetItem 添加到 QTableWidget
+        ui.tableWidget->setItem(id, 0, item);
+
+    });
+
+    //任务全部恢复
+    connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
+        HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle());
+        WindowManager::SaveBitmapToFile(hBitmap, L"1.bmp");
+        const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
+        cv::imshow("Source Image", mat);
+        cv::waitKey(0);
+        cv::imwrite("2.bmp", mat);
+
+        DeleteObject(hBitmap);
     });
 
     ui.tableWidget->setRowCount(10);  // 设置行数为10行

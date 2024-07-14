@@ -41,8 +41,8 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
-bool BasicTask::Close(const MatchParams &match, const std::string& templ_name) {
-    ClickImageMatch(match, nullptr, templ_name);
+bool BasicTask::Close() {
+    ClickImageMatch({.similar = 0.6}, nullptr, "按钮关闭");
     return false;
 }
 
@@ -58,6 +58,7 @@ void BasicTask::LocationDetection() {
         }
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图世界区域");
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
+        ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
         ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("571");
@@ -83,7 +84,7 @@ void BasicTask::Arrive() {
         if (CoortImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "标志大世界自动寻路中").empty()) {
             count++;
 
-            if (count >= 8) {
+            if (count >= 15) {
                 return;
             }
 
@@ -102,8 +103,9 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
     //读取模板图片
     cv::Mat templ = ImageProcessor::imread(templ_name);
 
+    HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
     //模板匹配 数据转换类型
-    const cv::Mat img = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
+    const cv::Mat img = ImageProcessor::HBITMAPToMat(hbitmap);
 
     const cv::Rect roi(match.scope.x1, match.scope.y1, match.scope.x2 - match.scope.x1, match.scope.y2 - match.scope.y1);
     cv::Mat image = img(roi);
@@ -145,6 +147,7 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
 
 
     matches.insert(matches.end(), matche.begin(), matche.end());
+    DeleteObject(hbitmap);
 }
 
 void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& location) const {

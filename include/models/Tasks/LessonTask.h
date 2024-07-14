@@ -29,7 +29,8 @@ public:
 
 private:
     std::string cause;
-    std::vector<std::chrono::steady_clock::time_point>
+    std::vector<std::chrono::steady_clock::time_point> record_time{1};
+
 };
 
 #endif //LESSONTASK_H

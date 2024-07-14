@@ -47,7 +47,7 @@ protected:
 
     bool OpenKnapsack();
 
-    bool Close(const MatchParams &match, const std::string& templ_name);
+    bool Close();
 
     void LocationDetection();
 
@@ -84,36 +84,43 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, CallbackFunc *c
     for(int i = 1; i <= match.matchCount && unbind_event; i++) {
 
         (ImageMatch(templ_names, matches, match), ...);
-
+        ImageProcessor::nonMaxSuppression(matches, 22 * FACTOR);
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
 
         }
 
+        // 初始化随机数种子
+        std::random_device rd;
+        std::uniform_int_distribution<std::vector<Match>::size_type> dis(0, matches.size() - 1);
+
         if (!matches.empty()) {
             //不为空直接返回
             switch (match.click) {
-                case RANDOM: {
-                    // 初始化随机数种子
-
-
-                    // 随机取出一个元素
-                    std::random_device rd;
-                    std::uniform_int_distribution<std::vector<Match>::size_type> dis(0, matches.size() - 1);
-                    const auto& [location, score] = matches[dis(rd)];
-                    mouse_down_up(match, location);
+                case NoTap:
                     break;
-                }
+                case RANDOM:
+                    mouse_down_up(match, matches[dis(rd)].location);
+                    break;
+                case FIRST:
+                    // 取出第一个元素
+                    mouse_down_up(match,  matches.front().location);
+                    break;
+                case LAST:
+                    mouse_down_up(match, matches.back().location);
+                    break;
                 case FORWARD:
                     for (const auto& [location, score] : matches) {
                         mouse_down_up(match, location);
                     }
-                break;
+                    break;
                 case BACKWARD:
                     for (auto &[location, score] : std::ranges::reverse_view(matches)) {
                         mouse_down_up(match, location);
                     }
-                break;
+                    break;
+                default:
+                    break;;
             }
 
             return matches;
@@ -141,6 +148,8 @@ std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, CallbackFunc *c
 
         (ImageMatch(templ_names, matches, match), ...);
 
+
+        ImageProcessor::nonMaxSuppression(matches, 22 * FACTOR);
 
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;

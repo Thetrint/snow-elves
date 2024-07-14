@@ -39,8 +39,9 @@ void TaskManager::setState(const std::string &task) const {
 
 }
 void TaskManager::start(){
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
-    // WindowManager::CaptureAndSaveImage(hwnd, L"1.bmp");
+    emit Signals::instance()->setPersion(id, hwnd);
 
     LoadJsonFile::instance().LoadFile(id);
 

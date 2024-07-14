@@ -10,7 +10,8 @@ find_package(Qt6 COMPONENTS
 # 添加可执行文件
 add_executable(test_exec
         tests.cpp
-
+        ../src/models/ImageProcess.cpp
+        ../include/models/ImageProcess.h
         ../src/models/WindowManager.cpp
         ../include/models/WindowManager.h
 

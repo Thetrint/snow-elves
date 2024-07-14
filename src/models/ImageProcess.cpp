@@ -29,9 +29,7 @@ cv::Mat ImageProcessor::imread(const std::string &templ_name) {
 }
 
 
-
-
-cv::Mat ImageProcessor::HBITMAPToMat(HBITMAP hBitmap) {
+cv::Mat ImageProcessor::HBITMAPToMat(const HBITMAP &hBitmap) {
     BITMAP bitmap;
     GetObject(hBitmap, sizeof(BITMAP), &bitmap);
 
@@ -77,9 +75,10 @@ cv::Mat ImageProcessor::HBITMAPToMat(HBITMAP hBitmap) {
     cv::Mat matRGB;
     cv::cvtColor(mat, matRGB, cv::COLOR_BGRA2BGR); // Convert from BGRA to BGR
 
-    const cv::Rect roi(0, 0, 1334, 750);
-    cv::Mat persionImage = matRGB(roi);
-    return persionImage.clone();   // 返回克隆的图像，确保 Mat 对象拥有独立的数据
+    // const cv::Rect roi(0, 0, 1334, 750);
+    // cv::Mat persionImage = matRGB(roi);
+    return matRGB.clone();   // 返回克隆的图像，确保 Mat 对象拥有独立的数据
+
 
 }
 
@@ -114,13 +113,18 @@ vector<Match> ImageProcessor::matchTemplate_TM_SQDIFF_NORMED(const cv::Mat& imag
     }
 
 
-    // // 在大图像上绘制标记
-    // cv::Mat largeImageCopy;
-    // image.copyTo(largeImageCopy); // 复制一份大图像用于标记
-    //
-    // for (const auto [location, score] : matches) {
-    //     rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
-    // }
+    if (match.Show) {
+        // 在大图像上绘制标记
+        cv::Mat largeImageCopy;
+        image.copyTo(largeImageCopy); // 复制一份大图像用于标记
+
+        for (const auto [location, score] : matches) {
+            rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
+        }
+        cv::imshow("Source Image", largeImageCopy);
+        cv::waitKey(0);
+    }
+
 
 
 
@@ -176,13 +180,18 @@ vector<Match> ImageProcessor::matchTemplate_TM_CCORR_NORMED(const cv::Mat& image
     }
 
 
-    // // 在大图像上绘制标记
-    // cv::Mat largeImageCopy;
-    // image.copyTo(largeImageCopy); // 复制一份大图像用于标记
-    //
-    // for (const auto [location, score] : matches) {
-    //     rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
-    // }
+    if (match.Show) {
+        // 在大图像上绘制标记
+        cv::Mat largeImageCopy;
+        image.copyTo(largeImageCopy); // 复制一份大图像用于标记
+
+        for (const auto [location, score] : matches) {
+            rectangle(largeImageCopy, location, cv::Point(location.x + templ.cols, location.y + templ.rows), cv::Scalar(255, 255, 255), 2);
+        }
+        cv::imshow("Source Image", templ);
+        cv::imshow("Source ", largeImageCopy);
+        cv::waitKey(0);
+    }
 
     //计算中心坐标
 
@@ -223,7 +232,6 @@ vector<Match> ImageProcessor::matchTemplate(const cv::Mat& image, const cv::Mat 
 
     }
 
-    nonMaxSuppression(matches, 22);
 
 
     return matches;
@@ -231,6 +239,15 @@ vector<Match> ImageProcessor::matchTemplate(const cv::Mat& image, const cv::Mat 
 
 // 自定义的非最大值抑制函数
 void ImageProcessor::nonMaxSuppression(std::vector<Match>& matches, const double distanceThreshold) {
+    if (matches.empty()) {
+        return;
+    }
+
+    // 按得分从高到低排序
+    ranges::sort(matches, [](const Match& a, const Match& b) {
+        return a.score > b.score;
+    });
+
     std::vector<Match> suppressedMatches;
 
     for (const auto& match : matches) {
@@ -245,5 +262,12 @@ void ImageProcessor::nonMaxSuppression(std::vector<Match>& matches, const double
             suppressedMatches.push_back(match);
         }
     }
+
+    // // 缩放位置
+    // for (auto&[location, score] : suppressedMatches) {
+    //     location.x = static_cast<int>(std::round(location.x * FACTOR));
+    //     location.y = static_cast<int>(std::round(location.y * FACTOR));
+    // }
+
     matches = std::move(suppressedMatches);
 }

@@ -10,18 +10,47 @@
 #include "views/ScriptWindow.h"
 #include "views/RunWindow.h"
 #include <QButtonGroup>
-
+#include <QAbstractNativeEventFilter>
+#include <QObject>
+#include <utils/signals.h>
 
 namespace Ui {
     class MainWindow;
 }
 
+class NativeEventFilter final : public QObject, public QAbstractNativeEventFilter {
+    Q_OBJECT
+
+public:
+    explicit NativeEventFilter(QObject *parent = nullptr) : QObject(parent){}
+
+    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result) override {
+        if (eventType == "windows_generic_MSG") {
+            if (const MSG *msg = static_cast<MSG *>(message); msg->message == WM_HOTKEY) {
+                std::cout << "成功了吧~~" << std::endl;
+                std::cout << msg->wParam << std::endl;
+                if (msg->wParam == 1) {
+                    emit Signals::instance()->Start();
+                }
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+};
+
+
 class MainWindow final: public QWidget
 {
-    // Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
+
+    std::string username{};
 
      // ~MainWindow();
 private slots:
@@ -31,6 +60,8 @@ private slots:
 private:
 
     Ui::MainWindow ui{};
+
+    NativeEventFilter *eventFilter;
 
     //窗口页面
     HomeWindow *home;

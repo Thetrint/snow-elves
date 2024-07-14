@@ -33,13 +33,14 @@ public:
     QTableWidget *tableWidget;
     QWidget *widget_3;
     QGridLayout *gridLayout;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
-    QPushButton *pushButton_3;
+    QPushButton *pushButton_7;
     QPushButton *pushButton_4;
+    QPushButton *pushButton_3;
     QPushButton *pushButton_5;
     QPushButton *pushButton_6;
-    QPushButton *pushButton_7;
+    QPushButton *pushButton_2;
+    QPushButton *pushButton;
+    QPushButton *pushButton_8;
 
     void setupUi(QWidget *RunWindow)
     {
@@ -110,26 +111,20 @@ public:
         widget_3->setSizePolicy(sizePolicy4);
         gridLayout = new QGridLayout(widget_3);
         gridLayout->setObjectName("gridLayout");
-        pushButton = new QPushButton(widget_3);
-        pushButton->setObjectName("pushButton");
-        pushButton->setStyleSheet(QString::fromUtf8(""));
+        pushButton_7 = new QPushButton(widget_3);
+        pushButton_7->setObjectName("pushButton_7");
 
-        gridLayout->addWidget(pushButton, 0, 0, 1, 1);
-
-        pushButton_2 = new QPushButton(widget_3);
-        pushButton_2->setObjectName("pushButton_2");
-
-        gridLayout->addWidget(pushButton_2, 0, 1, 1, 1);
-
-        pushButton_3 = new QPushButton(widget_3);
-        pushButton_3->setObjectName("pushButton_3");
-
-        gridLayout->addWidget(pushButton_3, 1, 0, 1, 1);
+        gridLayout->addWidget(pushButton_7, 4, 0, 1, 2);
 
         pushButton_4 = new QPushButton(widget_3);
         pushButton_4->setObjectName("pushButton_4");
 
         gridLayout->addWidget(pushButton_4, 1, 1, 1, 1);
+
+        pushButton_3 = new QPushButton(widget_3);
+        pushButton_3->setObjectName("pushButton_3");
+
+        gridLayout->addWidget(pushButton_3, 1, 0, 1, 1);
 
         pushButton_5 = new QPushButton(widget_3);
         pushButton_5->setObjectName("pushButton_5");
@@ -141,10 +136,21 @@ public:
 
         gridLayout->addWidget(pushButton_6, 2, 1, 1, 1);
 
-        pushButton_7 = new QPushButton(widget_3);
-        pushButton_7->setObjectName("pushButton_7");
+        pushButton_2 = new QPushButton(widget_3);
+        pushButton_2->setObjectName("pushButton_2");
 
-        gridLayout->addWidget(pushButton_7, 3, 0, 1, 2);
+        gridLayout->addWidget(pushButton_2, 0, 1, 1, 1);
+
+        pushButton = new QPushButton(widget_3);
+        pushButton->setObjectName("pushButton");
+        pushButton->setStyleSheet(QString::fromUtf8(""));
+
+        gridLayout->addWidget(pushButton, 0, 0, 1, 1);
+
+        pushButton_8 = new QPushButton(widget_3);
+        pushButton_8->setObjectName("pushButton_8");
+
+        gridLayout->addWidget(pushButton_8, 3, 0, 1, 2);
 
 
         verticalLayout->addWidget(widget_3);
@@ -161,13 +167,14 @@ public:
     void retranslateUi(QWidget *RunWindow)
     {
         RunWindow->setWindowTitle(QCoreApplication::translate("RunWindow", "Form", nullptr));
-        pushButton->setText(QCoreApplication::translate("RunWindow", "\346\232\202\345\201\234", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("RunWindow", "\345\205\250\351\203\250\346\232\202\345\201\234", nullptr));
-        pushButton_3->setText(QCoreApplication::translate("RunWindow", "\346\201\242\345\244\215", nullptr));
+        pushButton_7->setText(QCoreApplication::translate("RunWindow", "\345\274\200\345\247\213", nullptr));
         pushButton_4->setText(QCoreApplication::translate("RunWindow", "\345\205\250\351\203\250\346\201\242\345\244\215", nullptr));
+        pushButton_3->setText(QCoreApplication::translate("RunWindow", "\346\201\242\345\244\215", nullptr));
         pushButton_5->setText(QCoreApplication::translate("RunWindow", "\350\247\243\347\273\221", nullptr));
         pushButton_6->setText(QCoreApplication::translate("RunWindow", "\345\205\250\351\203\250\350\247\243\347\273\221", nullptr));
-        pushButton_7->setText(QCoreApplication::translate("RunWindow", "\345\274\200\345\247\213", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("RunWindow", "\345\205\250\351\203\250\346\232\202\345\201\234", nullptr));
+        pushButton->setText(QCoreApplication::translate("RunWindow", "\346\232\202\345\201\234", nullptr));
+        pushButton_8->setText(QCoreApplication::translate("RunWindow", "\346\210\252\345\233\276", nullptr));
     } // retranslateUi
 
 };

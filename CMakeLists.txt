@@ -134,6 +134,8 @@ add_executable(SnowElvesScript WIN32
         src/models/DownloadThread.cpp
         include/models/DownloadThread.h
         include/main.h
+        src/models/Tasks/Submersion.cpp
+        include/models/Tasks/Submersion.h
 
 
 )
