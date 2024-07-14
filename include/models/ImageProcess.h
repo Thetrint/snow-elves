@@ -11,10 +11,17 @@
 struct Match {
     cv::Point location;  // 匹配位置
     float score;     // 匹配得分
+    bool operator==(const Match& other) const {
+        return location == other.location; // 比较位置
+    }
 };
 
+
 enum ClickType {
+    NoTap,
     RANDOM,
+    FIRST,
+    LAST,
     FORWARD,
     BACKWARD
 };
@@ -36,13 +43,15 @@ struct MatchParams {
     float similar{}; // 相似度
     int matchCount = 3;
     ClickType click = RANDOM;
+
     int x = 0; //偏移坐标x
     int y = 0; //偏移坐标y
-    MatchScope scope = {0, 0, 1334, 750}; // 匹配范围
-    bool convertToGray = true; // 默认值
+    MatchScope scope = {0, 0, 1335, 750}; // 匹配范围
+    bool convertToGray = true; // h灰度处理开关
     bool applyGaussianBlur = true; // 控制高斯模糊的开关
     bool applyEdgeDetection  = true; // 控制边缘检测
     EdgeThreshold edgeThreshold = {100, 200};
+    bool Show = false;
 };
 
 class ImageProcessor {
@@ -69,7 +78,24 @@ public:
     static cv::Mat imread(const std::string &filename);
 
     //图片类型转换
-    static cv::Mat HBITMAPToMat(HBITMAP hBitmap);
+    static cv::Mat HBITMAPToMat(const HBITMAP &hBitmap);
+
+    static void removeMatches(std::vector<Match>& matches, const std::vector<Match>& last_matches) {
+        std::vector<Match> result;
+        for (const auto& loc1 : matches) {
+            bool found = false;
+            for (const auto&[location, score] : last_matches) {
+                if (std::sqrt((loc1.location.x - location.x) * (loc1.location.x - location.x) + (loc1.location.y - location.y) * (loc1.location.y - location.y)) < 32 * FACTOR) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                result.push_back(loc1);
+            }
+        }
+        matches = result;
+    }
 
 private:
 

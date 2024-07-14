@@ -13,6 +13,7 @@
 #include <QJsonParseError>
 #include <iostream>
 #include <qabstractbutton.h>
+#include <QJsonArray>
 #include <QMessageBox>
 #include <QTimer>
 #include <utils/Signals.h>
@@ -30,12 +31,15 @@ RenewWindow::RenewWindow(QWidget *parent):
 }
 
 void RenewWindow::checkupdae() {
-        // 发起 GET 请求，不需要身份验证
-    const cpr::Response r = cpr::Get(cpr::Url{"https://gitee.com/api/v5/repos/IceSnowVersion/snow-elves/releases/latest?access_token=b5127c648ab2025e7911e567a7b8b9c1"});
+    // 发起 GET 请求
+    const cpr::Response r = cpr::Get(cpr::Url{"https://gitee.com/api/v5/repos/IceSnowVersion/snow-elves/releases?access_token=b5127c648ab2025e7911e567a7b8b9c1&page=1&per_page=20&direction=desc"});
 
-    std::cout << r.text << std::endl;
+    if (r.status_code != 200) {
+        std::cerr << "Failed to fetch releases. Status code: " << r.status_code << std::endl;
+        return;
+    }
 
-    // 假设 r.text 是你从网络获取的 JSON 字符串
+    // 转换为 QString
     const QString jsonString = QString::fromStdString(r.text);
 
     // 解析 JSON
@@ -44,34 +48,76 @@ void RenewWindow::checkupdae() {
 
     if (error.error != QJsonParseError::NoError) {
         std::cerr << "Error parsing JSON: " << error.errorString().toStdString() << std::endl;
-        return;  // 处理解析错误
+        return;
     }
 
-    // 读取版本号
-    std::string local_version;
-    // 创建文件输入流对象
+    // 读取本地版本号
+    std::string local_version = "v0.0.0"; // 默认版本号
     std::ifstream input_file("version.txt");
-
-    // 检查文件是否成功打开
-    if (!input_file) {
-        local_version = "v0.0.0";
+    if (input_file) {
+        std::getline(input_file, local_version);
+        input_file.close();
+    } else {
+        std::cerr << "Could not open version.txt, using default version: " << local_version << std::endl;
     }
 
-    std::getline(input_file, local_version);
 
     // 输出版本号到控制台
     std::cout << "Version: " << local_version << std::endl;
+    emit Signals::instance()->Log(-1, "目前版本：" + local_version);
 
-    // 关闭文件流
-    input_file.close();
+    // 遍历 JSON 数据找出比本地版本新的版本
+    const QJsonArray releases = jsonDoc.array();
+    std::vector<ReleaseInfo> newer_versions;
 
-    // 获取根对象
-    const QJsonObject jsonObj = jsonDoc.object();
-    if (const QString version = jsonObj.value("tag_name").toString(); compareVersions(version.toStdString(), local_version)) {
+    for (const auto& release : releases) {
+        const QJsonObject releaseObj = release.toObject();
+        std::string version = releaseObj["tag_name"].toString().toStdString();
+        int id = releaseObj["id"].toInt();
+        std::string name = releaseObj["name"].toString().toStdString();
+        std::string body = releaseObj["body"].toString().toStdString();
+        if (compareVersions(local_version, version)) {
+            std::cout << "Version: " << version << ", ID: " << id << ", Name: " << name << ", Body: " << body << std::endl;
+            newer_versions.push_back({version, id, name, body});
+        }
+    }
+
+
+    std::string selected_version;
+    int selected_id;
+    std::string selected_name;
+    std::string selected_body;
+
+    // 输出所有新版本
+    if (!newer_versions.empty()) {
+        std::cout << "Newer versions found:" << std::endl;
+        bool found_full = false;
+        for (const auto& [version, id, name, body] : newer_versions) {
+
+            if (name == "Full Update" && !found_full) {
+                selected_version = version;
+                selected_id = id;
+                selected_name = name;
+                selected_body = body;
+                found_full = true;
+            }
+        }
+        if (!found_full) {
+            const auto& [version, id, name, body] = newer_versions.front();
+            selected_version = version;
+            selected_id = id;
+            selected_name = name;
+            selected_body = body;
+        }
+    } else {
+        std::cout << "No newer versions found." << std::endl;
+    }
+
+    if (!newer_versions.empty()) {
         // 创建一个消息框
-        auto msgBox = std::make_unique<QMessageBox>();
+        const auto msgBox = std::make_unique<QMessageBox>();
         msgBox->setWindowTitle("更新窗口");
-        msgBox->setText(jsonObj.value("body").toString());
+        msgBox->setText(QString::fromStdString(selected_body));
         msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox->setDefaultButton(QMessageBox::Yes);
 
@@ -83,29 +129,14 @@ void RenewWindow::checkupdae() {
             }
         });
 
-
+        //等待用户选择
         if (const int ret = msgBox->exec(); ret == QMessageBox::Yes) {
             msgBox->deleteLater();
-            std::cout << "name: " << jsonObj.value("name").toString().toStdString() << std::endl;
-            std::cout << "id: " << jsonObj.value("id").toInt() << std::endl;
-
-            // // 创建一个输出文件流对象
-            // std::ofstream outFile("version.txt");
-            //
-            // // 检查文件是否成功打开
-            // if (!outFile) {
-            //     std::cerr << "无法打开文件" << std::endl;
-            // }
-            //
-            // // 写入数据到文件
-            // outFile << jsonObj.value("tag_name").toString().toStdString() << std::endl;
-            //
-            // // 关闭文件
-            // outFile.close();
-
+            std::cout << "name: " << selected_name << std::endl;
+            std::cout << "id: " << selected_id << std::endl;
             show();
 
-            auto* downloadThread = new DownloadThread(jsonObj.value("name").toString().toStdString(), jsonObj.value("id").toInt(), jsonObj.value("tag_name").toString().toStdString(), this);
+            auto* downloadThread = new DownloadThread(selected_name, selected_id, selected_version, this);
 
             connect(downloadThread, &DownloadThread::SetProgressBarSignal, this, [=](const int max) {
                 ui.progressBar->setRange(0, max);
@@ -118,10 +149,11 @@ void RenewWindow::checkupdae() {
             emit login();
         }
 
-        msgBox->deleteLater();
+
     }else {
         emit login();
     }
+
 
 
 
@@ -130,40 +162,32 @@ void RenewWindow::checkupdae() {
 // 版本号比较函数
 // 返回值：version1 > version2 返回 true，否则返回 false
 bool RenewWindow::compareVersions(const std::string& version1, const std::string& version2) {
-    std::istringstream ss1(version1.substr(1)); // 去掉开头的 'v'
-    std::istringstream ss2(version2.substr(1)); // 去掉开头的 'v'
 
-    int num1, num2;
-    char dot = '.';
 
-    // 当两个字符串流都没有读完时继续循环
-    while (ss1.good() || ss2.good()) {
-        if (ss1.good()) {
-            ss1 >> num1;
-        } else {
-            num1 = 0; // 如果ss1读完了，则设置为0
+    // 将版本号分割成独立的数字部分进行比较
+    auto split = [](const std::string& version) {
+        std::vector<int> parts;
+        // 如果版本号以 'v' 开头，则移除它
+        std::string ss1(version.substr(1));
+
+        size_t start = 0, end = 0;
+        while ((end = ss1.find('.', start)) != std::string::npos) {
+            parts.push_back(std::stoi(ss1.substr(start, end - start)));
+            start = end + 1;
         }
+        parts.push_back(std::stoi(ss1.substr(start)));
+        return parts;
+    };
 
-        if (ss2.good()) {
-            ss2 >> num2;
-        } else {
-            num2 = 0; // 如果ss2读完了，则设置为0
+    const std::vector<int> v1 = split(version1);
+    const std::vector<int> v2 = split(version2);
+    for (size_t i = 0; i < std::max(v1.size(), v2.size()); ++i) {
+        const int num1 = i < v1.size() ? v1[i] : 0;
+        if (const int num2 = i < v2.size() ? v2[i] : 0; num1 != num2) {
+            return num1 < num2;
         }
-
-        if (num1 > num2) {
-            return true;
-        }
-        if(num1 < num2) {
-            return false;
-        }
-
-        // 跳过点号
-        ss1 >> dot;
-        ss2 >> dot;
     }
-
-    return false; // 如果版本号完全相同，返回false
-
+    return false; // 版本号相同
 }
 
 void RenewWindow::UpdateProgressBar(const int val) const {

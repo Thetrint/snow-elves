@@ -10,6 +10,7 @@
 #include "models/Tasks/BasicTask.h"
 #include "models/Tasks/LessonTask.h"
 #include "models/Tasks/FactionTask.h"
+#include "models/Tasks/Submersion.h"
 
 // 工厂类
 class Factory {
@@ -44,6 +45,7 @@ private:
         // 在构造函数中注册所有需要的类
         autoRegister<LessonTask>("课业任务");
         autoRegister<FactionTask>("帮派任务");
+        autoRegister<Submersion>("潜神入忆");
     }
 
     std::map<std::string, CreateFunc> registry_;

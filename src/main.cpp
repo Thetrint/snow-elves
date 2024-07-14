@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     //获取屏幕缩放
     WindowManager::GetFactor();
 
+
     QApplication app(argc, argv);
     // QApplication::setStyle(QStyleFactory::create("windowsvita"));
 
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
 
     // 连接 loginSuccess 信号到主窗口的 show 槽
     QObject::connect(&Login, &LoginWindow::loginSuccess, [&]() {
+        w.username = "admin";
         w.show();
     });
 

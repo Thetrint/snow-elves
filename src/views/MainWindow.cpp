@@ -21,7 +21,8 @@
 #include <QDir>
 
 MainWindow::MainWindow(QWidget *parent):
-    QWidget(parent)
+    QWidget(parent),
+    eventFilter(new NativeEventFilter(this))
 
 {
     ui.setupUi(this);  // 初始化界面布局和元素
@@ -45,12 +46,22 @@ MainWindow::MainWindow(QWidget *parent):
 
     connect(Signals::instance(), &Signals::writejson, this, &MainWindow::writewinconfig);
 
+    // 注册热键 (示例：Ctrl+Shift+1)
+    if (RegisterHotKey(reinterpret_cast<HWND>(this->winId()), 1, MOD_SHIFT, 'Q')) {
+        std::cout << "热键注册成功" << std::endl;
+    } else {
+        std::cout << "热键注册失败" << std::endl;
+    }
+
+    // 创建并安装事件过滤器
+    qApp->installNativeEventFilter(eventFilter);
 
 
     // writewinconfig();
     // switchToPage(1);
 
 }
+
 
 //容器添加界面
 void MainWindow::addPageAndButton(const QString &buttonText, QWidget *page) {
