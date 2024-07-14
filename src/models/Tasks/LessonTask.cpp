@@ -10,13 +10,16 @@ int LessonTask::implementation() {
 
     std::vector<Match> matchs;
 
-    objective("等待完成");
+    objective("位置检测");
 
     while (unbind_event) {
-        switch (int sw = determine()) {
+        switch (determine()) {
             case 0:
                 return 0;
             case -1:
+                break;
+            case -3:
+                Close();
                 break;
             case 1:
                 LocationDetection();
@@ -58,15 +61,41 @@ int LessonTask::implementation() {
                 break;
             case 4:
 
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界播放中").empty()) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+                    continue;
+                }
+
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界自动").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界自动");
+                    std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+                    continue;
+                }
+
                 if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 30) {
                     record_time[0] = std::chrono::steady_clock::now();
                     if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界江湖").empty()) {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                     }
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
-                    ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界吟风任务", "按钮大世界濯剑任务", "按钮大世界锻心任务");
+                    ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
+                        nullptr, "按钮大世界吟风任务", "按钮大世界含灵任务", "按钮大世界归义任务", "按钮大世界濯剑任务", "按钮大世界锻心任务");
                 }
 
+
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业答题").empty()) {
+                    Close();
+                }
+
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业杂货商人").empty()) {
+                    mouse_down_up(MatchParams{}, cv::Point{1003, 617});
+                }
+
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
+                    Close();
+                }
 
                 if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交").empty()) {
                     if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定").empty()) {
@@ -74,18 +103,9 @@ int LessonTask::implementation() {
                     }
 
                 }
+
                 break;
-            case 5:
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮交易购买");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                Close();
-                break;
-            case 6:
-                Close();
-                break;
-            case 7:
-                mouse_down_up(MatchParams{}, cv::Point{1003, 617});
-                break;
+
             default:
                 break;;
         }
@@ -146,16 +166,8 @@ int LessonTask::determine() {
 
     if (cause == "等待完成") {
         switch (sw) {
-            case 1:
-                return 4;
-            case 2:
-                return 5;
-            case 3:
-                return 6;
-            case 4:
-                return 7;
             default:
-                return -3;
+                return 4;
         }
     }
 
@@ -163,18 +175,10 @@ int LessonTask::determine() {
 }
 
 int LessonTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.75, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
         return 1;
     }
-    if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
-        return 2;
-    }
-    if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业答题").empty()) {
-        return 3;
-    }
-    if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业杂货商人").empty()) {
-        return 4;
-    }
+
 
     return -5;
 

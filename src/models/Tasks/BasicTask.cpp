@@ -160,6 +160,15 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
 
 }
 
+void BasicTask::mouse_move(const MatchParams &match, const cv::Point &start, const cv::Point &end) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        WindowManager::MouseMove(hwnd, start.x, start.y, end.x, end.y);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+}
+
 void BasicTask::key_down_up(const std::string& key) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);

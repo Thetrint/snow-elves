@@ -111,32 +111,47 @@ void WindowManager::setWinodw(HWND const &hwnd) {
 
     GetWindowRect(hwnd, &rect);
 
-    int width = static_cast<int>(1335);
-    int height = static_cast<int>(750);
+    constexpr int targetWidth = 1335;
+    constexpr int targetHeight = 750;
+
+    int width = targetWidth;
+    int height = targetHeight;
+
+    int widthStep = std::max(1, width / 2);  // 初始步长设为宽度的一半
+    int heightStep = std::max(1, height / 2);  // 初始步长设为高度的一半
 
     for (int i = 1; i <= 300; i++) {
-
         try {
             MoveWindow(hwnd, rect.left, rect.top, width, height, TRUE);
         } catch (const std::exception& e) {
             std::cerr << "设置游戏窗口大小: " << e.what() << std::endl;
+            continue;  // Skip the rest of the loop if MoveWindow fails
         }
 
         HBITMAP hBitmap = CaptureAnImage(hwnd);
+        if (!hBitmap) {
+            std::cerr << "Failed to capture image." << std::endl;
+            continue;  // Skip the rest of the loop if CaptureAnImage fails
+        }
 
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
+        if (mat.empty()) {
+            std::cerr << "Failed to convert HBITMAP to cv::Mat" << std::endl;
+            DeleteObject(hBitmap);
+            continue;  // Skip the rest of the loop if HBITMAPToMat fails
+        }
 
         BITMAP bitmap;
         GetObject(hBitmap, sizeof(BITMAP), &bitmap);
-        // cv::imshow("Source Image", mat);
-        // cv::waitKey(0);
         DeleteObject(hBitmap);
+
         std::cout << "Image Size: " << mat.cols << " x " << mat.rows << std::endl;
         std::cout << "Image: " << bitmap.bmWidth << " x " << bitmap.bmHeight << std::endl;
 
-        if (1335 <= mat.cols && mat.cols <= 1336 && 750 <= mat.rows && mat.rows <= 751) {
+        if (targetWidth - 1 <= mat.cols && mat.cols <= targetWidth + 1 &&
+            targetHeight - 1 <= mat.rows && mat.rows <= targetHeight + 1) {
+            // Uncomment these lines if you need to do further processing
             // HBITMAP hBitmap1 = CaptureAnImage(hwnd);
-            //
             // const cv::Mat mat1 = ImageProcessor::HBITMAPToMat(hBitmap1);
             // cv::imshow("Source Image", mat1);
             // cv::waitKey(0);
@@ -144,26 +159,26 @@ void WindowManager::setWinodw(HWND const &hwnd) {
             // SaveBitmapToFile(hBitmap1, L"1.bmp");
             // DeleteObject(hBitmap1);
             break;
+            }
 
+        // 调整宽度
+        if (mat.cols > targetWidth) {
+            width -= widthStep;
+        } else if (mat.cols < targetWidth) {
+            width += widthStep;
         }
 
-        if (mat.cols > 1335) {
-            width--;
-        }else if(mat.cols < 1335) {
-            width++;
+        // 调整高度
+        if (mat.rows > targetHeight) {
+            height -= heightStep;
+        } else if (mat.rows < targetHeight) {
+            height += heightStep;
         }
 
-        if (mat.rows > 750) {
-            height--;
-        }else if(mat.rows < 750) {
-            height++;
-        }
-
+        // 减小步长
+        widthStep = std::max(1, widthStep / 2);
+        heightStep = std::max(1, heightStep / 2);
     }
-
-
-
-
 }
 
 HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
@@ -417,6 +432,49 @@ void WindowManager::MouseDownUp(HWND hwnd, int x, int y) {
     // 模拟鼠标按下
     PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
     PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+}
+
+
+void WindowManager::MouseMove(HWND hwnd, const int x1, const int y1, const int x2, const int y2) {
+    // 将屏幕坐标转换为窗口客户区坐标
+    POINT startPt = { x1, y1 };
+    POINT endPt = { x2, y2 };
+
+    ScreenToClient(hwnd, &startPt);
+    ScreenToClient(hwnd, &endPt);
+
+    // 生成随机控制点
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-100, 100);
+    const POINT controlPt = { (startPt.x + endPt.x) / 2 + dis(gen), (startPt.y + endPt.y) / 2 + dis(gen) };
+
+    // 贝塞尔曲线函数
+    auto bezierCurve = [](const double t, const double p0, const double p1, const double p2) {
+        return (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
+    };
+
+    // 计算移动距离
+    const double distance = std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+    // 动态生成步长
+    const int steps = static_cast<int>(distance / 20);
+
+    // 模拟鼠标按下
+    PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(startPt.x, startPt.y));
+
+    for (int i = 0; i <= steps; i++) {
+        const double t = static_cast<double>(i) / steps;
+        const int x = static_cast<int>(bezierCurve(t, startPt.x, controlPt.x, endPt.x));
+        const int y = static_cast<int>(bezierCurve(t, startPt.y, controlPt.y, endPt.y));
+        const LPARAM lParam = MAKELPARAM(x, y);
+
+        // 模拟鼠标移动
+        PostMessage(hwnd, WM_MOUSEMOVE, MK_LBUTTON, lParam);
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+
+    // 模拟鼠标松开
+    PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(endPt.x, endPt.y));
 }
 
 int WindowManager::GetVkCode(const std::string &key) {

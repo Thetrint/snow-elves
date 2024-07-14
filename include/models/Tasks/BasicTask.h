@@ -57,6 +57,8 @@ protected:
 
     void mouse_down_up(const MatchParams &match, const cv::Point &location) const;
 
+    void mouse_move(const MatchParams &match, const cv::Point &start, const cv::Point &end) const;
+
     void key_down_up(const std::string &key) const;
 
     void input_text(const std::string &text) const;

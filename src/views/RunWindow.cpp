@@ -167,9 +167,22 @@ RunWindow::RunWindow(QWidget *parent):
         HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle());
         WindowManager::SaveBitmapToFile(hBitmap, L"1.bmp");
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
-        cv::imshow("Source Image", mat);
-        cv::waitKey(0);
+
         cv::imwrite("2.bmp", mat);
+
+        cv::Mat gray;
+        cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
+
+        // 应用高斯模糊
+        cv::Mat blurred;
+        cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 1.2);
+
+        // 应用 Canny 边缘检测
+        cv::Mat edges;
+        cv::Canny(blurred, edges, 100, 200);
+
+        cv::imshow("Source Image", edges);
+        cv::waitKey(0);
 
         DeleteObject(hBitmap);
     });

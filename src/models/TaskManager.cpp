@@ -25,7 +25,9 @@ void TaskManager::stop() {
 }
 
 void TaskManager::pause() {
-    pause_event.lock();
+    if (!pause_event.try_lock()) {
+        std::cout << "Failed to pause, task is already paused or lock is held" << std::endl;
+    }
 }
 
 void TaskManager::resume() {
