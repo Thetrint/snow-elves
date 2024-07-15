@@ -5,6 +5,7 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 #include <qwindowdefs_win.h>
+#include <models/Tasks/TheSwordTask.h>
 #include "models//TaskManager.h"
 #include "models/ImageProcess.h"
 #include "models/Tasks/BasicTask.h"
@@ -52,6 +53,7 @@ private:
         autoRegister<LessonTask>("课业任务");
         autoRegister<FactionTask>("帮派任务");
         autoRegister<Submersion>("潜神入忆");
+        autoRegister<TheSwordTask>("华山论剑");
 
     }
 

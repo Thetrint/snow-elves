@@ -24,13 +24,17 @@ public:
 
     static void GetFactor();
 
-    static void MouseDownUp(HWND hwnd, int x, int y);
+    static void MouseDownUp(const HWND &hwnd, const int x, const int y);
+
+    static void MouseKeep(const HWND &hwnd, const int x, const int y, const int delay);
 
     static void MouseMove(HWND hwnd, int x1, int y1, int x2, int y2);
 
     static int GetVkCode(const std::string &key);
 
-    static void KeyDownUp(HWND hwnd, const std::string& key);
+    static void KeyDownUp(const HWND &hwnd, const std::string &key);
+
+    static void KeyKeep(const HWND &hwnd, const std::string &key, int dealy);
 
     static void InputText(HWND hwnd, const std::string &text);
 

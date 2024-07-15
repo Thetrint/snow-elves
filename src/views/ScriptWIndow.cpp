@@ -15,7 +15,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
 
 
     QStringList items;
-    items << "课业任务" << "帮派任务" << "潜神入忆";
+    items << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);

@@ -24,8 +24,27 @@ public:
     virtual ~BasicTask() = default;
 
     // ReSharper disable once CppParameterMayBeConst
-    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted) {}
+    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : id(id), hwnd(hwnd),
+        pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), detect_count(0), fight_(false) {
+        skillMap[1] = "1";
+        skillMap[2] = "2";
+        skillMap[3] = "E";
+        skillMap[4] = "F";
+        skillMap[5] = "Z";
+        skillMap[6] = "X";
+        skillMap[7] = "C";
+        skillMap[8] = "V";
+    }
 
+    struct CAUSE {
+        std::string& cause;
+        std::string ve;
+    };
+
+    struct Skill {
+        int id;
+        int interval;
+    };
 
     // 纯虚函数，要求子类必须实现
     virtual int implementation() = 0;
@@ -42,7 +61,11 @@ protected:
     // 定义一个枚举类型
     Timer timer{unbind_event};
 
+    std::map<int, std::string> skillMap;
+
     int detect_count;
+
+    bool fight_;
 
     bool OpenMap();
 
@@ -60,28 +83,40 @@ protected:
 
     void mouse_down_up(const MatchParams &match, const cv::Point &location) const;
 
+    void mouse_keep(const MatchParams &match, const cv::Point &location, int delay) const;
+
     void mouse_move(const MatchParams &match, const cv::Point &start, const cv::Point &end) const;
 
     void key_down_up(const std::string &key) const;
+
+    void key_keep(const std::string &key, int dealy) const;
 
     void input_text(const std::string &text) const;
 
     void Log(const std::string &message) const;
 
+    void AutoFight();
+
+    void Fight(const std::vector<Skill> &skills);
+
+    void FightStop();
+
     // 定义回调函数类型，包含一个字符串参数
     typedef std::function<void()> CallbackFunc;
 
     template <typename... Args>
-    std::vector<Match> ClickImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names);
+    std::vector<Match> ClickImageMatch(MatchParams match, std::unique_ptr<CAUSE> cause, Args... templ_names);
 
     template <typename... Args>
-    std::vector<Match> CoortImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names);
-
+    std::vector<Match> CoortImageMatch(MatchParams match, std::unique_ptr<CAUSE> cause, Args... templ_names);
+private:
+    std::jthread fight;
 
 };
 
+
 template <typename... Args>
-std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names) {
+std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, std::unique_ptr<CAUSE> cause, Args... templ_names) {
     std::vector<Match> matches;
     
 
@@ -136,17 +171,16 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, CallbackFunc *c
 
     }
 
-    if (callback) {
-        (*callback)(); // 不满足条件时调用回调函数
+    if (cause) {
+        cause->cause = cause->ve;
     }
-
     return matches;
 
 
 }
 
 template <typename... Args>
-std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, CallbackFunc *callback, Args... templ_names) {
+std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, std::unique_ptr<CAUSE> cause, Args... templ_names) {
     std::vector<Match> matches;
 
     if(unbind_event) {
@@ -164,8 +198,8 @@ std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, CallbackFunc *c
 
     }
 
-    if (callback) {
-        (*callback)(); // 不满足条件时调用回调函数
+    if (cause) {
+        cause->cause = cause->ve;
     }
 
     return matches;

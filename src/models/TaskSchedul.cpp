@@ -13,31 +13,31 @@ std::string TaskSchedul::get_task() {
     std::unique_lock<std::mutex> lock(mtx);
     auto* switchRolesTask = dynamic_cast<SwitchRolesTask*>(rol.get());
     if (tasks.empty()) {
-        if (LoadJsonFile::instance().file_0.value("切角色1").toBool() && switchRolesTask->roles[1]) {
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色1").toBool() && switchRolesTask->roles[1]) {
             // switch_rol.roles(1);
             switchRolesTask->roles[1] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色2").toBool() && switchRolesTask->roles[2]) {
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色2").toBool() && switchRolesTask->roles[2]) {
             // switch_rol.roles(2);
             switchRolesTask->roles[2] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色3").toBool() && switchRolesTask->roles[3]) {
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色3").toBool() && switchRolesTask->roles[3]) {
             // switch_rol.roles(3);
             switchRolesTask->roles[3] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色4").toBool() && switchRolesTask->roles[4]) {
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色4").toBool() && switchRolesTask->roles[4]) {
             // switch_rol.roles(4);
             switchRolesTask->roles[4] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色5").toBool() && switchRolesTask->roles[5]) {
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色5").toBool() && switchRolesTask->roles[5]) {
             // switch_rol.roles(5);
             switchRolesTask->roles[5] = false;
             init();

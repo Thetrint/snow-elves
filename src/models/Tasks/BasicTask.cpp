@@ -162,6 +162,15 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
 
 }
 
+void BasicTask::mouse_keep(const MatchParams &match, const cv::Point& location, const int delay) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        WindowManager::MouseKeep(hwnd, location.x + match.x, location.y + match.y, delay);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+
+}
 void BasicTask::mouse_move(const MatchParams &match, const cv::Point &start, const cv::Point &end) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
@@ -181,6 +190,16 @@ void BasicTask::key_down_up(const std::string& key) const {
 
 }
 
+void BasicTask::key_keep(const std::string& key, const int dealy) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        WindowManager::KeyKeep(hwnd, key, dealy);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+
+}
+
 void BasicTask::input_text(const std::string &text) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
@@ -193,5 +212,39 @@ void BasicTask::input_text(const std::string &text) const {
 void BasicTask::Log(const std::string &message) const {
     emit Signals::instance()->Log(id, message);
 
+}
+
+void BasicTask::AutoFight() {
+    fight_ = true;
+    std::string skillSequence = "1-2000; 2-2000; 3-2000; 4-2000; 5-2000; 6-2000; 7-2000; 8-2000";
+    std::vector<Skill> skills;
+    std::stringstream ss(skillSequence);
+
+    std::string item;
+
+    while (std::getline(ss, item, ';')) {
+        std::stringstream itemStream(item);
+        std::string idStr, intervalStr;
+        std::getline(itemStream, idStr, '-');
+        std::getline(itemStream, intervalStr);
+        skills.push_back({std::stoi(idStr), std::stoi(intervalStr)});
+    }
+
+    fight = std::jthread(&BasicTask::Fight, this, skills);
+
+}
+
+void BasicTask::Fight(const std::vector<Skill> &skills) {
+    while (unbind_event && fight_) {
+        for (const auto&[id, interval] : skills) {
+            if (!fight_ || !unbind_event) break;
+            key_down_up(skillMap[id]);
+            std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+        }
+    }
+}
+
+void BasicTask::FightStop() {
+    fight_ = false;
 }
 

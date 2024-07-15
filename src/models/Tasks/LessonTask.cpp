@@ -140,6 +140,7 @@ int LessonTask::determine() {
             return -1;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        return 307;
     }
     detect_count = 0;
 

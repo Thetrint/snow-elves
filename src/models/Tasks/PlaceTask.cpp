@@ -40,6 +40,7 @@ int PlaceTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
+                // mouse_move({}, {100, 300}, {900, 300});
                 objective("任务退出");
                 break;
 
@@ -65,6 +66,7 @@ int PlaceTask::determine() {
             return -1;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        return 307;
     }
     detect_count = 0;
 

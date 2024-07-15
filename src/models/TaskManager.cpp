@@ -16,8 +16,12 @@
 
 TaskManager::TaskManager(int id, HWND hwnd)
     : id(id), hwnd(hwnd), disrupted(false), unbind_event(true) {
+    LoadJsonFile::instance().LoadFile(id);
 }
 
+TaskManager::~TaskManager() {
+    LoadJsonFile::instance().jsonFiles.erase(id);
+}
 
 void TaskManager::stop() {
     unbind_event = false;
@@ -36,7 +40,10 @@ void TaskManager::resume() {
 }
 
 void TaskManager::setState(const std::string &task) const {
-    emit Signals::instance()->Log(id, task);
+    if (task != "占位任务") {
+        emit Signals::instance()->Log(id, task);
+    }
+
 
 }
 void TaskManager::start(){
@@ -45,19 +52,18 @@ void TaskManager::start(){
 
         emit Signals::instance()->setPersion(id, hwnd);
 
-        LoadJsonFile::instance().LoadFile(id);
 
         // 创建一个 vector 用于存储解码后的值
         std::vector<std::string> tasks;
 
-        for (const auto& task : LoadJsonFile::instance().file_0.value("执行任务").toArray()) {
+        for (const auto& task : LoadJsonFile::instance().jsonFiles[id].value("执行任务").toArray()) {
             tasks.push_back(task.toString().toStdString());
             std::cout << task.toString().toStdString() << std::endl;
         }
 
         const auto rol = Factory::instance().create("切换角色", id, hwnd, pause_event, unbind_event, disrupted);
 
-        TaskSchedul schedul(tasks, rol);
+        TaskSchedul schedul(tasks, rol, id);
 
         std::string task;
         while ((task = schedul.get_task()).empty() == false && unbind_event) {
@@ -65,9 +71,14 @@ void TaskManager::start(){
                 //更新状态
                 setState(task);
                 auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted);
-
                 if (const int result = obj->implementation(); result == -1) {
+                }else {
+                    if (task != "占位任务") {
+                        emit Signals::instance()->Log(id, task + "结束");
+                    }
+
                 }
+
                 obj.reset();
             } catch (const std::exception& e) {
                 spdlog::error("Failed to thread: {}", e.what());

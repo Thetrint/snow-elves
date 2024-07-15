@@ -190,7 +190,7 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     hdcMemDC = CreateCompatibleDC(hdcWindow);
     if (!hdcMemDC)
     {
-        MessageBox(hWnd, L"CreateCompatibleDC has failed", L"Failed", MB_OK);
+        // MessageBox(hWnd, L"CreateCompatibleDC has failed", L"Failed", MB_OK);
     }
 
     // 获取客户区的大小
@@ -204,7 +204,7 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     hbmScreen = CreateCompatibleBitmap(hdcWindow, width, height);
     if (!hbmScreen)
     {
-        MessageBox(hWnd, L"CreateCompatibleBitmap Failed", L"Failed", MB_OK);
+        // MessageBox(hWnd, L"CreateCompatibleBitmap Failed", L"Failed", MB_OK);
     }
 
     // 选择兼容的位图到内存DC
@@ -220,7 +220,7 @@ HBITMAP WindowManager::CaptureAnImage(HWND hWnd)
     // }
     if (!StretchBlt(hdcMemDC, 0, 0, width, height, hdcWindow, 0, 0, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SRCCOPY))
     {
-        MessageBox(hWnd, L"StretchBlt has failed", L"Failed", MB_OK);
+        // MessageBox(hWnd, L"StretchBlt has failed", L"Failed", MB_OK);
     }
 
     // 清理
@@ -416,15 +416,28 @@ void WindowManager::GetFactor() {
  * @param x 坐标
  * @param y 坐标
  */
-void WindowManager::MouseDownUp(HWND hwnd, int x, int y) {
+void WindowManager::MouseDownUp(const HWND &hwnd, const int x, const int y) {
     // 将屏幕坐标转换为窗口客户区坐标
-    POINT pt = { x, y };
+    const POINT pt = { x, y };
     // ScreenToClient(hwnd, &pt);
 
     // 模拟鼠标指针，传送到指定坐标
     LPARAM const lParam = MAKELPARAM(pt.x, pt.y);
     // 模拟鼠标按下
     PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+    PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+}
+
+void WindowManager::MouseKeep(const HWND &hwnd, const int x, const int y, const int delay) {
+    // 将屏幕坐标转换为窗口客户区坐标
+    const POINT pt = { x, y };
+    // ScreenToClient(hwnd, &pt);
+
+    // 模拟鼠标指针，传送到指定坐标
+    LPARAM const lParam = MAKELPARAM(pt.x, pt.y);
+    // 模拟鼠标按下
+    PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, lParam);
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
 }
 
@@ -451,7 +464,7 @@ void WindowManager::MouseMove(HWND hwnd, const int x1, const int y1, const int x
     // 计算移动距离
     const double distance = std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     // 动态生成步长
-    const int steps = static_cast<int>(distance / 20);
+    const int steps = static_cast<int>(distance / 100);
 
     // 模拟鼠标按下
     PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(startPt.x, startPt.y));
@@ -463,12 +476,14 @@ void WindowManager::MouseMove(HWND hwnd, const int x1, const int y1, const int x
         const LPARAM lParam = MAKELPARAM(x, y);
 
         // 模拟鼠标移动
+
         PostMessage(hwnd, WM_MOUSEMOVE, MK_LBUTTON, lParam);
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        // PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 
     // 模拟鼠标松开
-    PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(endPt.x, endPt.y));
+    PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(startPt.x, startPt.y));
 }
 
 int WindowManager::GetVkCode(const std::string &key) {
@@ -484,7 +499,7 @@ int WindowManager::GetVkCode(const std::string &key) {
     }
 }
 
-void WindowManager::KeyDownUp(HWND hwnd, const std::string &key) {
+void WindowManager::KeyDownUp(const HWND& hwnd, const std::string &key) {
     const int vk_code = GetVkCode(key);
     if (vk_code == 0) {
         std::cerr << "Invalid key: " << key << std::endl;
@@ -496,6 +511,22 @@ void WindowManager::KeyDownUp(HWND hwnd, const std::string &key) {
     const LPARAM lparam = (scan_code << 16) | 1;
 
     PostMessage(hwnd, WM_KEYDOWN, wparam, lparam);
+    PostMessageW(hwnd, WM_KEYUP, wparam, lparam);
+}
+
+void WindowManager::KeyKeep(const HWND& hwnd, const std::string &key, const int dealy) {
+    const int vk_code = GetVkCode(key);
+    if (vk_code == 0) {
+        std::cerr << "Invalid key: " << key << std::endl;
+        return; // 无效键值
+    }
+
+    const UINT scan_code = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
+    const WPARAM wparam = vk_code;
+    const LPARAM lparam = (scan_code << 16) | 1;
+
+    PostMessage(hwnd, WM_KEYDOWN, wparam, lparam);
+    std::this_thread::sleep_for(std::chrono::milliseconds(dealy));
     PostMessageW(hwnd, WM_KEYUP, wparam, lparam);
 }
 

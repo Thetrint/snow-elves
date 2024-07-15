@@ -36,27 +36,27 @@ int SwitchRolesTask::implementation() {
                 objective("切换角色");
                 break;
             case 3:
-                if (LoadJsonFile::instance().file_0.value("切角色1").toBool() && roles[1]) {
+                if (LoadJsonFile::instance().jsonFiles[id].value("切角色1").toBool() && roles[1]) {
                     // switch_roles(1);
                     roles[1] = false;
                     return 1;
                 }
-                if (LoadJsonFile::instance().file_0.value("切角色2").toBool() && roles[2]) {
+                if (LoadJsonFile::instance().jsonFiles[id].value("切角色2").toBool() && roles[2]) {
                     // switch_roles(2);
                     roles[2] = false;
                     return 1;
                 }
-                if (LoadJsonFile::instance().file_0.value("切角色3").toBool() && roles[3]) {
+                if (LoadJsonFile::instance().jsonFiles[id].value("切角色3").toBool() && roles[3]) {
                     // switch_roles(3);
                     roles[3] = false;
                     return 1;
                 }
-                if (LoadJsonFile::instance().file_0.value("切角色4").toBool() && roles[4]) {
+                if (LoadJsonFile::instance().jsonFiles[id].value("切角色4").toBool() && roles[4]) {
                     // switch_roles(4);
                     roles[4] = false;
                     return 1;
                 }
-                if (LoadJsonFile::instance().file_0.value("切角色5").toBool() && roles[5]) {
+                if (LoadJsonFile::instance().jsonFiles[id].value("切角色5").toBool() && roles[5]) {
                     // switch_roles(5);
                     roles[5] = false;
                     return 1;

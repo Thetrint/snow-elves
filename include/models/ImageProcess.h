@@ -41,7 +41,7 @@ struct MatchScope {
 struct MatchParams {
     cv::TemplateMatchModes modes = cv::TM_CCORR_NORMED; // 默认值
     float similar{}; // 相似度
-    int matchCount = 3;
+    int matchCount = 4;
     ClickType click = RANDOM;
 
     int x = 0; //偏移坐标x
