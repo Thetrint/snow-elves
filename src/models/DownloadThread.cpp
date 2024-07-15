@@ -9,7 +9,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <utils/Signals.h>
-
+#include "utils/Utilities.h"
 
 void DownloadThread::run(){
 
@@ -86,16 +86,22 @@ void DownloadThread::run(){
         }));
 
         // 检查请求是否成功
+        // 检查请求是否成功
         if (d.status_code == 200) {
             // 获取临时目录路径
             const QString tempDir = QDir::tempPath();
             const QString filePath = tempDir + "/ScriptApp.zip";
 
             // 将响应内容写入文件
-            std::ofstream outfile(filePath.toStdString(), std::ofstream::binary);
-            outfile << d.text;
-            outfile.close();
-            emit Signals::instance()->Update(name, version);
+            if (std::ofstream outfile(filePath.toStdString(), std::ofstream::binary); outfile.is_open()) {
+                outfile << d.text;
+                outfile.close();
+                emit Signals::instance()->Update(name, version);
+            } else {
+                spdlog::error("更新文件写入失败");
+            }
+        } else {
+            spdlog::error("网络请求失败");
         }
 
     }

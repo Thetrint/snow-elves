@@ -44,6 +44,10 @@ private:
     NativeEventFilter *eventFilter;
     void writeUserSettings() const;
 
+    void writeSystemSettings();
+
+    void readSystemSettings() const;
+
     void exportConfig();
 
     void importConfig();
@@ -58,6 +62,17 @@ private:
     int getSpacerIndex(const QSpacerItem *spacer) const;
 
     QJsonDocument createJsonDocument() const;
+protected:
+    void closeEvent(QCloseEvent *event) override {
+        if (const QMessageBox::StandardButton reply =
+            QMessageBox::question(this, "关闭窗口", "你确定要关闭窗口吗？", QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
+            writeSystemSettings();
+            event->accept();  // 接受关闭事件
+        } else {
+            event->ignore();  // 忽略关闭事件
+        }
+    }
+
 };
 
 #endif // MAINWINDOW_H

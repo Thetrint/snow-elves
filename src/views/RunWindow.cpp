@@ -28,7 +28,11 @@ RunWindow::RunWindow(QWidget *parent):
             // 将新创建的实例存储在 instances 容器中
             instances[id] = instance;
             windowHwnd[id] = hwnd;
-            threads[hwnd] = std::jthread(&TaskManager::start, instance);
+            try {
+                threads[hwnd] = std::jthread(&TaskManager::start, instance);
+            } catch (const std::exception& e) {
+                spdlog::error("线程创建: {}", e.what());
+            }
         }
 
     });
@@ -43,6 +47,7 @@ RunWindow::RunWindow(QWidget *parent):
         if (instances.contains(id)) {
             instances[id]->stop();
             instances.erase(id);
+            threads.erase(windowHwnd[id]);
             windowHwnd.erase(id);
         }
 
@@ -59,6 +64,7 @@ RunWindow::RunWindow(QWidget *parent):
             if (instances.contains(id)) {
                 instances[id]->stop();
                 instances.erase(id);
+                threads.erase(windowHwnd[id]);
                 windowHwnd.erase(id);
             }
         }
@@ -103,56 +109,64 @@ RunWindow::RunWindow(QWidget *parent):
     //日志更新
     connect(Signals::instance(), &Signals::Log, this, [&](const int id, const std::string& message) {
         // 获取当前时间
-        const auto now = std::chrono::system_clock::now();
-        const std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-        const std::tm* now_tm = std::localtime(&now_time);
+        try {
+            const auto now = std::chrono::system_clock::now();
+            const std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+            const std::tm* now_tm = std::localtime(&now_time);
 
-        // 格式化时间为 "12:34:34"
-        std::ostringstream oss;
-        oss << std::put_time(now_tm, "%H:%M:%S");
-        const std::string time_str = oss.str();
-        std::string text = "[" +time_str + "]" + "[窗口 " + std::to_string(id + 1) + "]" + " " + ">>> " + message;
-        if (id == -1) {
-            text = "[" +time_str + "]"  + " >>> " + message;
+            // 格式化时间为 "12:34:34"
+            std::ostringstream oss;
+            oss << std::put_time(now_tm, "%H:%M:%S");
+            const std::string time_str = oss.str();
+            std::string text = "[" +time_str + "]" + "[窗口 " + std::to_string(id + 1) + "]" + " " + ">>> " + message;
+            if (id == -1) {
+                text = "[" +time_str + "]"  + " >>> " + message;
+            }
+
+            ui.textEdit->append(QString::fromUtf8(text.c_str()));
+        } catch (const std::exception& e) {
+            spdlog::error("线程创建: {}", e.what());
         }
-
-        ui.textEdit->append(QString::fromUtf8(text.c_str()));
 
 
     });
 
     //设置角色信息
     connect(Signals::instance(), &Signals::setPersion, this, [&](const int id, HWND hwnd) {
+        try {
+            spdlog::info("设置角色信息");
+            const cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
+            const cv::Rect roi(120, 730, 115, 20);
+            cv::Mat persionImage = image(roi);
+            // cv::imshow("12", image);
+            // cv::imshow("13", persionImage);
+            // cv::waitKey(0);
+            // 将 cv::Mat 转换为 QImage
+            QImage qImage;
+            if (persionImage.type() == CV_8UC3) {
+                cv::cvtColor(persionImage, persionImage, cv::COLOR_BGR2RGB);
+                qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
+                                static_cast<int>(persionImage.step), QImage::Format_RGB888);
+            } else if (persionImage.type() == CV_8UC1) {
+                qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
+                                static_cast<int>(persionImage.step), QImage::Format_Grayscale8);
+            } else if (persionImage.type() == CV_8UC4) {
+                qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
+                                static_cast<int>(persionImage.step), QImage::Format_ARGB32);
+            }
 
-        const cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
-        const cv::Rect roi(120, 730, 115, 20);
-        cv::Mat persionImage = image(roi);
-        // cv::imshow("12", image);
-        // cv::imshow("13", persionImage);
-        // cv::waitKey(0);
-        // 将 cv::Mat 转换为 QImage
-        QImage qImage;
-        if (persionImage.type() == CV_8UC3) {
-            cv::cvtColor(persionImage, persionImage, cv::COLOR_BGR2RGB);
-            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
-                            static_cast<int>(persionImage.step), QImage::Format_RGB888);
-        } else if (persionImage.type() == CV_8UC1) {
-            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
-                            static_cast<int>(persionImage.step), QImage::Format_Grayscale8);
-        } else if (persionImage.type() == CV_8UC4) {
-            qImage = QImage(persionImage.data, static_cast<int>(persionImage.cols), static_cast<int>(persionImage.rows),
-                            static_cast<int>(persionImage.step), QImage::Format_ARGB32);
+            // 将 QImage 转换为 QPixmap
+            const QPixmap pixmap = QPixmap::fromImage(qImage);
+
+            // 创建一个 QTableWidgetItem 并设置图像数据
+            const auto item = new QTableWidgetItem();
+            item->setData(Qt::DecorationRole, pixmap);
+
+            // 将 QTableWidgetItem 添加到 QTableWidget
+            ui.tableWidget->setItem(id, 0, item);
+        } catch (const std::exception& e) {
+            spdlog::error("线程创建: {}", e.what());
         }
-
-        // 将 QImage 转换为 QPixmap
-        const QPixmap pixmap = QPixmap::fromImage(qImage);
-
-        // 创建一个 QTableWidgetItem 并设置图像数据
-        const auto item = new QTableWidgetItem();
-        item->setData(Qt::DecorationRole, pixmap);
-
-        // 将 QTableWidgetItem 添加到 QTableWidget
-        ui.tableWidget->setItem(id, 0, item);
 
     });
 
@@ -208,8 +222,7 @@ RunWindow::RunWindow(QWidget *parent):
 
 int RunWindow::getrowindex() const {
     // 假设 tableWidget 是您的 QTableWidget 对象
-    QModelIndex currentIndex = ui.tableWidget->currentIndex();
-    if (currentIndex.isValid()) {
+    if (const QModelIndex currentIndex = ui.tableWidget->currentIndex(); currentIndex.isValid()) {
         const int rowIndex = currentIndex.row();
         return rowIndex;
     }

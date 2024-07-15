@@ -9,23 +9,23 @@ int FactionTask::implementation() {
     // key_down_up("B");L
     // ClickImageMatch(ImageProcessor::MatchParams{.similar = 0.75}, L"世界区域");
     // 记录开始时间
-    timer.start();
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    std::cout << 1 << std::endl;
-    std::cout << timer.read() << std::endl;
-
-    timer.pause();
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    std::cout << 1 << std::endl;
-    std::cout << timer.read() << std::endl;
-
-    timer.start();
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    std::cout << 1 << std::endl;
-    std::cout << timer.read() << std::endl;
+    // timer.start();
+    //
+    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    // std::cout << 1 << std::endl;
+    // std::cout << timer.read() << std::endl;
+    //
+    // timer.pause();
+    //
+    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    // std::cout << 1 << std::endl;
+    // std::cout << timer.read() << std::endl;
+    //
+    // timer.start();
+    //
+    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    // std::cout << 1 << std::endl;
+    // std::cout << timer.read() << std::endl;
 
 
 

@@ -47,6 +47,13 @@
 #include <QFile>
 #include <QDir>
 #include <QFileDialog>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <QCloseEvent>
+#include <QLineEdit>
+
+
 
 #include "resources/images.h"
 

@@ -36,7 +36,7 @@ void TaskManager::resume() {
 }
 
 void TaskManager::setState(const std::string &task) const {
-
+    spdlog::info("状态设置窗口 {}: {}", id, task);
     emit Signals::instance()->Log(id, task);
 
 }
@@ -60,12 +60,16 @@ void TaskManager::start(){
 
     std::string task;
     while ((task = schedul.get_task()).empty() == false && unbind_event) {
-        setState(task);
-        auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted);
-        if (const int result = obj->implementation(); result == -1) {
+        try {
+            setState(task);
+            auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted);
 
+            if (const int result = obj->implementation(); result == -1) {
+            }
+            obj.reset();
+        } catch (const std::exception& e) {
+            spdlog::error("Failed to thread: {}", e.what());
         }
-        obj.reset();
 
     }
 

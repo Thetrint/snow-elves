@@ -100,6 +100,8 @@ FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
         GIT_TAG 3b15fa82ea74739b574d705fea44959b58142eb8) # Replace with your desired git commit from: https://github.com/libcpr/cpr/releases
 FetchContent_MakeAvailable(cpr)
 
+add_subdirectory(external/spdlog)
+
 # 可执行文件
 add_executable(SnowElvesScript WIN32
         src/main.cpp
@@ -163,6 +165,7 @@ target_link_libraries(SnowElvesScript PRIVATE
         Qt::Gui
         Qt::Widgets
         cpr::cpr
+        spdlog::spdlog
         ${OpenCV_LIBS}
 
 )

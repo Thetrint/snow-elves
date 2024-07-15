@@ -98,7 +98,7 @@ void BasicTask::Arrive() {
 
 
 void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& matches, MatchParams& match) const {
-
+    spdlog::info("图片匹配 {}", templ_name);
     std::cout << templ_name << std::endl;
     //读取模板图片
     cv::Mat templ = ImageProcessor::imread(templ_name);

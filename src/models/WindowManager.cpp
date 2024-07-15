@@ -149,16 +149,9 @@ void WindowManager::setWinodw(HWND const &hwnd) {
         std::cout << "Image Size: " << mat.cols << " x " << mat.rows << std::endl;
         std::cout << "Image: " << bitmap.bmWidth << " x " << bitmap.bmHeight << std::endl;
 
-        if (targetWidth - 1 <= mat.cols && mat.cols <= targetWidth + 1 &&
-            targetHeight - 1 <= mat.rows && mat.rows <= targetHeight + 1) {
-            // Uncomment these lines if you need to do further processing
-            // HBITMAP hBitmap1 = CaptureAnImage(hwnd);
-            // const cv::Mat mat1 = ImageProcessor::HBITMAPToMat(hBitmap1);
-            // cv::imshow("Source Image", mat1);
-            // cv::waitKey(0);
-            // cv::imwrite("2.bmp", mat);
-            // SaveBitmapToFile(hBitmap1, L"1.bmp");
-            // DeleteObject(hBitmap1);
+        if (targetWidth <= mat.cols && mat.cols <= targetWidth + 1 &&
+            targetHeight <= mat.rows && mat.rows <= targetHeight + 1) {
+
             break;
             }
 
