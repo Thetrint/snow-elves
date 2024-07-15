@@ -94,6 +94,7 @@ HWND WindowManager::getWindowHandle()
 
         if(std::wstring(title) == L"一梦江湖") {
             std::cout << hwnd << std::endl;
+
             return hwnd;
         }
 

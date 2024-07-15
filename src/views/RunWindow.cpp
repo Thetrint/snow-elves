@@ -1,12 +1,7 @@
+#include "main.h"
 #include "views/RunWindow.h"
 #include "models/WindowManager.h"
 #include "utils/Signals.h"
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QWidget>
-#include <iostream>
-#include <thread>
-#include <QTableWidget>
 
 RunWindow::RunWindow(QWidget *parent):
     QWidget(parent)
@@ -21,24 +16,21 @@ RunWindow::RunWindow(QWidget *parent):
     });
 
     connect(ui.pushButton_7, &QPushButton::clicked, this, [&]() {
+        HWND hwnd;
+        if (int id; detectWin(id, hwnd)) {
+            Signals::instance()->emitWriteJson(id);
 
-        const int id = getrowindex();
-        Signals::instance()->emitWriteJson(id);
-        HWND hwnd = WindowManager::getWindowHandle();
+            WindowManager::setWinodw(hwnd);
 
-        WindowManager::setWinodw(hwnd);
-
-
-        // 检查是否已经存在指定 ID 的实例
-        if (!instances.contains(id)) {
             // 如果不存在，创建一个新的 MyClass 实例并存储在共享指针中
             const auto instance = std::make_shared<TaskManager>(id, hwnd);
 
             // 将新创建的实例存储在 instances 容器中
             instances[id] = instance;
-
-            threads[id] = std::jthread(&TaskManager::start, instance);
+            windowHwnd[id] = hwnd;
+            threads[hwnd] = std::jthread(&TaskManager::start, instance);
         }
+
     });
 
     //任务解绑
@@ -51,6 +43,7 @@ RunWindow::RunWindow(QWidget *parent):
         if (instances.contains(id)) {
             instances[id]->stop();
             instances.erase(id);
+            windowHwnd.erase(id);
         }
 
     });
@@ -66,6 +59,7 @@ RunWindow::RunWindow(QWidget *parent):
             if (instances.contains(id)) {
                 instances[id]->stop();
                 instances.erase(id);
+                windowHwnd.erase(id);
             }
         }
 
@@ -162,13 +156,13 @@ RunWindow::RunWindow(QWidget *parent):
 
     });
 
-    //任务全部恢复
+    //截图
     connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
         HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle());
         WindowManager::SaveBitmapToFile(hBitmap, L"1.bmp");
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
 
-        cv::imwrite("2.bmp", mat);
+
 
         cv::Mat gray;
         cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
@@ -180,9 +174,9 @@ RunWindow::RunWindow(QWidget *parent):
         // 应用 Canny 边缘检测
         cv::Mat edges;
         cv::Canny(blurred, edges, 100, 200);
-
-        cv::imshow("Source Image", edges);
-        cv::waitKey(0);
+        cv::imwrite("2.bmp", edges);
+        // cv::imshow("Source Image", edges);
+        // cv::waitKey(0);
 
         DeleteObject(hBitmap);
     });
@@ -200,6 +194,9 @@ RunWindow::RunWindow(QWidget *parent):
     for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
         ui.tableWidget->setRowHeight(i, 20);
     }
+
+    // 设置单选模式
+    ui.tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
     // 禁用水平滚动条
     ui.tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -220,7 +217,55 @@ int RunWindow::getrowindex() const {
 }
 
 
+bool RunWindow::detectWin(int &id, HWND &hwnd) {
 
+    id = getrowindex();
+    hwnd = WindowManager::getWindowHandle();
+    if (hwnd == nullptr) {
+        auto *msgBox = new QMessageBox();
+        msgBox->setWindowTitle("提示");
+        msgBox->setText("请勿绑定非游戏窗口");
+        msgBox->setStandardButtons(QMessageBox::Ok);
+        msgBox->setAttribute(Qt::WA_DeleteOnClose); // 自动删除
+        msgBox->show();
+
+        // 设置定时器，在一段时间后关闭消息框
+        QTimer::singleShot(2000, msgBox, &QMessageBox::close);
+        return false;
+    }
+
+    if (!threads.contains(hwnd)) {
+        if (!instances.contains(id)) {
+            return true;
+        }
+        for (int i = 0; i < 10; i++) {
+            if (!instances.contains(i)) {
+                id = i;
+                return true;
+            }
+        }
+        auto *msgBox = new QMessageBox();
+        msgBox->setWindowTitle("提示");
+        msgBox->setText("当前没有空余窗口");
+        msgBox->setStandardButtons(QMessageBox::Ok);
+        msgBox->setAttribute(Qt::WA_DeleteOnClose); // 自动删除
+        msgBox->show();
+
+        // 设置定时器，在一段时间后关闭消息框
+        QTimer::singleShot(2000, msgBox, &QMessageBox::close);
+        return false;
+    }
+    auto *msgBox = new QMessageBox();
+    msgBox->setWindowTitle("提示");
+    msgBox->setText("当前游戏已被绑定");
+    msgBox->setStandardButtons(QMessageBox::Ok);
+    msgBox->setAttribute(Qt::WA_DeleteOnClose); // 自动删除
+    msgBox->show();
+
+    // 设置定时器，在一段时间后关闭消息框
+    QTimer::singleShot(2000, msgBox, &QMessageBox::close);
+    return false;
+}
 
 // RunWindow::~RunWindow() {
 //     // Qt会自动清理子对象

@@ -42,7 +42,7 @@ bool BasicTask::OpenKnapsack() {
 }
 
 bool BasicTask::Close() {
-    ClickImageMatch({.similar = 0.6}, nullptr, "按钮关闭");
+    ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
     return false;
 }
 

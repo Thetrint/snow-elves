@@ -7,7 +7,7 @@
 
 #include "main.h"
 #include "models/ImageProcess.h"
-
+#include "utils/Utilities.h"
 
 
 
@@ -18,12 +18,13 @@ protected:
     HWND hwnd; // 窗口句柄，假设 HWND 是窗口句柄的类型
     std::mutex& pause_event;
     bool& unbind_event;
+    bool& disrupted;
 
 public:
     virtual ~BasicTask() = default;
 
     // ReSharper disable once CppParameterMayBeConst
-    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) : id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
+    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted) {}
 
 
     // 纯虚函数，要求子类必须实现
@@ -39,7 +40,9 @@ public:
 
 protected:
     // 定义一个枚举类型
+    Timer timer{unbind_event};
 
+    int detect_count;
 
     bool OpenMap();
 
@@ -93,10 +96,10 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, CallbackFunc *c
         }
 
         // 初始化随机数种子
-        std::random_device rd;
         std::uniform_int_distribution<std::vector<Match>::size_type> dis(0, matches.size() - 1);
 
         if (!matches.empty()) {
+            std::random_device rd;
             //不为空直接返回
             switch (match.click) {
                 case NoTap:

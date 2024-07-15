@@ -6,12 +6,6 @@
 #include "models/WindowManager.h"
 #include "views/LoginWindow.h"
 #include "views/RenewWindow.h"
-#include <QStyleFactory>
-
-
-#include <iostream>
-#include <QFile>
-#include <QResource>
 #include <utils/signals.h>
 
 
@@ -68,7 +62,7 @@ int main(int argc, char *argv[])
     // 连接 loginSuccess 信号到主窗口的 show 槽
     QObject::connect(Signals::instance(), &Signals::Update, [&](const std::string& name, const std::string& version) {
         std::cout << version << std::endl;
-        const std::string command = "start /B Update.bat " + name + " " + version;
+        const std::string command = "powershell -Command \"Start-Process cmd -ArgumentList '/c Update.bat " + name + " " + version + "' -Verb RunAs\"";
         std::system(command.c_str());
 
         w.close();

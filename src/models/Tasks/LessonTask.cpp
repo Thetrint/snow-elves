@@ -11,14 +11,22 @@ int LessonTask::implementation() {
     std::vector<Match> matchs;
 
     objective("位置检测");
-
+    timer.start();
     while (unbind_event) {
+
+        if (disrupted) {
+            timer.pause();
+            return -1; //任务调度中止任务
+        }
+
+        if (timer.read() >= std::chrono::seconds(720)) {
+            return 0;
+        }
+
         switch (determine()) {
             case 0:
-                return 0;
+                return 0; // 任务正常退出
             case -1:
-                break;
-            case -3:
                 Close();
                 break;
             case 1:
@@ -31,7 +39,7 @@ int LessonTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+                Close();
                 objective("开始任务");
                 break;
             case 3:
@@ -46,7 +54,7 @@ int LessonTask::implementation() {
                 }
                 ClickImageMatch(MatchParams{.similar = 0.6, .scope = {170, 127, 404, 582}}, nullptr, "按钮前往");
                 Arrive();
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界课业");
+                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界课业", "按钮大世界悟禅");
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮课业确定");
                 for (int i = 0; i <= 8; i++) {
                     if (ClickImageMatch(MatchParams{.similar = 0.6, .click = FIRST}, nullptr, "按钮课业困难").empty()) {
@@ -78,8 +86,9 @@ int LessonTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                     }
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
-                    ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
-                        nullptr, "按钮大世界吟风任务", "按钮大世界含灵任务", "按钮大世界归义任务", "按钮大世界濯剑任务", "按钮大世界锻心任务");
+                    ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
+                        nullptr, "按钮大世界吟风任务", "按钮大世界含灵任务", "按钮大世界寻道任务", "按钮大世界归义任务",
+                        "按钮大世界悟禅任务", "按钮大世界漱尘任务", "按钮大世界濯剑任务", "按钮大世界观梦任务", "按钮大世界锻心任务");
                 }
 
 
@@ -127,13 +136,20 @@ void LessonTask::objective(const std::string ve) {
 
 int LessonTask::determine() {
     const int sw = detect();
+    if (sw == -5) {
+        if (detect_count++ >= 15) {
+            return -1;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+    detect_count = 0;
 
     if (cause == "任务退出") {
         switch (sw) {
             case 1:
                 return 0;
             default:
-                return -3;
+                return -1;
         }
     }
 
@@ -142,7 +158,7 @@ int LessonTask::determine() {
             case 1:
                 return 1;
             default:
-                return -3;
+                return -1;
         }
     }
 
@@ -151,7 +167,7 @@ int LessonTask::determine() {
             case 1:
                 return 2;
             default:
-                return -3;
+                return -1;
         }
     }
 
@@ -160,7 +176,7 @@ int LessonTask::determine() {
             case 1:
                 return 3;
             default:
-                return -3;
+                return -1;
         }
     }
 

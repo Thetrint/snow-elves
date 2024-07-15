@@ -8,17 +8,7 @@
 #include "views/RunWindow.h"
 #include "views/ScriptWindow.h"
 #include "utils/signals.h"
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QSpacerItem>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <iostream>
-#include <fstream>
-#include <filesystem>
-#include <QFile>
-#include <QDir>
+
 
 MainWindow::MainWindow(QWidget *parent):
     QWidget(parent),
@@ -44,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent):
     // connect(RunWindow)
     buttonGroup.setExclusive(true);
 
-    connect(Signals::instance(), &Signals::writejson, this, &MainWindow::writewinconfig);
+    connect(Signals::instance(), &Signals::writejson, this, &MainWindow::writeWinConfig);
 
     // 注册热键 (示例：Ctrl+Shift+1)
     if (RegisterHotKey(reinterpret_cast<HWND>(this->winId()), 1, MOD_SHIFT, 'Q')) {
@@ -55,7 +45,8 @@ MainWindow::MainWindow(QWidget *parent):
 
     // 创建并安装事件过滤器
     qApp->installNativeEventFilter(eventFilter);
-
+    // writeUserSettings();
+    // exportConfig();
 
     // writewinconfig();
     // switchToPage(1);
@@ -92,44 +83,147 @@ int MainWindow::getSpacerIndex(const QSpacerItem *spacer) const {
     return -1; // 如果没有找到弹簧，则返回-1
 }
 
-//写入json
-
-
-void MainWindow::writewinconfig(const int id) const {
-
-    // 创建 JSON 数组并将 QListWidget 中的项直接写入
+QJsonDocument MainWindow::createJsonDocument() const {
     QJsonArray jsonArray;
     for (int i = 0; i < script->ui.listWidget_2->count(); ++i) {
         const QListWidgetItem* item = script->ui.listWidget_2->item(i);
         jsonArray.append(item->text());
     }
 
-    // 创建 JSON 对象并添加键值对
     QJsonObject root;
     root["执行任务"] = jsonArray;
     root["keyu"] = 30;
     root["city"] = "New York";
 
-    // 创建 JSON 文档
-    const QJsonDocument jsonDoc(root);
+    return QJsonDocument(root);
+}
 
-    // 将 JSON 文档转换为字符串
-    const QByteArray jsonData = jsonDoc.toJson();
 
-    // 获取临时目录路径并设置文件路径
-    const QString tempDir = QDir::tempPath();
-    const QString filePath = tempDir + "/ElvesConfig_" + QString::number(id) + ".json";
+void MainWindow::writeWinConfig(const int id) const {
+    const QJsonDocument settingsDoc = createJsonDocument();
 
     // 打开文件以写入 JSON 字符串
-    QFile file(filePath);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream stream(&file);
-        stream << jsonData << Qt::endl;
+    if (QFile file(QDir::tempPath() + "/ElvesConfig_" + QString::number(id) + ".json"); file.
+        open(QIODevice::WriteOnly)) {
+        file.write(settingsDoc.toJson());
         file.close();
-        qDebug() << "JSON data written to file:" << filePath;
-    } else {
-        qWarning() << "Failed to open file for writing:" << file.errorString();
     }
 
 
+}
+
+
+
+void MainWindow::readUserSettings() const {
+    QJsonDocument settingsDoc;
+    if (QFile file(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config.json"); file.open(QIODevice::ReadOnly)) {
+        QByteArray data = file.readAll();
+        file.close();
+         settingsDoc = QJsonDocument::fromJson(data);
+    }
+
+    if (!settingsDoc.isNull()) {
+        QJsonObject root = settingsDoc.object();
+
+        // 读取执行任务
+        QJsonArray executeTasks = root["执行任务"].toArray();
+        // 更新界面或处理数据
+        script->ui.listWidget_2->clear();
+        for (const auto& value : executeTasks) {
+            auto *item = new QListWidgetItem(value.toString());
+            item->setSizeHint(QSize(script->ui.listWidget_2->height(), 30));
+            item->setTextAlignment(Qt::AlignCenter);
+            script->ui.listWidget_2->addItem(item);
+        }
+
+        // 读取其他配置
+        int keyu = root["keyu"].toInt();
+        QString city = root["city"].toString();
+
+
+
+        qDebug() << "Keyu:" << keyu;
+        qDebug() << "City:" << city;
+    }
+}
+
+
+
+void MainWindow::writeUserSettings() const {
+
+    const QJsonDocument settingsDoc = createJsonDocument();
+
+    if (QFile file(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config.json"); file.open(
+        QIODevice::WriteOnly)) {
+        file.write(settingsDoc.toJson());
+        file.close();
+        }
+}
+
+
+void MainWindow::exportConfig() {
+    // 获取应用配置路径下的 JSON 文件列表
+    QStringList filters = {"*.json"};
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation));
+    QStringList files = dir.entryList(filters, QDir::Files);
+
+    // 创建一个选择文件的对话框
+    auto* fileList = new QListWidget;
+    fileList->addItems(files);
+    QDialog dialog(this);
+    dialog.setWindowTitle(tr("选择要复制的配置文件"));
+    dialog.setLayout(new QVBoxLayout);
+    dialog.layout()->addWidget(fileList);
+    dialog.setWindowModality(Qt::ApplicationModal);
+
+    auto* selectButton = new QPushButton(tr("选择"));
+    dialog.layout()->addWidget(selectButton);
+    dialog.setFixedSize(300, 200);
+
+    connect(selectButton, &QPushButton::clicked, &dialog, [&]() {
+        if (fileList->currentItem()) {
+            dialog.accept();
+        }
+    });
+
+    if (dialog.exec() == QDialog::Accepted) {
+        QString sourcePath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/" + fileList->currentItem()->text();
+
+        // 选择保存目标目录
+        QString destinationDir = QFileDialog::getExistingDirectory(this, tr("选择保存位置"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+        if (destinationDir.isEmpty()) {
+            return; // 用户取消选择
+        }
+
+        // 复制文件
+        QString destinationPath = destinationDir + "/" + fileList->currentItem()->text();
+        if (QFile::copy(sourcePath, destinationPath)) {
+            qDebug() << "配置文件已导出到：" << destinationPath;
+        } else {
+
+        }
+    }
+}
+
+
+void MainWindow::importConfig() {
+    // 打开文件选择对话框选择多个源文件
+    QStringList sourcePaths = QFileDialog::getOpenFileNames(this, tr("选择要导入的配置文件"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), tr("JSON 文件 (*.json)"));
+    if (sourcePaths.isEmpty()) {
+        return; // 用户取消选择
+    }
+
+    // 指定目标路径（之前导出的路径）
+    QString targetDirectory = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+
+    // 复制每个文件
+    for (const QString& sourcePath : sourcePaths) {
+        QString destinationPath = targetDirectory + "/" + QFileInfo(sourcePath).fileName();
+
+        if (QFile::copy(sourcePath, destinationPath)) {
+            qDebug() << "配置文件已导入到：" << destinationPath;
+        } else {
+
+        }
+    }
 }
