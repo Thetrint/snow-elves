@@ -4,6 +4,7 @@
 
 #ifndef TASKSCHEDUL_H
 #define TASKSCHEDUL_H
+#include "main.h"
 #include <mutex>
 #include <string>
 #include <thread>
@@ -13,7 +14,9 @@
 class TaskSchedul {
 
 public:
-    explicit TaskSchedul(const std::vector<std::string> &array) :array(array) {};
+    explicit TaskSchedul(const std::vector<std::string> &array) :array(array) {
+        spdlog::info("创建任务调度器");
+    };
     void init();
 
     void task_schedul();

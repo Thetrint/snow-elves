@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.28)
 project(SnowElvesScript)
 
+# 获取传递的版本号
+if(NOT DEFINED VERSION)
+    set(VERSION "v10.0.0")
+endif()
+
+# 添加宏定义
+add_definitions(-DPROJECT_VERSION="${VERSION}")
+message(STATUS "使用的版本: ${VERSION}")
+
 #set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_AUTOMOC ON)
@@ -91,6 +100,8 @@ FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
         GIT_TAG 3b15fa82ea74739b574d705fea44959b58142eb8) # Replace with your desired git commit from: https://github.com/libcpr/cpr/releases
 FetchContent_MakeAvailable(cpr)
 
+add_subdirectory(external/spdlog)
+
 # 可执行文件
 add_executable(SnowElvesScript WIN32
         src/main.cpp
@@ -136,6 +147,8 @@ add_executable(SnowElvesScript WIN32
         include/main.h
         src/models/Tasks/Submersion.cpp
         include/models/Tasks/Submersion.h
+        src/utils/Utilities.cpp
+        include/utils/Utilities.h
 
 
 )
@@ -152,6 +165,7 @@ target_link_libraries(SnowElvesScript PRIVATE
         Qt::Gui
         Qt::Widgets
         cpr::cpr
+        spdlog::spdlog
         ${OpenCV_LIBS}
 
 )

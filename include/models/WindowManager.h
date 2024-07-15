@@ -26,6 +26,8 @@ public:
 
     static void MouseDownUp(HWND hwnd, int x, int y);
 
+    static void MouseMove(HWND hwnd, int x1, int y1, int x2, int y2);
+
     static int GetVkCode(const std::string &key);
 
     static void KeyDownUp(HWND hwnd, const std::string& key);

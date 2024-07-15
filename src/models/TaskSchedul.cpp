@@ -2,7 +2,7 @@
 // Created by y1726 on 2024/6/30.
 //
 #include "models/TaskSchedul.h"
-
+#include "main.h"
 #include <iostream>
 #include <ostream>
 
@@ -18,6 +18,7 @@ std::string TaskSchedul::get_task() {
 }
 
 void TaskSchedul::init() {
+    spdlog::info("任务调度器初始化");
     //获取锁
     std::unique_lock<std::mutex> lock(mtx);
     tasks.clear();
