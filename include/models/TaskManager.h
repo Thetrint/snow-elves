@@ -33,7 +33,7 @@ public:
 private:
     int id;
     HWND hwnd;
-
+    bool disrupted;
     std::mutex pause_event;
     bool unbind_event;
 };

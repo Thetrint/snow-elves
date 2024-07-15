@@ -11,9 +11,12 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -26,6 +29,12 @@ public:
     QGridLayout *gridLayout;
     QWidget *widget;
     QWidget *widget_2;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QComboBox *comboBox;
+    QPushButton *pushButton_3;
+    QPushButton *pushButton_4;
     QWidget *widget_4;
     QVBoxLayout *verticalLayout;
     QLabel *label;
@@ -59,6 +68,34 @@ public:
 
         widget_2 = new QWidget(ScriptWindow);
         widget_2->setObjectName("widget_2");
+        horizontalLayout = new QHBoxLayout(widget_2);
+        horizontalLayout->setObjectName("horizontalLayout");
+        pushButton = new QPushButton(widget_2);
+        pushButton->setObjectName("pushButton");
+
+        horizontalLayout->addWidget(pushButton);
+
+        pushButton_2 = new QPushButton(widget_2);
+        pushButton_2->setObjectName("pushButton_2");
+
+        horizontalLayout->addWidget(pushButton_2);
+
+        comboBox = new QComboBox(widget_2);
+        comboBox->setObjectName("comboBox");
+        comboBox->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout->addWidget(comboBox);
+
+        pushButton_3 = new QPushButton(widget_2);
+        pushButton_3->setObjectName("pushButton_3");
+
+        horizontalLayout->addWidget(pushButton_3);
+
+        pushButton_4 = new QPushButton(widget_2);
+        pushButton_4->setObjectName("pushButton_4");
+
+        horizontalLayout->addWidget(pushButton_4);
+
 
         gridLayout->addWidget(widget_2, 0, 2, 1, 1);
 
@@ -133,6 +170,10 @@ public:
     void retranslateUi(QWidget *ScriptWindow)
     {
         ScriptWindow->setWindowTitle(QCoreApplication::translate("ScriptWindow", "Form", nullptr));
+        pushButton->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\205\245\351\205\215\347\275\256", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("ScriptWindow", "\344\277\235\345\255\230\351\205\215\347\275\256", nullptr));
+        pushButton_3->setText(QCoreApplication::translate("ScriptWindow", "\345\210\240\351\231\244\351\205\215\347\275\256", nullptr));
+        pushButton_4->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\207\272\351\205\215\347\275\256", nullptr));
         label->setText(QCoreApplication::translate("ScriptWindow", "\344\273\273\345\212\241\345\210\227\350\241\250", nullptr));
         label_2->setText(QCoreApplication::translate("ScriptWindow", "\346\211\247\350\241\214\345\210\227\350\241\250", nullptr));
     } // retranslateUi

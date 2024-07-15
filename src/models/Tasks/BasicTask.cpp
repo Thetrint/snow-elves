@@ -42,7 +42,7 @@ bool BasicTask::OpenKnapsack() {
 }
 
 bool BasicTask::Close() {
-    ClickImageMatch({.similar = 0.6}, nullptr, "按钮关闭");
+    ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
     return false;
 }
 
@@ -98,7 +98,7 @@ void BasicTask::Arrive() {
 
 
 void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& matches, MatchParams& match) const {
-
+    spdlog::info("图片匹配 {}", templ_name);
     std::cout << templ_name << std::endl;
     //读取模板图片
     cv::Mat templ = ImageProcessor::imread(templ_name);
@@ -158,6 +158,15 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 
+}
+
+void BasicTask::mouse_move(const MatchParams &match, const cv::Point &start, const cv::Point &end) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        WindowManager::MouseMove(hwnd, start.x, start.y, end.x, end.y);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
 }
 
 void BasicTask::key_down_up(const std::string& key) const {

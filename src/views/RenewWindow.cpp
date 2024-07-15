@@ -51,20 +51,20 @@ void RenewWindow::checkupdae() {
         return;
     }
 
-    // 读取本地版本号
-    std::string local_version = "v0.0.0"; // 默认版本号
-    std::ifstream input_file("version.txt");
-    if (input_file) {
-        std::getline(input_file, local_version);
-        input_file.close();
-    } else {
-        std::cerr << "Could not open version.txt, using default version: " << local_version << std::endl;
-    }
-
-
-    // 输出版本号到控制台
-    std::cout << "Version: " << local_version << std::endl;
-    emit Signals::instance()->Log(-1, "目前版本：" + local_version);
+    // // 读取本地版本号
+    // std::string local_version = "v0.0.0"; // 默认版本号
+    // std::ifstream input_file("version.txt");
+    // if (input_file) {
+    //     std::getline(input_file, local_version);
+    //     input_file.close();
+    // } else {
+    //     std::cerr << "Could not open version.txt, using default version: " << local_version << std::endl;
+    // }
+    //
+    //
+    // // 输出版本号到控制台
+    // std::cout << "Version: " << local_version << std::endl;
+    emit Signals::instance()->Log(-1, "目前版本：" + std::string(PROJECT_VERSION));
 
     // 遍历 JSON 数据找出比本地版本新的版本
     const QJsonArray releases = jsonDoc.array();
@@ -76,7 +76,7 @@ void RenewWindow::checkupdae() {
         int id = releaseObj["id"].toInt();
         std::string name = releaseObj["name"].toString().toStdString();
         std::string body = releaseObj["body"].toString().toStdString();
-        if (compareVersions(local_version, version)) {
+        if (compareVersions(PROJECT_VERSION, version)) {
             std::cout << "Version: " << version << ", ID: " << id << ", Name: " << name << ", Body: " << body << std::endl;
             newer_versions.push_back({version, id, name, body});
         }

@@ -1,19 +1,19 @@
 /* styles.qss */
 
 
-#listWidget{
+#listWidget, #listWidget_2{
     border: 1px solid gray;
     color: black;
 }
 
-#listWidget::item{
+#listWidget::item, #listWidget_2::item{
     padding-top: 20px;
     padding-bottom: 4px;
 
 }
 
 
-#listWidget:focus{
+#listWidget:focus, #listWidget_2:focus{
     outline: none;
 }
 

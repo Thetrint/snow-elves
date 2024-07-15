@@ -13,9 +13,10 @@ protected:
     HWND hwnd; //
     std::mutex& pause_event;
     bool& unbind_event;
+    bool& disrupted;
 
 public:
-    FactionTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event) : BasicTask(id, hwnd, pause_event, unbind_event), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
+    FactionTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted) {}
 
     // 实现基类的纯虚函数
     int implementation() override;
