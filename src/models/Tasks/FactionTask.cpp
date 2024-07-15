@@ -5,48 +5,178 @@
 #include <iostream>
 #include <models/WindowManager.h>
 
+
 int FactionTask::implementation() {
-    // key_down_up("B");L
-    // ClickImageMatch(ImageProcessor::MatchParams{.similar = 0.75}, L"世界区域");
-    // 记录开始时间
-    // timer.start();
-    //
-    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    // std::cout << 1 << std::endl;
-    // std::cout << timer.read() << std::endl;
-    //
-    // timer.pause();
-    //
-    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    // std::cout << 1 << std::endl;
-    // std::cout << timer.read() << std::endl;
-    //
-    // timer.start();
-    //
-    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-    // std::cout << 1 << std::endl;
-    // std::cout << timer.read() << std::endl;
+    std::vector<Match> matchs;
+    objective("位置检测");
+    timer.start();
+    spdlog::info("计时器启动");
+    while (unbind_event) {
+
+        if (disrupted) {
+            timer.pause();
+            return -1; //任务调度中止任务
+        }
+
+        if (timer.read() >= std::chrono::seconds(720)) {
+            return 0;
+        }
+
+        switch (determine()) {
+            case 0:
+                return 0; // 任务正常退出
+            case -1:
+                Close();
+                break;
+            case 1:
+                LocationDetection();
+                objective("队伍检测");
+                break;
+            case 2:
+                OpenTeam();
+                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
+                }
+                Close();
+                objective("开始任务");
+                break;
+            case 3:
+                OpenKnapsack();
+                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品综合入口");
+                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品活动");
+                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮活动帮派");
+
+                if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, nullptr, "按钮活动帮派任务").empty()) {
+                    objective("任务退出");
+                    continue;
+                }
+                Arrive();
+                ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮帮派任务帮派任务");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮课业确定");
+
+                objective("等待完成");
+                break;
+            case 4:
+                if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 30) {
+                    record_time[0] = std::chrono::steady_clock::now();
+                    if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界江湖").empty()) {
+                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
+                    }
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
+                    ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
+                }
+                if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界帮派仓库", "按钮大世界摆摊购买").empty()) {
+                    if (!ClickImageMatch(MatchParams{.similar = 0.6, .y = -65}, nullptr, "按钮大世界帮派仓库").empty()) {
+                        if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮帮派仓库提交").empty()) {
+                            Arrive();
+                        }
+                        Close();
+                    }
+                    ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
+                    if (!ClickImageMatch(MatchParams{.similar = 0.6, .y = -65}, nullptr, "按钮大世界摆摊购买").empty()) {
+                        if (ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮交易购买").empty()) {
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务任务");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务江湖");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务回帮派复命");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务重新接取");
+                            ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
+                            Close();
+                        }
+                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
+                        Close();
+                    }
 
 
+                }
+
+                if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交").empty()) {
+                    if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "标志帮派任务已经完成").empty()) {
+                        objective("任务退出");
+                    }
+
+                }
+
+                break;
+            default:
+                break;;
+        }
+
+    }
 
     return 0;
-    // while (true) {
-    //     // 休眠 2000 毫秒（即2秒）
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    // }
+
+
 }
 
-void FactionTask::objective(std::string ve) {
-
+void FactionTask::objective(const std::string ve) {
+    cause = ve;
 }
 
 int FactionTask::determine() {
+    const int sw = detect();
+    if (sw == -5) {
+        if (detect_count++ >= 15) {
+            return -1;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        return 307;
+    }
+    detect_count = 0;
 
-    return 0;
+    if (cause == "任务退出") {
+        switch (sw) {
+            case 1:
+                return 0;
+            default:
+                return -1;
+        }
+    }
+
+    if (cause == "位置检测") {
+        switch (sw) {
+            case 1:
+                return 1;
+            default:
+                return -1;
+        }
+    }
+
+    if (cause == "队伍检测") {
+        switch (sw) {
+            case 1:
+                return 2;
+            default:
+                return -1;
+        }
+    }
+
+    if (cause == "开始任务") {
+        switch (sw) {
+            case 1:
+                return 3;
+            default:
+                return -1;
+        }
+    }
+
+    if (cause == "等待完成") {
+        switch (sw) {
+            default:
+                return 4;
+        }
+    }
+
+    return 307;
 }
 
 int FactionTask::detect() {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+        return 1;
+    }
 
-    return 0;
+    return -5;
 
 }

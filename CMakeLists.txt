@@ -151,6 +151,10 @@ add_executable(SnowElvesScript WIN32
         include/utils/Utilities.h
         include/models/Tasks/SwitchRolesTask.h
         src/models/Tasks/SwitchRolesTask.cpp
+        src/models/Tasks/PlaceTask.cpp
+        include/models/Tasks/PlaceTask.h
+        src/models/Tasks/TheSwordTask.cpp
+        include/models/Tasks/TheSwordTask.h
 
 
 )

@@ -11,6 +11,10 @@
 #include "models/Tasks/LessonTask.h"
 #include "models/Tasks/FactionTask.h"
 #include "models/Tasks/Submersion.h"
+#include "models/Tasks/SwitchRolesTask.h"
+#include "models/Tasks/PlaceTask.h"
+
+
 
 // 工厂类
 class Factory {
@@ -43,10 +47,12 @@ public:
 private:
     Factory() {
         // 在构造函数中注册所有需要的类
+        autoRegister<PlaceTask>("占位任务");
+        autoRegister<SwitchRolesTask>("切换角色");
         autoRegister<LessonTask>("课业任务");
         autoRegister<FactionTask>("帮派任务");
         autoRegister<Submersion>("潜神入忆");
-        autoRegister<SwitchRolesTask>("切换角色");
+
     }
 
     std::map<std::string, CreateFunc> registry_;

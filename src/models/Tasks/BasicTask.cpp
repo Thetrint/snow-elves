@@ -42,7 +42,9 @@ bool BasicTask::OpenKnapsack() {
 }
 
 bool BasicTask::Close() {
-    ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+    for (int i = 0; i < 3; ++i) {
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+    }
     return false;
 }
 
@@ -56,7 +58,7 @@ void BasicTask::LocationDetection() {
             ClickImageMatch({.similar = 0.75}, nullptr, "按钮关闭");
             return;
         }
-        ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图世界区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
         ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");

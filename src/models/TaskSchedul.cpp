@@ -5,44 +5,46 @@
 #include "main.h"
 #include <iostream>
 #include <ostream>
+#include <models/Tasks/SwitchRolesTask.h>
 #include <utils/LoadJsonFile.h>
 
 
 std::string TaskSchedul::get_task() {
     std::unique_lock<std::mutex> lock(mtx);
+    auto* switchRolesTask = dynamic_cast<SwitchRolesTask*>(rol.get());
     if (tasks.empty()) {
-        if (LoadJsonFile::instance().file_0.value("切角色1").toBool() && rol.roles[1]) {
+        if (LoadJsonFile::instance().file_0.value("切角色1").toBool() && switchRolesTask->roles[1]) {
             // switch_rol.roles(1);
-            rol.roles[1] = false;
+            switchRolesTask->roles[1] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色2").toBool() && rol.roles[2]) {
+        if (LoadJsonFile::instance().file_0.value("切角色2").toBool() && switchRolesTask->roles[2]) {
             // switch_rol.roles(2);
-            rol.roles[2] = false;
+            switchRolesTask->roles[2] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色3").toBool() && rol.roles[3]) {
+        if (LoadJsonFile::instance().file_0.value("切角色3").toBool() && switchRolesTask->roles[3]) {
             // switch_rol.roles(3);
-            rol.roles[3] = false;
+            switchRolesTask->roles[3] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色4").toBool() && rol.roles[4]) {
+        if (LoadJsonFile::instance().file_0.value("切角色4").toBool() && switchRolesTask->roles[4]) {
             // switch_rol.roles(4);
-            rol.roles[4] = false;
+            switchRolesTask->roles[4] = false;
             init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().file_0.value("切角色5").toBool() && rol.roles[5]) {
+        if (LoadJsonFile::instance().file_0.value("切角色5").toBool() && switchRolesTask->roles[5]) {
             // switch_rol.roles(5);
-            rol.roles[5] = false;
+            switchRolesTask->roles[5] = false;
             init();
             return "占位任务";
         }
-        if (std::ranges::all_of(rol.roles, [](const bool role) { return role; })) {
-            rol.roles[0] = false;
+        if (std::ranges::all_of(switchRolesTask->roles, [](const bool role) { return role; })) {
+            switchRolesTask->roles[0] = false;
             init();
             return "占位任务";
         }

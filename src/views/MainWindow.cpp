@@ -400,8 +400,12 @@ QJsonDocument MainWindow::createJsonDocument() const {
 
     QJsonObject root;
     root["执行任务"] = jsonArray;
-    root["keyu"] = 30;
-    root["city"] = "New York";
+    root["角色1"] = false;
+    root["角色2"] = false;
+    root["角色3"] = false;
+    root["角色4"] = false;
+    root["角色5"] = false;
+
 
     return QJsonDocument(root);
 }

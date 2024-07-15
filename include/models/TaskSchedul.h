@@ -10,13 +10,13 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include "models/Tasks/BasicTask.h"
 
-#include "Tasks/SwitchRolesTask.h"
 
 class TaskSchedul {
 
 public:
-    explicit TaskSchedul(const std::vector<std::string> &array, const auto& rol) : rol(rol), array(array){
+    explicit TaskSchedul(const std::vector<std::string> &array, const std::unique_ptr<BasicTask> &rol) : rol(rol), array(array){
         spdlog::info("创建任务调度器");
     };
     void init();
@@ -37,7 +37,7 @@ private:
     std::mutex mtx;
     bool running_ = true;
     std::thread thread_;
-    SwitchRolesTask rol;
+    const std::unique_ptr<BasicTask>& rol;
     std::vector<std::string> array;
     std::vector<Task> tasks;
 

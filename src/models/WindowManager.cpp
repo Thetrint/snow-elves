@@ -146,11 +146,11 @@ void WindowManager::setWinodw(HWND const &hwnd) {
         GetObject(hBitmap, sizeof(BITMAP), &bitmap);
         DeleteObject(hBitmap);
 
-        std::cout << "Image Size: " << mat.cols << " x " << mat.rows << std::endl;
-        std::cout << "Image: " << bitmap.bmWidth << " x " << bitmap.bmHeight << std::endl;
+        // std::cout << "Image Size: " << mat.cols << " x " << mat.rows << std::endl;
+        // std::cout << "Image: " << bitmap.bmWidth << " x " << bitmap.bmHeight << std::endl;
 
-        if (targetWidth <= mat.cols && mat.cols <= targetWidth + 1 &&
-            targetHeight <= mat.rows && mat.rows <= targetHeight + 1) {
+        if (targetWidth <= mat.cols && mat.cols <= targetWidth &&
+            targetHeight <= mat.rows && mat.rows <= targetHeight) {
 
             break;
             }

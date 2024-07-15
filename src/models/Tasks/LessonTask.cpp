@@ -1,7 +1,6 @@
 //
 // Created by y1726 on 2024/6/30.
 //
-#include <iostream>
 #include "models//Tasks/LessonTask.h"
 
 
@@ -31,12 +30,10 @@ int LessonTask::implementation() {
                 Close();
                 break;
             case 1:
-                spdlog::info("队伍检测");
                 LocationDetection();
                 objective("队伍检测");
                 break;
             case 2:
-                spdlog::info("队伍检测");
                 OpenTeam();
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
@@ -46,7 +43,6 @@ int LessonTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
-                spdlog::info("任务开始");
                 OpenKnapsack();
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品综合入口");
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品活动");
@@ -190,7 +186,7 @@ int LessonTask::determine() {
         }
     }
 
-    return -6;
+    return 307;
 }
 
 int LessonTask::detect() {

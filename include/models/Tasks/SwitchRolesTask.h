@@ -4,7 +4,7 @@
 
 #ifndef SWITCHROLESTASK_H
 #define SWITCHROLESTASK_H
-#include "BasicTask.h"
+#include "models/Tasks/BasicTask.h"
 
 class SwitchRolesTask final : public BasicTask{
 
@@ -30,7 +30,7 @@ public:
 private:
 
     std::string cause;
-    std::vector<std::chrono::steady_clock::time_point> record_time{1};
+
 
 };
 
