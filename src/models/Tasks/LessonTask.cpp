@@ -4,7 +4,6 @@
 #include <iostream>
 #include "models//Tasks/LessonTask.h"
 
-#include <models/WindowManager.h>
 
 int LessonTask::implementation() {
     spdlog::info("任务执行");

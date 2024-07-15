@@ -23,6 +23,7 @@ signals:
     void Start();
 
 
+
 private:
     // 私有构造函数以防止直接实例化
     explicit Signals(QObject *parent = nullptr);

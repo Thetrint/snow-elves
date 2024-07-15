@@ -46,6 +46,7 @@ private:
         autoRegister<LessonTask>("课业任务");
         autoRegister<FactionTask>("帮派任务");
         autoRegister<Submersion>("潜神入忆");
+        autoRegister<SwitchRolesTask>("切换角色");
     }
 
     std::map<std::string, CreateFunc> registry_;

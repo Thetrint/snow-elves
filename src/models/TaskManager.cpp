@@ -36,7 +36,6 @@ void TaskManager::resume() {
 }
 
 void TaskManager::setState(const std::string &task) const {
-    spdlog::info("状态设置窗口 {}: {}", id, task);
     emit Signals::instance()->Log(id, task);
 
 }
@@ -55,12 +54,15 @@ void TaskManager::start(){
         std::cout << task.toString().toStdString() << std::endl;
     }
 
-    TaskSchedul schedul(tasks);
-    schedul.init();
+    auto rol = Factory::instance().create("切换角色", id, hwnd, pause_event, unbind_event, disrupted);
+
+    TaskSchedul schedul(tasks, &rol);
+
 
     std::string task;
     while ((task = schedul.get_task()).empty() == false && unbind_event) {
         try {
+            //更新状态
             setState(task);
             auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted);
 
