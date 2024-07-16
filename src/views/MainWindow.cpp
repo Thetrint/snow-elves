@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent):
 {
     ui.setupUi(this);  // 初始化界面布局和元素
 
-    setMinimumSize(961, 652);
+    setMinimumSize(1100, 650);
 
 
 
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent):
     }
 
     //保存配置文件
-    connect(script->ui.pushButton_2, &QPushButton::clicked, this, [=](){
+    connect(script->ui.pushButton_2, &QPushButton::clicked, this, [&](){
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
         const QStringList filters = {"*.json"};
         const QDir dir(configPath);

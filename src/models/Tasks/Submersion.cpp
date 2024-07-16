@@ -119,10 +119,10 @@ int Submersion::determine() {
 }
 
 int Submersion::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.75, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
         return 1;
     }
-    if (!CoortImageMatch(MatchParams{.similar = 0.75, .applyGaussianBlur = false}, nullptr, "标志限时活动潜神入忆").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志限时活动潜神入忆").empty()) {
         return 2;
     }
 

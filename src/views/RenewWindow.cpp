@@ -84,7 +84,7 @@ void RenewWindow::checkupdae() {
 
 
     std::string selected_version;
-    int selected_id;
+    int selected_id{};
     std::string selected_name;
     std::string selected_body;
 
@@ -138,10 +138,10 @@ void RenewWindow::checkupdae() {
 
             auto* downloadThread = new DownloadThread(selected_name, selected_id, selected_version, this);
 
-            connect(downloadThread, &DownloadThread::SetProgressBarSignal, this, [=](const int max) {
+            connect(downloadThread, &DownloadThread::SetProgressBarSignal, this, [&](const int max) {
                 ui.progressBar->setRange(0, max);
             });
-            connect(downloadThread, &DownloadThread::UpdateProgressBarSignal, this, [=](const int value) {
+            connect(downloadThread, &DownloadThread::UpdateProgressBarSignal, this, [&](const int value) {
                 ui.progressBar->setValue(value);
             });
             downloadThread->start();

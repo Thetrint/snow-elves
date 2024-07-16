@@ -3,9 +3,9 @@ project(SnowElvesScript)
 
 # 获取传递的版本号
 if(NOT DEFINED VERSION)
-    set(VERSION "v10.0.0")
+    set(VERSION "v0.0.0")
 endif()
-
+#set(VERSION "v0.0.0")
 # 添加宏定义
 add_definitions(-DPROJECT_VERSION="${VERSION}")
 message(STATUS "使用的版本: ${VERSION}")
@@ -106,7 +106,6 @@ add_subdirectory(external/spdlog)
 add_executable(SnowElvesScript WIN32
         src/main.cpp
         include/main.h
-        tests/tests.cpp
         src/views/HomeWindow.cpp
         include/views/HomeWindow.h
         src/views/RunWindow.cpp
@@ -157,15 +156,14 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/TheSwordTask.h
         src/models/Tasks/TheSwordThreeTask.cpp
         include/models/Tasks/TheSwordThreeTask.h
+        src/models/Tasks/VientianeTask.cpp
+        include/models/Tasks/VientianeTask.h
 
 
 )
 
 # 添加资源文件
 target_sources(SnowElvesScript PRIVATE resources/main.rc)
-
-
-add_subdirectory(tests)
 
 
 target_link_libraries(SnowElvesScript PRIVATE
