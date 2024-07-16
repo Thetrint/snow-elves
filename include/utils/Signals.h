@@ -21,6 +21,7 @@ signals:
     void Log(int id, std::string message);
     void setPersion(int id, HWND hwnd);
     void Start();
+    void Close();
 
 
 

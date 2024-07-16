@@ -6,6 +6,9 @@
 #define FACTORY_H
 #include <qwindowdefs_win.h>
 #include <models/Tasks/TheSwordTask.h>
+#include <models/Tasks/TheSwordThreeTask.h>
+#include <models/Tasks/VientianeTask.h>
+
 #include "models//TaskManager.h"
 #include "models/ImageProcess.h"
 #include "models/Tasks/BasicTask.h"
@@ -14,7 +17,6 @@
 #include "models/Tasks/Submersion.h"
 #include "models/Tasks/SwitchRolesTask.h"
 #include "models/Tasks/PlaceTask.h"
-
 
 
 // 工厂类
@@ -54,6 +56,8 @@ private:
         autoRegister<FactionTask>("帮派任务");
         autoRegister<Submersion>("潜神入忆");
         autoRegister<TheSwordTask>("华山论剑");
+        autoRegister<TheSwordThreeTask>("华山论剑3v3");
+        autoRegister<VientianeTask>("万象刷赞");
 
     }
 

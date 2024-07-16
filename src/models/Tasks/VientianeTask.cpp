@@ -1,12 +1,12 @@
 //
 // Created by y1726 on 24-7-16.
 //
-#include "models/Tasks/TheSwordThreeTask.h"
+#include "models/Tasks/VientianeTask.h"
 
-#include <utils/LoadJsonFile.h>
-
-int TheSwordThreeTask::implementation() {
+int VientianeTask::implementation() {
+    spdlog::info("任务执行");
     std::vector<Match> matchs;
+
     objective("位置检测");
     timer.start();
     while (unbind_event) {
@@ -40,42 +40,39 @@ int TheSwordThreeTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
-                OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品活动");
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮活动纷争");
+                if (OpenMap()) {
+                    ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图停止寻路");
+                    ClickImageMatch({.similar = 0.98, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+                    ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+                    input_text("307");
 
-                if (ClickImageMatch(MatchParams{.similar = 0.6, .x = 60, .y = 45}, nullptr, "按钮活动华山论剑").empty()) {
-                    objective("任务退出");
-                    continue;
+                    ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+                    input_text("360");
+
+                    ClickImageMatch({.similar = 0.75}, nullptr, "按钮地图前往区域");
+                    ClickImageMatch({.similar = 0.75}, nullptr, "按钮关闭");
+                    Arrive();
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界拍照");
+
                 }
-                objective("等待战斗");
+
                 break;
             case 4:
-                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮论剑取消匹配").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑匹配");
-                }
-                ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑确认");
+                ClickImageMatch({.similar = 0.5, .matchCount = 1}, nullptr, "按钮场景环绕旋转");
+                ClickImageMatch({.similar = 0.5, .matchCount = 1}, nullptr, "按钮场景确定");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮场景万象");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮场景拍照");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮江湖万象打卡");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮江湖万象上传打卡");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
                 break;
             case 5:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
+                ClickImageMatch({.similar = 0.5, .x = -240, .y = -55}, nullptr, "按钮拍照打卡立刻拍照");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮拍照打卡立刻拍照");
 
-                if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑准备时间").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑准备");
+                if(++record_num[0] >= 20) {
+                    objective("任务退出");
                 }
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 60, .click = NoTap}, nullptr, "标志论剑战斗时间").empty()) {
-                    key_keep("W", 3000);
-                    AutoFight();
-                    ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
-                    FightStop();
-                }
-
-                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("华山论剑次数").toInt()) {
-                        objective("任务退出");
-                    }
-
-                }
-                break;
             default:
                 break;;
         }
@@ -87,11 +84,11 @@ int TheSwordThreeTask::implementation() {
 
 }
 
-void TheSwordThreeTask::objective(const std::string ve) {
+void VientianeTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int TheSwordThreeTask::determine() {
+int VientianeTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (detect_count++ >= 15) {
@@ -133,29 +130,24 @@ int TheSwordThreeTask::determine() {
         switch (sw) {
             case 1:
                 return 3;
-            default:
-                return -1;
-        }
-    }
-
-    if (cause == "等待战斗") {
-        switch (sw) {
-            case 1:
-                return 5;
             case 2:
                 return 4;
+            case 3:
+                return 5;
             default:
                 return -1;
         }
     }
-
 
 
     return 307;
 }
 
-int TheSwordThreeTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面论剑").empty()) {
+int VientianeTask::detect() {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面拍照打卡").empty()) {
+        return 3;
+    }
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面场景").empty()) {
         return 2;
     }
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {

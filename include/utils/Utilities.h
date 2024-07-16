@@ -71,4 +71,33 @@ public:
     }
 };
 
+
+class SingleInstanceGuard {
+public:
+    explicit SingleInstanceGuard(const QString &key) : sharedMemory(key) {
+        if (sharedMemory.attach()) {
+            spdlog::warn("Another instance is already running.");
+            isRunning = true;
+        } else {
+            sharedMemory.create(1); // 创建共享内存
+        }
+    }
+
+    ~SingleInstanceGuard() {
+        if (!isRunning) {
+            sharedMemory.detach();
+        }
+    }
+
+    bool isAnotherInstanceRunning() const {
+        return isRunning;
+    }
+
+private:
+    QSharedMemory sharedMemory;
+    bool isRunning = false;
+};
+
+
+
 #endif //UTILITIES_H

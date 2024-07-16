@@ -1,12 +1,12 @@
 //
-// Created by y1726 on 24-7-15.
+// Created by y1726 on 24-7-16.
 //
 
-#ifndef PLACETASK_H
-#define PLACETASK_H
+#ifndef VIENTIANETASK_H
+#define VIENTIANETASK_H
 #include "models/Tasks/BasicTask.h"
 
-class PlaceTask final : public BasicTask{
+class VientianeTask final : public BasicTask{
 
 protected:
     int id; // 任务ID
@@ -15,7 +15,7 @@ protected:
     bool& unbind_event;
 
 public:
-    PlaceTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
+    VientianeTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
 
     // 实现基类的纯虚函数
     int implementation() override;
@@ -29,8 +29,8 @@ public:
 
 private:
     std::string cause;
-    // std::vector<int> record_num{0};
+    std::vector<int> record_num{0};
     // std::vector<std::chrono::steady_clock::time_point> record_time{0};
 
 };
-#endif //PLACETASK_H
+#endif //VIENTIANETASK_H
