@@ -12,7 +12,9 @@ echo %PARAM3% > version.txt
 rem 根据参数执行相应操作
 if "%PARAM1%"=="Incremental" (
     echo Executing Incremental Update
+    del "SnowElvesScriptTemp.exe"
     ren "SnowElvesScript.exe" "SnowElvesScriptTemp.exe"
+    del "SnowElvesScript.exe"
     ren "SnowElvesScriptUpdate.exe" "SnowElvesScript.exe"
 
     start "" ".\SnowElvesScript.exe"
