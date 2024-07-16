@@ -10,11 +10,14 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include "models/Tasks/BasicTask.h"
+
 
 class TaskSchedul {
 
 public:
-    explicit TaskSchedul(const std::vector<std::string> &array) :array(array) {
+    explicit TaskSchedul(const std::vector<std::string> &array, const std::unique_ptr<BasicTask> &rol, const int& id) :
+    id(0), rol(rol), array(array) {
         spdlog::info("创建任务调度器");
     };
     void init();
@@ -31,10 +34,11 @@ private:
 
         // explicit Task(std::wstring  task, int priority = 1) : task(std::move(task)), priority(priority) {}
     };
-
+    int id;
     std::mutex mtx;
     bool running_ = true;
     std::thread thread_;
+    const std::unique_ptr<BasicTask>& rol;
     std::vector<std::string> array;
     std::vector<Task> tasks;
 

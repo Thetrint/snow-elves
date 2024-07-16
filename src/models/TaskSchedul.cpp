@@ -5,12 +5,51 @@
 #include "main.h"
 #include <iostream>
 #include <ostream>
+#include <models/Tasks/SwitchRolesTask.h>
+#include <utils/LoadJsonFile.h>
 
 
 std::string TaskSchedul::get_task() {
     std::unique_lock<std::mutex> lock(mtx);
+    auto* switchRolesTask = dynamic_cast<SwitchRolesTask*>(rol.get());
     if (tasks.empty()) {
-        return "";  // 如果 tasks 为空，返回空字符串
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色1").toBool() && switchRolesTask->roles[1]) {
+            // switch_rol.roles(1);
+            switchRolesTask->roles[1] = false;
+            init();
+            return "占位任务";
+        }
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色2").toBool() && switchRolesTask->roles[2]) {
+            // switch_rol.roles(2);
+            switchRolesTask->roles[2] = false;
+            init();
+            return "占位任务";
+        }
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色3").toBool() && switchRolesTask->roles[3]) {
+            // switch_rol.roles(3);
+            switchRolesTask->roles[3] = false;
+            init();
+            return "占位任务";
+        }
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色4").toBool() && switchRolesTask->roles[4]) {
+            // switch_rol.roles(4);
+            switchRolesTask->roles[4] = false;
+            init();
+            return "占位任务";
+        }
+        if (LoadJsonFile::instance().jsonFiles[id].value("切角色5").toBool() && switchRolesTask->roles[5]) {
+            // switch_rol.roles(5);
+            switchRolesTask->roles[5] = false;
+            init();
+            return "占位任务";
+        }
+        if (std::ranges::all_of(switchRolesTask->roles, [](const bool role) { return role; })) {
+            switchRolesTask->roles[0] = false;
+            init();
+            return "占位任务";
+        }
+
+        return "占位任务";  // 如果 tasks 为空，返回空字符串
     }
     std::string taskname = tasks[0].taskname; // 获取并移除第一个任务名
     tasks.erase(tasks.begin()); // 移除任务列表中的第一个任务
@@ -19,10 +58,7 @@ std::string TaskSchedul::get_task() {
 
 void TaskSchedul::init() {
     spdlog::info("任务调度器初始化");
-    //获取锁
-    std::unique_lock<std::mutex> lock(mtx);
     tasks.clear();
-
     for (const std::string&value : array) {
         // 将整数值转换为字符串，并创建Task结构体
         std::string taskname = value;

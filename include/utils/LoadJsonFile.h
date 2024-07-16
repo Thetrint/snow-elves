@@ -12,17 +12,7 @@ public:
     static LoadJsonFile& instance();
 
     void LoadFile(int id);
-
-    QJsonObject  file_0;
-    QJsonObject  file_1;
-    QJsonObject  file_2;
-    QJsonObject  file_3;
-    QJsonObject  file_4;
-    QJsonObject  file_5;
-    QJsonObject  file_6;
-    QJsonObject  file_7;
-    QJsonObject  file_8;
-    QJsonObject  file_9;
+    std::map<int, QJsonObject> jsonFiles;
 
 private:
 
