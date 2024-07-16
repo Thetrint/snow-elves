@@ -55,6 +55,10 @@ RunWindow::RunWindow(QWidget *parent):
 
 
     //任务全部解绑
+    connect(Signals::instance(), &Signals::Close, this, [&]() {
+        emit ui.pushButton_6->click();
+    });
+
     connect(ui.pushButton_6, &QPushButton::clicked, this, [&](){
 
         for(int id = 0; id < 10; id++) {

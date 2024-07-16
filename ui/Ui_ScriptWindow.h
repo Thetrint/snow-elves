@@ -160,7 +160,7 @@ public:
         stackedWidget = new QStackedWidget(ScriptWindow);
         stackedWidget->setObjectName("stackedWidget");
         QSizePolicy sizePolicy3(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy3.setHorizontalStretch(5);
+        sizePolicy3.setHorizontalStretch(6);
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(stackedWidget->sizePolicy().hasHeightForWidth());
         stackedWidget->setSizePolicy(sizePolicy3);
@@ -210,7 +210,7 @@ public:
 
         horizontalLayout_2->addWidget(checkBox);
 
-        horizontalSpacer = new QSpacerItem(375, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+        horizontalSpacer = new QSpacerItem(300, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer);
 

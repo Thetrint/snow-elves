@@ -16,7 +16,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox->setMinimum(1);
 
     QStringList items;
-    items << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑";
+    items << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);

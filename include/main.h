@@ -52,7 +52,8 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <QCloseEvent>
 #include <QLineEdit>
-
+#include <QFileDevice>
+#include <QSharedMemory>
 
 
 #include "resources/images.h"
