@@ -406,6 +406,7 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["角色4"] = false;
     root["角色5"] = false;
     root["华山论剑次数"] = script->ui.spinBox->value();
+    root["华山论剑秒退"] = script->ui.checkBox->checkState();
 
 
     return QJsonDocument(root);

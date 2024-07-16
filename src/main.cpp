@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     Logger::init(); // 初始化日志
 
     QApplication app(argc, argv);
-    // QApplication::setStyle(QStyleFactory::create("windowsvita"));
+    QApplication::setStyle(QStyleFactory::create("windows11"));
 
 
     // 注册资源文件

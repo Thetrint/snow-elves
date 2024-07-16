@@ -13,6 +13,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
 {
     ui.setupUi(this);  // 初始化界面布局和元素
 
+    ui.spinBox->setMinimum(1);
 
     QStringList items;
     items << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑";

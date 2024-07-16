@@ -55,24 +55,29 @@ int TheSwordTask::implementation() {
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮论剑取消匹配").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑匹配");
                 }
-                ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮确定");
+                ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑确认");
                 break;
             case 5:
                 if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
-                    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑准备时间").empty()) {
-                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑准备");
-                    }
-
-                    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑战斗时间").empty()) {
-                        key_keep("W", 3000);
-                        AutoFight();
-                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
-                        FightStop();
-                        if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("华山论剑次数").toInt()) {
-                            objective("任务退出");
+                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toBool()) {
+                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
+                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
+                    }else {
+                        if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑准备时间").empty()) {
+                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑准备");
                         }
-
+                        if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 60, .click = NoTap}, nullptr, "标志论剑战斗时间").empty()) {
+                            key_keep("W", 3000);
+                            AutoFight();
+                            ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
+                            FightStop();
+                        }
                     }
+
+                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("华山论剑次数").toInt()) {
+                        objective("任务退出");
+                    }
+
                 }
                 break;
             default:
