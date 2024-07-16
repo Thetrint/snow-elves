@@ -58,7 +58,7 @@
 #include "resources/images.h"
 
 inline double FACTOR;
-inline int DELAY  = 800;
+inline int DELAY  = 850;
 
 
 

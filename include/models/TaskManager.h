@@ -19,6 +19,7 @@ class TaskManager {
 public:
     explicit TaskManager(int id, HWND hwnd);
 
+    ~TaskManager();
 
     void start();
 

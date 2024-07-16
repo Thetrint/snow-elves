@@ -400,8 +400,14 @@ QJsonDocument MainWindow::createJsonDocument() const {
 
     QJsonObject root;
     root["执行任务"] = jsonArray;
-    root["keyu"] = 30;
-    root["city"] = "New York";
+    root["角色1"] = false;
+    root["角色2"] = false;
+    root["角色3"] = false;
+    root["角色4"] = false;
+    root["角色5"] = false;
+    root["华山论剑次数"] = script->ui.spinBox->value();
+    root["华山论剑秒退"] = script->ui.checkBox->checkState();
+
 
     return QJsonDocument(root);
 }
@@ -411,11 +417,15 @@ void MainWindow::writeWinConfig(const int id) const {
     const QJsonDocument settingsDoc = createJsonDocument();
 
     // 打开文件以写入 JSON 字符串
-    if (QFile file(QDir::tempPath() + "/ElvesConfig_" + QString::number(id) + ".json"); file.
-        open(QIODevice::WriteOnly)) {
+    if (QFile file(QDir::tempPath() + "/ElvesConfig_" + QString::number(id) + ".json");
+        file.open(QIODevice::WriteOnly)) {
         file.write(settingsDoc.toJson());
         file.close();
+        spdlog::info("配置文件已保存: {}", id);
+    } else {
+        spdlog::error("无法打开文件进行写入: {}", id);
     }
+
 
 }
 
