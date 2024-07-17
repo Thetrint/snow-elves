@@ -27,7 +27,7 @@ int LessonTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 LocationDetection();
@@ -39,7 +39,7 @@ int LessonTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("开始任务");
                 break;
             case 3:
@@ -64,7 +64,7 @@ int LessonTask::implementation() {
                         break;
                     }
                 }
-                Close();
+                Close(1);
                 objective("等待完成");
                 break;
             case 4:
@@ -93,7 +93,7 @@ int LessonTask::implementation() {
 
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业答题").empty()) {
-                    Close();
+                    Close(1);
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业杂货商人").empty()) {
@@ -103,7 +103,7 @@ int LessonTask::implementation() {
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买");
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
-                    Close();
+                    Close(1);
                 }
 
                 if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交").empty()) {
@@ -136,13 +136,12 @@ void LessonTask::objective(const std::string ve) {
 int LessonTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (detect_count++ >= 15) {
+        if (++detect_count >= 15) {
             return -1;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-        return 307;
+    }else {
+        detect_count = 0;
     }
-    detect_count = 0;
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -191,7 +190,7 @@ int LessonTask::determine() {
 }
 
 int LessonTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

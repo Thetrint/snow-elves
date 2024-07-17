@@ -24,7 +24,7 @@ int TheSwordThreeTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,7 +36,7 @@ int TheSwordThreeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("开始任务");
                 break;
             case 3:
@@ -94,13 +94,12 @@ void TheSwordThreeTask::objective(const std::string ve) {
 int TheSwordThreeTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (detect_count++ >= 15) {
+        if (++detect_count >= 15) {
             return -1;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-        return 307;
+    }else {
+        detect_count = 0;
     }
-    detect_count = 0;
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -158,7 +157,7 @@ int TheSwordThreeTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面论剑").empty()) {
         return 2;
     }
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

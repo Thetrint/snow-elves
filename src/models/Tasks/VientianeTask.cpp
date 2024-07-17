@@ -24,7 +24,7 @@ int VientianeTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,7 +36,7 @@ int VientianeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("开始任务");
                 break;
             case 3:
@@ -50,7 +50,7 @@ int VientianeTask::implementation() {
                     input_text("360");
 
                     ClickImageMatch({.similar = 0.75}, nullptr, "按钮地图前往区域");
-                    ClickImageMatch({.similar = 0.75}, nullptr, "按钮关闭");
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
                     Arrive();
                     ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界拍照");
 
@@ -91,13 +91,12 @@ void VientianeTask::objective(const std::string ve) {
 int VientianeTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (detect_count++ >= 15) {
+        if (++detect_count >= 15) {
             return -1;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-        return 307;
+    }else {
+        detect_count = 0;
     }
-    detect_count = 0;
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -150,7 +149,7 @@ int VientianeTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面场景").empty()) {
         return 2;
     }
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

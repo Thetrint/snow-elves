@@ -41,8 +41,8 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
-bool BasicTask::Close() {
-    for (int i = 0; i < 3; ++i) {
+bool BasicTask::Close(const int &count) {
+    for (int i = 0; i < count; ++i) {
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
     }
     return false;
@@ -55,7 +55,7 @@ void BasicTask::LocationDetection() {
     //打开地图
     if (OpenMap()) {
         if (!CoortImageMatch({.similar = 0.75}, nullptr, "标志地图金陵坐标").empty()) {
-            ClickImageMatch({.similar = 0.75}, nullptr, "按钮关闭");
+            ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
             return;
         }
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
@@ -69,12 +69,28 @@ void BasicTask::LocationDetection() {
         input_text("484");
 
         ClickImageMatch({.similar = 0.75}, nullptr, "按钮地图前往区域");
-        ClickImageMatch({.similar = 0.75}, nullptr, "按钮关闭");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
         Arrive();
 
     }
+}
 
+/**
+ * 基础功能 双世界喊话
+ */
+void BasicTask::Shout(const std::string &text) {
+    mouse_down_up({}, {15, 600});
 
+    ClickImageMatch({.similar = 0.65}, nullptr, "按钮大世界世界");
+    ClickImageMatch({.similar = 0.5}, nullptr, "标志大世界输入文字");
+    input_text(text);
+    ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界发送");
+
+    ClickImageMatch({.similar = 0.65}, nullptr, "按钮大世界互联世界");
+    ClickImageMatch({.similar = 0.5}, nullptr, "标志大世界输入文字");
+    input_text(text);
+    ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界发送");
+    ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界聊天退出");
 }
 
 /**
@@ -155,17 +171,33 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
 void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& location) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
-        WindowManager::MouseDownUp(hwnd, location.x + match.x, location.y + match.y);
+        for (int i = 1; i <= match.clickCount; i++) {
+            WindowManager::MouseDownUp(hwnd, location.x + match.x, location.y + match.y);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
 
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 
 }
 
+void BasicTask::mouse_wheel(const MatchParams &match, const cv::Point& location, const int delta) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        for (int i = 0; i < match.matchCount; i++) {
+            WindowManager::MouseWHEEL(hwnd, location.x + match.x, location.y + match.y, delta);
+        }
+
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+}
+
 void BasicTask::mouse_keep(const MatchParams &match, const cv::Point& location, const int delay) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
-        WindowManager::MouseKeep(hwnd, location.x + match.x, location.y + match.y, delay);
+        WindowManager::MouseKeep(hwnd, location.x, location.y, delay);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }

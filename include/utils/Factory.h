@@ -5,6 +5,8 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 #include <qwindowdefs_win.h>
+#include <models/Tasks/DailyCopiesTask.h>
+#include <models/Tasks/HeroListTask.h>
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
 #include <models/Tasks/VientianeTask.h>
@@ -58,6 +60,8 @@ private:
         autoRegister<TheSwordTask>("华山论剑");
         autoRegister<TheSwordThreeTask>("华山论剑3v3");
         autoRegister<VientianeTask>("万象刷赞");
+        autoRegister<HeroListTask>("江湖英雄榜");
+        autoRegister<DailyCopiesTask>("日常副本");
 
     }
 

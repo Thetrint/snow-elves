@@ -4,9 +4,7 @@
 #include "models/Tasks/PlaceTask.h"
 
 int PlaceTask::implementation() {
-    spdlog::info("任务执行");
     std::vector<Match> matchs;
-
     objective("开始任务");
     timer.start();
     while (unbind_event) {
@@ -24,7 +22,7 @@ int PlaceTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,11 +34,11 @@ int PlaceTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("开始任务");
                 break;
             case 3:
-                // mouse_move({}, {100, 300}, {900, 300});
+                // Shout("sxy");
                 objective("任务退出");
                 break;
 
@@ -62,13 +60,13 @@ void PlaceTask::objective(const std::string ve) {
 int PlaceTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (detect_count++ >= 15) {
+        if (++detect_count >= 15) {
             return -1;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-        return 307;
+    }else {
+        detect_count = 0;
     }
-    detect_count = 0;
+
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -111,7 +109,7 @@ int PlaceTask::determine() {
 }
 
 int PlaceTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

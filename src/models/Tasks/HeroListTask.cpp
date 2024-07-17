@@ -1,13 +1,15 @@
 //
-// Created by y1726 on 24-7-15.
+// Created by y1726 on 24-7-16.
 //
-#include "models/Tasks/TheSwordTask.h"
+#include "models//Tasks/HeroListTask.h"
 
 #include <utils/LoadJsonFile.h>
 
-int TheSwordTask::implementation() {
+int HeroListTask::implementation() {
+
     std::vector<Match> matchs;
-    objective("位置检测");
+
+    objective("开始任务");
     timer.start();
     while (unbind_event) {
 
@@ -45,39 +47,43 @@ int TheSwordTask::implementation() {
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品活动");
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮活动纷争");
 
-                if (ClickImageMatch(MatchParams{.similar = 0.6, .x = -60, .y = 45}, nullptr, "按钮活动华山论剑").empty()) {
+                if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, nullptr, "按钮活动江湖英雄榜").empty()) {
                     objective("任务退出");
-                    continue;
                 }
-                objective("等待战斗");
+
+
                 break;
             case 4:
-                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮论剑取消匹配").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑匹配");
+                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "标志江湖英雄榜次数").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜晋级赛", "按钮江湖英雄榜匹配");
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜确定");
+                    objective("等待战斗");
+                    continue;
                 }
-                ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑确认");
+                objective("任务退出");
                 break;
             case 5:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
-                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toInt()) {
-                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
-                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
+                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
+                    if (LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜秒退").toInt()) {
+                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出");
+                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出副本");
+                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
                     }else {
-                        if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑准备时间").empty()) {
-                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑准备");
+                        if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志江湖英雄榜准备时间").empty()) {
+                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜准备");
                         }
-                        if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 60, .click = NoTap}, nullptr, "标志论剑战斗时间").empty()) {
-                            key_keep("W", 3000);
+                        if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 60, .click = NoTap}, nullptr, "标志江湖英雄榜战斗时间").empty()) {
+                            key_keep("W", 4000);
                             AutoFight();
                             ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
                             FightStop();
                         }
                     }
 
-                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("华山论剑次数").toInt()) {
+                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt()) {
                         objective("任务退出");
                     }
-
+                    objective("开始任务");
                 }
                 break;
             default:
@@ -91,11 +97,11 @@ int TheSwordTask::implementation() {
 
 }
 
-void TheSwordTask::objective(const std::string ve) {
+void HeroListTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int TheSwordTask::determine() {
+int HeroListTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 15) {
@@ -136,6 +142,8 @@ int TheSwordTask::determine() {
         switch (sw) {
             case 1:
                 return 3;
+            case 2:
+                return 4;
             default:
                 return -1;
         }
@@ -145,20 +153,17 @@ int TheSwordTask::determine() {
         switch (sw) {
             case 1:
                 return 5;
-            case 2:
-                return 4;
             default:
                 return -1;
         }
     }
 
 
-
     return 307;
 }
 
-int TheSwordTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面论剑").empty()) {
+int HeroListTask::detect() {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面江湖英雄榜").empty()) {
         return 2;
     }
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {

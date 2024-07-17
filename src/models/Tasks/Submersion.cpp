@@ -40,10 +40,19 @@ int Submersion::implementation() {
 
                 if (!CoortImageMatch({.similar = 0.6}, nullptr, "标志限时活动记忆时间").empty()) {
                     last_matches = CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
-                    if (!ClickImageMatch({.similar = 0.6, .matchCount = 8, .click = NoTap}, nullptr, "标志限时活动选择时间").empty()) {
+                    if (!ClickImageMatch({.similar = 0.6, .matchCount = 5, .click = NoTap}, nullptr, "标志限时活动选择时间").empty()) {
                         matches = CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
                         ImageProcessor::removeMatches(matches, last_matches);
-                        mouse_down_up({}, matches.front().location);
+                        if (!matches.empty()) {
+                            mouse_down_up({.clickCount = 3}, matches.front().location);
+                        }
+                    }
+                }
+                if (!CoortImageMatch({.similar = 0.6}, nullptr, "标志限时活动选择时间").empty()) {
+                    matches = CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
+                    ImageProcessor::removeMatches(matches, last_matches);
+                    if (!matches.empty()) {
+                        mouse_down_up({.clickCount = 3}, matches.front().location);
                     }
                 }
 
@@ -69,6 +78,13 @@ void Submersion::objective(const std::string ve) {
 
 int Submersion::determine() {
     const int sw = detect();
+    if (sw == -5) {
+        if (++detect_count >= 15) {
+            return -1;
+        }
+    }else {
+        detect_count = 0;
+    }
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -119,7 +135,7 @@ int Submersion::determine() {
 }
 
 int Submersion::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志限时活动潜神入忆").empty()) {
