@@ -26,7 +26,7 @@ int FactionTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 LocationDetection();
@@ -38,7 +38,7 @@ int FactionTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("开始任务");
                 break;
             case 3:
@@ -66,27 +66,30 @@ int FactionTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
                     ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
                 }
+
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界帮派仓库", "按钮大世界摆摊购买").empty()) {
+                    record_time[0] = std::chrono::steady_clock::time_point{};
                     if (!ClickImageMatch(MatchParams{.similar = 0.6, .y = -65}, nullptr, "按钮大世界帮派仓库").empty()) {
                         if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮帮派仓库提交").empty()) {
                             Arrive();
                         }
-                        Close();
+                        Close(2);
                     }
                     ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
                     if (!ClickImageMatch(MatchParams{.similar = 0.6, .y = -65}, nullptr, "按钮大世界摆摊购买").empty()) {
-                        if (ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮交易购买").empty()) {
+                        if (ClickImageMatch(MatchParams{.similar = 0.6, .scope = {259, 410, 1076, 602}}, nullptr, "按钮交易购买").empty()) {
+                            Close(3);
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务任务");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务江湖");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务回帮派复命");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务重新接取");
-                            ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
-                            Close();
+                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
+                            Close(3);
                         }
-                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
-                        Close();
+                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
+                        Close(1);
                     }
 
 
@@ -118,13 +121,12 @@ void FactionTask::objective(const std::string ve) {
 int FactionTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (detect_count++ >= 15) {
+        if (++detect_count >= 15) {
             return -1;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-        return 307;
+    }else {
+        detect_count = 0;
     }
-    detect_count = 0;
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -173,7 +175,7 @@ int FactionTask::determine() {
 }
 
 int FactionTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

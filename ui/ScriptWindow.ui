@@ -39,6 +39,31 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QWidget" name="widget_4" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>1</horstretch>
+       <verstretch>10</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>任务列表</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="listWidget"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="2">
     <widget class="QWidget" name="widget_2" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -83,31 +108,6 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QWidget" name="widget_4" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>1</horstretch>
-       <verstretch>10</verstretch>
-      </sizepolicy>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>任务列表</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QListWidget" name="listWidget"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="1" column="1">
     <widget class="QWidget" name="widget_3" native="true">
      <property name="sizePolicy">
@@ -142,7 +142,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page"/>
      <widget class="QWidget" name="page_2">
@@ -188,7 +188,7 @@
            <widget class="QLabel" name="label_4">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>1</horstretch>
+              <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -204,7 +204,7 @@
            <widget class="QSpinBox" name="spinBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>1</horstretch>
+              <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -218,13 +218,33 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>江湖英雄榜次数</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinBox_2"/>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_2">
+            <property name="text">
+             <string>江湖英雄榜秒退</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>300</width>
+              <width>40</width>
               <height>20</height>
              </size>
             </property>
@@ -242,6 +262,180 @@
           <size>
            <width>20</width>
            <height>393</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_3">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>日常悬赏任务设置</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+         <property name="class" stdset="0">
+          <string>page</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_6" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>副本喊话内容:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>副本开启人数:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_2">
+            <item>
+             <property name="text">
+              <string>副本1人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本2人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本3人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本4人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本5人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本6人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本7人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本8人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本9人开</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>副本10人开</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>副本模式:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_3">
+            <item>
+             <property name="text">
+              <string>带队模式</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>固定队模式</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>113</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>576</height>
           </size>
          </property>
         </spacer>

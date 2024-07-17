@@ -28,6 +28,7 @@ public:
 
 
 private:
+    std::vector<Match> matches;
     std::string cause;
     std::vector<std::chrono::steady_clock::time_point> record_time{1};
 

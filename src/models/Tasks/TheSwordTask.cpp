@@ -24,7 +24,7 @@ int TheSwordTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,7 +36,7 @@ int TheSwordTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("开始任务");
                 break;
             case 3:
@@ -59,7 +59,7 @@ int TheSwordTask::implementation() {
                 break;
             case 5:
                 if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
-                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toBool()) {
+                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toInt()) {
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
                     }else {
@@ -98,13 +98,12 @@ void TheSwordTask::objective(const std::string ve) {
 int TheSwordTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (detect_count++ >= 15) {
+        if (++detect_count >= 15) {
             return -1;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-        return 307;
+    }else {
+        detect_count = 0;
     }
-    detect_count = 0;
 
     if (cause == "任务退出") {
         switch (sw) {
@@ -162,7 +161,7 @@ int TheSwordTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面论剑").empty()) {
         return 2;
     }
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

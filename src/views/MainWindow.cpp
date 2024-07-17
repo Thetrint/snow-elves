@@ -407,6 +407,11 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["角色5"] = false;
     root["华山论剑次数"] = script->ui.spinBox->value();
     root["华山论剑秒退"] = script->ui.checkBox->checkState();
+    root["江湖英雄榜次数"] = script->ui.spinBox_2->value();
+    root["江湖英雄榜秒退"] = script->ui.checkBox_2->checkState();
+    root["副本模式"] = script->ui.comboBox_3->currentText();
+    root["副本人数"] = script->ui.comboBox_2->currentIndex() + 1;
+    root["副本喊话内容"] = script->ui.lineEdit->text();
 
 
     return QJsonDocument(root);

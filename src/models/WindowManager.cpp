@@ -441,62 +441,62 @@ void WindowManager::MouseKeep(const HWND &hwnd, const int x, const int y, const 
     PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
 }
 
-
-void WindowManager::MouseMove(HWND hwnd, const int x1, const int y1, const int x2, const int y2) {
+void WindowManager::MouseWHEEL(const HWND &hwnd, const int x, const int y, const int delta) {
     // 将屏幕坐标转换为窗口客户区坐标
-    POINT startPt = { x1, y1 };
-    POINT endPt = { x2, y2 };
+    const POINT pt = { x, y };
+    // ScreenToClient(hwnd, &pt);
 
-    ScreenToClient(hwnd, &startPt);
-    ScreenToClient(hwnd, &endPt);
+    // 模拟鼠标滚轮滚动
+    LPARAM const lParam = MAKELPARAM(pt.x, pt.y);
+    PostMessage(hwnd, WM_MOUSEWHEEL, delta << 16, lParam);
+}
 
-    // 生成随机控制点
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(-100, 100);
-    const POINT controlPt = { (startPt.x + endPt.x) / 2 + dis(gen), (startPt.y + endPt.y) / 2 + dis(gen) };
+void WindowManager::MouseMove(const HWND &hwnd, const int x1, const int y1, const int x2, const int y2) {
+    // 将屏幕坐标转换为窗口客户区坐标
+    const POINT startPt = { x1, y1 };
+    const POINT endPt = { x2, y2 };
 
-    // 贝塞尔曲线函数
-    auto bezierCurve = [](const double t, const double p0, const double p1, const double p2) {
-        return (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
-    };
+    // 定义控制点，使移动路径更平滑
+    POINT controlPt = { (x1 + x2) / 2, y1 - 100 }; // 这个点可以根据需要调整
 
-    // 计算移动距离
-    const double distance = std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-    // 动态生成步长
-    const int steps = static_cast<int>(distance / 100);
+    // 生成贝塞尔曲线路径
+    std::vector<POINT> path;
+    constexpr int steps = 100; // 步数越多，移动越平滑
+    for (int i = 0; i <= steps; ++i) {
+        const float t = static_cast<float>(i) / steps;
+        const float u = 1 - t;
+        const float tt = t * t;
+        const float uu = u * u;
+
+        POINT pt;
+        pt.x = static_cast<LONG>(uu * static_cast<float>(startPt.x) + 2 * u * t * static_cast<float>(controlPt.x) + tt * static_cast<float>(endPt.x));
+        pt.y = static_cast<LONG>(uu * static_cast<float>(startPt.y) + 2 * u * t * static_cast<float>(controlPt.y) + tt * static_cast<float>(endPt.y));
+        path.push_back(pt);
+    }
 
     // 模拟鼠标按下
     PostMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(startPt.x, startPt.y));
 
-    for (int i = 0; i <= steps; i++) {
-        const double t = static_cast<double>(i) / steps;
-        const int x = static_cast<int>(bezierCurve(t, startPt.x, controlPt.x, endPt.x));
-        const int y = static_cast<int>(bezierCurve(t, startPt.y, controlPt.y, endPt.y));
-        const LPARAM lParam = MAKELPARAM(x, y);
-
-        // 模拟鼠标移动
-
-        PostMessage(hwnd, WM_MOUSEMOVE, MK_LBUTTON, lParam);
-        // PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, lParam);
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    // 模拟鼠标沿路径移动
+    for (const auto&[x, y] : path) {
+        PostMessage(hwnd, WM_MOUSEMOVE, MK_LBUTTON, MAKELPARAM(x, y));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 添加延迟，使移动更平滑
     }
 
     // 模拟鼠标松开
     PostMessage(hwnd, WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(startPt.x, startPt.y));
 }
 
+
+
 int WindowManager::GetVkCode(const std::string &key) {
     if (key.length() == 1) {
         return VkKeyScanA(key[0]) & 0xFF;
-    } else {
-        const auto it = VkCode.find(key);
-        if (it != VkCode.end()) {
-            return it->second;
-        } else {
-            return 0; // 无效键值
-        }
     }
+    if (const auto it = VkCode.find(key); it != VkCode.end()) {
+        return it->second;
+    }
+    return 0; // 无效键值
 }
 
 void WindowManager::KeyDownUp(const HWND& hwnd, const std::string &key) {
@@ -527,13 +527,13 @@ void WindowManager::KeyKeep(const HWND& hwnd, const std::string &key, const int 
 
     PostMessage(hwnd, WM_KEYDOWN, wparam, lparam);
     std::this_thread::sleep_for(std::chrono::milliseconds(dealy));
-    PostMessageW(hwnd, WM_KEYUP, wparam, lparam);
+    PostMessage(hwnd, WM_KEYUP, wparam, lparam);
 }
 
 
 void WindowManager::InputText(HWND hwnd, const std::string& text) {
-    for (const char c : text) {
-        SendMessage(hwnd, WM_CHAR, static_cast<WPARAM>(c), 0);
+    for (std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; const wchar_t c : converter.from_bytes(text)) {
+        SendMessageW(hwnd, WM_CHAR, static_cast<WPARAM>(c), 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(20)); // 模拟键入延迟
     }
 }
