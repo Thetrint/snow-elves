@@ -8,6 +8,7 @@
 #include <models/Tasks/BountyMissionsTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
 #include <models/Tasks/HeroListTask.h>
+#include <models/Tasks/TeaStoryTask.h>
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
 #include <models/Tasks/VientianeTask.h>
@@ -64,6 +65,7 @@ private:
         autoRegister<HeroListTask>("江湖英雄榜");
         autoRegister<DailyCopiesTask>("日常副本");
         autoRegister<BountyMissionsTask>("悬赏任务");
+        autoRegister<TeaStoryTask>("茶馆说书");
 
     }
 

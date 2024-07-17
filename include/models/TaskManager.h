@@ -37,6 +37,7 @@ private:
     bool disrupted;
     std::mutex pause_event;
     bool unbind_event;
+    bool LOCK;
 };
 #endif //TASKMANAGER_H
 

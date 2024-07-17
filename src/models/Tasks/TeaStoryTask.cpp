@@ -1,9 +1,9 @@
 //
-// Created by y1726 on 24-7-15.
+// Created by y1726 on 24-7-17.
 //
-#include "models/Tasks/PlaceTask.h"
+#include "models/Tasks/TeaStoryTask.h"
 
-int PlaceTask::implementation() {
+int TeaStoryTask::implementation() {
     std::vector<Match> matchs;
     objective("开始任务");
     timer.start();
@@ -39,11 +39,28 @@ int PlaceTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
-                // input_text("你好sxy");
-                // Shout("sxy");
-                objective("任务退出");
+                OpenKnapsack();
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动江湖");
+                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动茶馆说书").empty()) {
+                    objective("任务退出");
+                    continue;
+                }
+                Arrive();
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书进入茶馆");
+                objective("等待完成");
                 break;
+            case 4:
+                if (!ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, std::make_unique<CAUSE>(cause, "开始任务"), "界面茶馆").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书甲", "按钮茶馆说书乙", "按钮茶馆说书丙", "按钮茶馆说书丁");
 
+                    if (!ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆").empty()) {
+                        objective("任务退出");
+                    }
+                }
+
+                break;
             default:
                 break;;
         }
@@ -55,11 +72,11 @@ int PlaceTask::implementation() {
 
 }
 
-void PlaceTask::objective(const std::string ve) {
+void TeaStoryTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int PlaceTask::determine() {
+int TeaStoryTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 15) {
@@ -106,11 +123,20 @@ int PlaceTask::determine() {
         }
     }
 
+    if (cause == "等待完成") {
+        switch (sw) {
+            case 1:
+                return 4;
+            default:
+                return -1;
+        }
+    }
+
 
     return 307;
 }
 
-int PlaceTask::detect() {
+int TeaStoryTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }

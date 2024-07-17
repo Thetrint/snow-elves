@@ -15,7 +15,7 @@
 #include "utils/FunctionLibrary.h"
 
 TaskManager::TaskManager(int id, HWND hwnd)
-    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true) {
+    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false) {
     LoadJsonFile::instance().LoadFile(id);
 }
 
@@ -29,14 +29,18 @@ void TaskManager::stop() {
 }
 
 void TaskManager::pause() {
-    if (!pause_event.try_lock()) {
-        std::cout << "Failed to pause, task is already paused or lock is held" << std::endl;
+    if(!LOCK) {
+        std::cout << "锁定" << std::endl;
+        pause_event.lock();
+        LOCK = true;
     }
+
 }
 
 void TaskManager::resume() {
     WindowManager::setWinodw(hwnd);
     pause_event.unlock();
+    LOCK = false;
 }
 
 void TaskManager::setState(const std::string &task) const {
