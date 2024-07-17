@@ -31,6 +31,15 @@ bool BasicTask::OpenTeam() {
 
 }
 
+bool BasicTask::OpenESC() {
+    key_down_up("ESC");
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面设置").empty()) {
+        return true;
+    }
+
+    return false;
+}
+
 bool BasicTask::OpenKnapsack() {
     key_down_up("B");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
@@ -52,6 +61,7 @@ bool BasicTask::Close(const int &count) {
  * 基础功能 位置检查 重置位置
  */
 void BasicTask::LocationDetection() {
+    Log("位置检测");
     //打开地图
     if (OpenMap()) {
         if (!CoortImageMatch({.similar = 0.75}, nullptr, "标志地图金陵坐标").empty()) {
@@ -81,12 +91,12 @@ void BasicTask::LocationDetection() {
 void BasicTask::Shout(const std::string &text) {
     mouse_down_up({}, {15, 600});
 
-    ClickImageMatch({.similar = 0.65}, nullptr, "按钮大世界世界");
+    ClickImageMatch({.similar = 0.65, .scope = {0, 0, 140, 695}}, nullptr, "按钮大世界世界");
     ClickImageMatch({.similar = 0.5}, nullptr, "标志大世界输入文字");
     input_text(text);
     ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界发送");
 
-    ClickImageMatch({.similar = 0.65}, nullptr, "按钮大世界互联世界");
+    ClickImageMatch({.similar = 0.65, .scope = {0, 0, 140, 695}}, nullptr, "按钮大世界互联世界");
     ClickImageMatch({.similar = 0.5}, nullptr, "标志大世界输入文字");
     input_text(text);
     ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界发送");
@@ -94,7 +104,7 @@ void BasicTask::Shout(const std::string &text) {
 }
 
 /**
- * 基础功能 等等寻路结束
+ * 基础功能 等待寻路结束
  */
 void BasicTask::Arrive() {
     int count = 0;
@@ -114,6 +124,26 @@ void BasicTask::Arrive() {
     }
 }
 
+/**
+ * 基础功能 离开队伍
+ */
+void BasicTask::LeaveTeam() {
+    Log("离开队伍");
+    OpenTeam();
+    ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
+    Close(2);
+
+}
+
+void BasicTask::OffCard() {
+    Log("脱离卡死");
+    OpenESC();
+    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮设置脱离卡死");
+    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮设置确定");
+    Close(3);
+
+}
 
 void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& matches, MatchParams& match) const {
     spdlog::info("图片匹配 {}", templ_name);
@@ -176,8 +206,10 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
 
+        if (match.clickDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 
 }

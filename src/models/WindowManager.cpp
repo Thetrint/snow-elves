@@ -480,7 +480,7 @@ void WindowManager::MouseMove(const HWND &hwnd, const int x1, const int y1, cons
     // 模拟鼠标沿路径移动
     for (const auto&[x, y] : path) {
         PostMessage(hwnd, WM_MOUSEMOVE, MK_LBUTTON, MAKELPARAM(x, y));
-        std::this_thread::sleep_for(std::chrono::milliseconds(30)); // 添加延迟，使移动更平滑
+        std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 添加延迟，使移动更平滑
     }
 
     // 模拟鼠标松开
@@ -527,13 +527,13 @@ void WindowManager::KeyKeep(const HWND& hwnd, const std::string &key, const int 
 
     PostMessage(hwnd, WM_KEYDOWN, wparam, lparam);
     std::this_thread::sleep_for(std::chrono::milliseconds(dealy));
-    PostMessageW(hwnd, WM_KEYUP, wparam, lparam);
+    PostMessage(hwnd, WM_KEYUP, wparam, lparam);
 }
 
 
 void WindowManager::InputText(HWND hwnd, const std::string& text) {
-    for (const char c : text) {
-        SendMessage(hwnd, WM_CHAR, static_cast<WPARAM>(c), 0);
+    for (std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; const wchar_t c : converter.from_bytes(text)) {
+        SendMessageW(hwnd, WM_CHAR, static_cast<WPARAM>(c), 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(20)); // 模拟键入延迟
     }
 }

@@ -5,6 +5,7 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 #include <qwindowdefs_win.h>
+#include <models/Tasks/BountyMissionsTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
 #include <models/Tasks/HeroListTask.h>
 #include <models/Tasks/TheSwordTask.h>
@@ -62,6 +63,7 @@ private:
         autoRegister<VientianeTask>("万象刷赞");
         autoRegister<HeroListTask>("江湖英雄榜");
         autoRegister<DailyCopiesTask>("日常副本");
+        autoRegister<BountyMissionsTask>("悬赏任务");
 
     }
 

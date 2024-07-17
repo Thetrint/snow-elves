@@ -47,6 +47,8 @@ struct MatchParams {
     int x = 0; //偏移坐标x
     int y = 0; //偏移坐标y
     int clickCount = 1;
+    bool clickDelay = true;
+    bool matchDelay = true;
     MatchScope scope = {0, 0, 1335, 750}; // 匹配范围
     bool convertToGray = true; // h灰度处理开关
     bool applyGaussianBlur = true; // 控制高斯模糊的开关

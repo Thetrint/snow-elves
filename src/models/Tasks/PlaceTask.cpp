@@ -38,6 +38,7 @@ int PlaceTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
+                // input_text("你好sxy");
                 // Shout("sxy");
                 objective("任务退出");
                 break;

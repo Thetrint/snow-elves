@@ -406,7 +406,7 @@
             </item>
             <item>
              <property name="text">
-              <string>混队模式</string>
+              <string>固定队模式</string>
              </property>
             </item>
            </widget>

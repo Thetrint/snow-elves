@@ -379,7 +379,7 @@ public:
         label_9->setText(QCoreApplication::translate("ScriptWindow", "\345\211\257\346\234\254\346\250\241\345\274\217:", nullptr));
         label_9->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         comboBox_3->setItemText(0, QCoreApplication::translate("ScriptWindow", "\345\270\246\351\230\237\346\250\241\345\274\217", nullptr));
-        comboBox_3->setItemText(1, QCoreApplication::translate("ScriptWindow", "\346\267\267\351\230\237\346\250\241\345\274\217", nullptr));
+        comboBox_3->setItemText(1, QCoreApplication::translate("ScriptWindow", "\345\233\272\345\256\232\351\230\237\346\250\241\345\274\217", nullptr));
 
     } // retranslateUi
 

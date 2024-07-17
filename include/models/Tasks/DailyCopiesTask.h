@@ -29,9 +29,9 @@ public:
 
 private:
     std::string cause;
-    std::vector<int> record_num{0, 0};
-    std::vector<std::chrono::steady_clock::time_point> record_time{0};
-    std::vector<bool> record_event{true};
+    std::vector<int> record_num{0, 0, 0};
+    std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point()};
+    std::vector<bool> record_event{true, false};
 
 };
 #endif //DAILYCOPIESTASK_H

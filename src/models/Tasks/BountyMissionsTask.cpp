@@ -1,11 +1,11 @@
 //
-// Created by y1726 on 24-7-16.
+// Created by y1726 on 24-7-17.
 //
-#include "models/Tasks/DailyCopiesTask.h"
+#include "models/Tasks/BountyMissionsTask.h"
 
 #include <utils/LoadJsonFile.h>
 
-int DailyCopiesTask::implementation() {
+int BountyMissionsTask::implementation() {
     std::vector<Match> matchs;
     objective("位置检测");
     timer.start();
@@ -16,7 +16,7 @@ int DailyCopiesTask::implementation() {
             return -1; //任务调度中止任务z
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(7200)) {
             return 0;
         }
 
@@ -32,6 +32,7 @@ int DailyCopiesTask::implementation() {
                     objective("队伍检测");
                     break;
                 case 2:
+                    Log("队伍检测");
                     OpenTeam();
                     if (!CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
                         ClickImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建");
@@ -47,6 +48,7 @@ int DailyCopiesTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍自动匹配1");
 
                     }
+                    Close(1);
                     objective("开始任务");
                     break;
                 case 3:
@@ -59,7 +61,7 @@ int DailyCopiesTask::implementation() {
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍进入副本");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本确认");
                             record_event[0] = true;
-                            record_num[2] = 0;
+                            record_num[3] = 0;
                             record_num[0] = 0;
                             objective("等待完成");
                         }else {
@@ -70,40 +72,64 @@ int DailyCopiesTask::implementation() {
                         }
 
                     }else {
-                        if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[1]).count() > 300) {
+                        if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[2]).count() > 30) {
                             Close(2);
                             Shout(LoadJsonFile::instance().jsonFiles[id].value("副本喊话内容").toString().toStdString());
-                            record_time[1] = std::chrono::steady_clock::now();
+                            record_time[2] = std::chrono::steady_clock::now();
                         }
                     }
                     break;
                 case 4:
+                    if (record_num[2] == 0) {
+                        Log("接取悬赏");
+                        OpenKnapsack();
+                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
+                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
+                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动悬赏");
+                        while (unbind_event) {
+                            if (record_num[2] = static_cast<int>(CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮悬赏前往").size()); record_num[2] == 3) {
+                                Close(3);
+                                break;
+                            }
+                            if(!CoortImageMatch(MatchParams{.similar = 0.85, .clickDelay = false}, nullptr, "标志悬赏完成").empty()) {
+                                if(record_num[2] == 0) {
+                                    objective("任务退出");
+                                }
+                                Close(3);
+                                break;
+                            }
+                            ClickImageMatch(MatchParams{.similar = 0.6, .clickDelay = false}, nullptr, "按钮悬赏刷新");
+                            if(!ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1, .y = 330, .clickDelay = false, .scope = {267 + 231 * record_num[2], 182, 1197, 558}}, nullptr, "标志悬赏江湖纪事").empty()) {
+                                ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 15, .matchDelay = false}, nullptr, "按钮悬赏铜钱押金");
+                            }
+
+                        }
+                    }
                     OpenTeam();
                     break;
                 case 5:
                     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
                         if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本退出").empty()) {
+
                             if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志副本获得").empty()) {
                                 mouse_down_up({}, {0, 0});
                             }
                             if (++record_num[0] >= 5) {
-                                record_num[0] = 0;
                                 objective("开始任务");
                             }
-                            std::this_thread::sleep_for(std::chrono::milliseconds(2800));
+                            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
                         }else {
 
                             if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志副本完成").empty()) {
                                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本退出");
-                                mouse_down_up({}, {0, 0});
-                                mouse_down_up({}, {0, 0});
                                 if(!ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定").empty()) {
-                                    objective("任务退出");
+                                    Log("副本退出");
+                                    record_num[2]--;
+                                    objective("开始任务");
                                 }
-
-
                             }
                             if (record_event[0]) {
+                                Log("激活副本任务");
                                 if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务").empty()) {
                                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                                 }
@@ -116,6 +142,8 @@ int DailyCopiesTask::implementation() {
 
                             }
 
+
+
                             record_num[0] = 0;
                         }
 
@@ -125,7 +153,7 @@ int DailyCopiesTask::implementation() {
                         OffCard();
                         record_event[1] = false;
                         record_event[0] = true;
-                        if(++record_num[2] >= 2) {
+                        if(++record_num[3] >= 2) {
                             //离开队伍
                             LeaveTeam();
                             objective("队伍检测");
@@ -136,6 +164,7 @@ int DailyCopiesTask::implementation() {
                         Close(1);
                     }
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本跳过剧情").empty()) {
+                        Log("跳过剧情");
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本跳过剧情");
                     }
 
@@ -169,8 +198,47 @@ int DailyCopiesTask::implementation() {
                     objective("开始任务");
                     break;
                 case 3:
+                    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
+                        if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本退出").empty()) {
+                            if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志副本完成").empty()) {
+                                Log("副本完成");
+                                if(record_event[0]) {
+                                    record_event[0] = false;
+                                    record_num[2]--;
+                                    continue;
+                                }
+                            }
+                            while (unbind_event && record_num[2] == 0) {
+                                if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面悬赏").empty()) {
+                                    Log("接取悬赏");
+                                    OpenKnapsack();
+                                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
+                                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
+                                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动悬赏");
+                                }else {
+                                    if (record_num[2] = static_cast<int>(CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮悬赏前往").size()); record_num[2] == 3) {
+                                        Close(3);
+                                        break;
+                                    }
+                                    if(!CoortImageMatch(MatchParams{.similar = 0.85, .clickDelay = false}, nullptr, "标志悬赏完成").empty()) {
+                                        if(record_num[2] == 0) {
+                                            objective("任务退出");
+                                        }
+                                        Close(3);
+                                        break;
+                                    }
+                                    ClickImageMatch(MatchParams{.similar = 0.6, .clickDelay = false}, nullptr, "按钮悬赏刷新");
+                                    if(!ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1, .y = 330, .clickDelay = false, .scope = {267 + 231 * record_num[2], 182, 1197, 558}}, nullptr, "标志悬赏江湖纪事").empty()) {
+                                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 15, .matchDelay = false}, nullptr, "按钮悬赏铜钱押金");
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面日常").empty()) {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本确认");
+                        record_event[0] = true;
                     }
 
                     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志副本继续").empty()) {
@@ -180,17 +248,12 @@ int DailyCopiesTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍跟随队长");
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                         Close(2);
-
                     }
 
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志副本获得").empty()) {
                         mouse_down_up({}, {0, 0});
                     }
 
-                    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志副本完成").empty()) {
-                        objective("任务退出");
-
-                    }
                     break;
                 default:
                     break;;
@@ -203,11 +266,11 @@ int DailyCopiesTask::implementation() {
 
 }
 
-void DailyCopiesTask::objective(const std::string ve) {
+void BountyMissionsTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int DailyCopiesTask::determine() {
+int BountyMissionsTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 15) {
@@ -307,7 +370,7 @@ int DailyCopiesTask::determine() {
 
 }
 
-int DailyCopiesTask::detect() {
+int BountyMissionsTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面队伍").empty()) {
         return 2;
     }
@@ -318,3 +381,5 @@ int DailyCopiesTask::detect() {
 
     return -5;
 }
+
+

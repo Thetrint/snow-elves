@@ -71,6 +71,8 @@ protected:
 
     bool OpenTeam();
 
+    bool OpenESC();
+
     bool OpenKnapsack();
 
     bool Close(const int &count);
@@ -80,6 +82,10 @@ protected:
     void Shout(const std::string &text);
 
     void Arrive();
+
+    void LeaveTeam();
+
+    void OffCard();
 
     void ImageMatch(const std::string &templ_name, std::vector<Match> &matches, MatchParams &match) const;
 
@@ -171,7 +177,9 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, std::unique_ptr
         }
 
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        if (match.matchDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
 
     }
 

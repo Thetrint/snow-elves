@@ -162,6 +162,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/HeroListTask.h
         src/models/Tasks/DailyCopiesTask.cpp
         include/models/Tasks/DailyCopiesTask.h
+        src/models/Tasks/BountyMissionsTask.cpp
+        include/models/Tasks/BountyMissionsTask.h
 
 
 )
