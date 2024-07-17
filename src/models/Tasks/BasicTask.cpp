@@ -109,6 +109,7 @@ void BasicTask::Shout(const std::string &text) {
  * 基础功能 等待寻路结束
  */
 void BasicTask::Arrive() {
+    Log("等待到达");
     int count = 0;
     while (unbind_event) {
         if (CoortImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "标志大世界自动寻路中").empty()) {

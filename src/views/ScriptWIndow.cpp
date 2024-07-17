@@ -18,7 +18,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
 
     QStringList items;
     items << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
-    << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书";
+    << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);
@@ -44,6 +44,17 @@ ScriptWindow::ScriptWindow(QWidget *parent):
 
     // 任务导航
     connect(ui.listWidget, &QListWidget::itemClicked, [&](const QListWidgetItem *new_item) {
+        const QString itemText = new_item->text();
+        const std::string itemTextStd = itemText.toStdString(); // 转换为 std::string
+
+        // 从字典中查找对应的值
+        if (const auto it = TaskMap.find(itemTextStd); it != TaskMap.end()) {
+            ui.stackedWidget->setCurrentIndex(it->second);
+
+        }
+    });
+
+    connect(ui.listWidget_2, &QListWidget::itemClicked, [&](const QListWidgetItem *new_item) {
         const QString itemText = new_item->text();
         const std::string itemTextStd = itemText.toStdString(); // 转换为 std::string
 

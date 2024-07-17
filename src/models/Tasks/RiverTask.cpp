@@ -1,9 +1,9 @@
 //
 // Created by y1726 on 24-7-17.
 //
-#include "models/Tasks/TeaStoryTask.h"
+#include "models/Tasks/RiverTask.h"
 
-int TeaStoryTask::implementation() {
+int RiverTask::implementation() {
     std::vector<Match> matchs;
     objective("位置检测");
     timer.start();
@@ -41,25 +41,25 @@ int TeaStoryTask::implementation() {
             case 3:
                 OpenKnapsack();
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动江湖");
-                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动茶馆说书").empty()) {
-                    objective("任务退出");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品山河器");
+                break;
+            case 4:
+                if (ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器探索").empty()) {
+                    if(ClickImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮山河器免费搜索").empty()) {
+                        // 退出
+                        Close(3);
+                        objective("任务退出");
+                        continue;
+                    }
+                    Log("搜索山河器");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器日晷");
                     continue;
                 }
                 Arrive();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书进入茶馆");
-                objective("等待完成");
-                break;
-            case 4:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, std::make_unique<CAUSE>(cause, "开始任务"), "界面茶馆").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书甲", "按钮茶馆说书乙", "按钮茶馆说书丙", "按钮茶馆说书丁");
-
-                    if (!ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆").empty()) {
-                        objective("任务退出");
-                    }
-                }
-
+                Log("拾取山河器");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器拾取");
+                mouse_down_up({}, {0, 0});
+                mouse_down_up({}, {0, 0});
                 break;
             default:
                 break;;
@@ -72,11 +72,11 @@ int TeaStoryTask::implementation() {
 
 }
 
-void TeaStoryTask::objective(const std::string ve) {
+void RiverTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int TeaStoryTask::determine() {
+int RiverTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 15) {
@@ -118,14 +118,7 @@ int TeaStoryTask::determine() {
         switch (sw) {
             case 1:
                 return 3;
-            default:
-                return -1;
-        }
-    }
-
-    if (cause == "等待完成") {
-        switch (sw) {
-            case 1:
+            case 2:
                 return 4;
             default:
                 return -1;
@@ -136,7 +129,10 @@ int TeaStoryTask::determine() {
     return 307;
 }
 
-int TeaStoryTask::detect() {
+int RiverTask::detect() {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面山河器").empty()) {
+        return 2;
+    }
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
