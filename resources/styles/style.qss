@@ -123,7 +123,6 @@
 QSpinBox {
     border: 1px solid #dcdcdc; /* 边框颜色 */
     border-radius: 6px; /* 边框圆角 */
-    padding: 3px 10px; /* 内边距 */
     background-color: #ffffff; /* 背景颜色 */
     color: #000000; /* 字体颜色 */
     font: 14px;
@@ -171,6 +170,30 @@ QCheckBox::indicator:checked:hover {
     border: 1px solid #005a9e; /* 选中且悬停时的边框颜色 */
 }
 
+/* 整体下拉框样式 */
+QComboBox {
+    border: 1px solid #dcdcdc;          /* 边框颜色 */
+    border-radius: 5px;                /* 圆角半径 */
+    padding: 5px;                      /* 内边距 */
+    background-color: #ffffff;         /* 背景颜色 */
+    color: #000000;                    /* 字体颜色 */
+    min-width: 100px;                  /* 最小宽度 */
+}
+
+QLineEdit {
+    border: 2px solid #B0B0B0;       /* 边框颜色 */
+    border-radius: 5px;              /* 圆角半径 */
+    padding: 5px;                    /* 内边距 */
+    background-color: #FFFFFF;       /* 背景颜色 */
+    color: #000000;                  /* 字体颜色 */
+    min-width: 100px;
+}
+
+/* 焦点状态下的样式 */
+QLineEdit:focus {
+    border: 2px solid #0078D7;       /* 焦点状态下的边框颜色 */
+    background-color: #F0F8FF;       /* 焦点状态下的背景颜色 */
+}
 
 /* 运行窗口 */
 #MainWindow #RunWindow #textEdit {

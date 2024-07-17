@@ -18,7 +18,7 @@ int SwitchRolesTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close();
+                Close(1);
                 break;
             case 1:
                 spdlog::info("队伍检测");
@@ -32,7 +32,7 @@ int SwitchRolesTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close();
+                Close(1);
                 objective("切换角色");
                 break;
             case 3:
@@ -136,7 +136,7 @@ int SwitchRolesTask::determine() {
 }
 
 int SwitchRolesTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界").empty()) {
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

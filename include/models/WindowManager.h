@@ -28,7 +28,9 @@ public:
 
     static void MouseKeep(const HWND &hwnd, const int x, const int y, const int delay);
 
-    static void MouseMove(HWND hwnd, int x1, int y1, int x2, int y2);
+    static void MouseWHEEL(const HWND &hwnd, int x, int y, int delta);
+
+    static void MouseMove(const HWND &hwnd, int x1, int y1, int x2, int y2);
 
     static int GetVkCode(const std::string &key);
 
