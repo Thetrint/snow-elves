@@ -1,6 +1,6 @@
 @echo off
 setlocal
-
+echo Current directory: %cd%
 ping 127.0.0.1
 
 rem 接收第一个参数
@@ -16,6 +16,9 @@ if "%PARAM1%"=="Incremental" (
     ren "SnowElvesScript.exe" "SnowElvesScriptTemp.exe"
     del "SnowElvesScript.exe"
     ren "SnowElvesScriptUpdate.exe" "SnowElvesScript.exe"
+
+    del resources\images.dat
+    ren "resources\imagesUpdate.dat" "images.dat"
 
     start "" ".\SnowElvesScript.exe"
     exit
