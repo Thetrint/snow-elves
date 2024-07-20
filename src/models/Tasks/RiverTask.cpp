@@ -45,7 +45,7 @@ int RiverTask::implementation() {
                 break;
             case 4:
                 if (ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器探索").empty()) {
-                    if(ClickImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮山河器免费搜索").empty()) {
+                    if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮山河器免费搜索").empty()) {
                         // 退出
                         Close(3);
                         objective("任务退出");

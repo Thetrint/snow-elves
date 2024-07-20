@@ -27,7 +27,7 @@
 // 工厂类
 class Factory {
 public:
-    using CreateFunc = std::function<std::unique_ptr<BasicTask>(int, HWND, std::mutex&, bool&, bool&)>;
+    using CreateFunc = std::function<std::unique_ptr<BasicTask>(int, HWND, std::mutex&, bool&, bool&, std::ifstream&)>;
 
     static Factory& instance() {
         static Factory factory;
@@ -38,17 +38,17 @@ public:
         registry_[className] = func;
     }
 
-    std::unique_ptr<BasicTask> create(const std::string& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) const {
+    std::unique_ptr<BasicTask> create(const std::string& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) const {
         if (auto it = registry_.find(className); it != registry_.end()) {
-            return it->second(id, hwnd, pause_event, unbind_event, disrupted);
+            return it->second(id, hwnd, pause_event, unbind_event, disrupted, ifs);
         }
         return nullptr; // or throw an exception for unknown className
     }
 
     template <typename T>
     void autoRegister(const std::string& className) {
-        registerClass(className, [](int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) {
-            return std::make_unique<T>(id, hwnd, pause_event, unbind_event, disrupted);
+        registerClass(className, [](int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) {
+            return std::make_unique<T>(id, hwnd, pause_event, unbind_event, disrupted, ifs);
         });
     }
 

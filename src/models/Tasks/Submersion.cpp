@@ -39,22 +39,20 @@ int Submersion::implementation() {
             case 4:
 
                 if (!CoortImageMatch({.similar = 0.6}, nullptr, "标志限时活动记忆时间").empty()) {
-                    last_matches = CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
-                    if (!ClickImageMatch({.similar = 0.6, .matchCount = 5, .click = NoTap}, nullptr, "标志限时活动选择时间").empty()) {
-                        matches = CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
+                    last_matches = CoortImageMatch({.similar = 0.998, .scope = {336, 85, 960, 658}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr,
+                        "按钮限时活动图标");
+                    if (!ClickImageMatch({.similar = 0.5, .matchCount = 9, .click = NoTap}, nullptr, "标志限时活动选择时间").empty()) {
+                        matches = CoortImageMatch({.similar = 0.998, .scope = {336, 85, 960, 658}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr,
+                            "按钮限时活动图标");
                         ImageProcessor::removeMatches(matches, last_matches);
                         if (!matches.empty()) {
-                            mouse_down_up({.clickCount = 3}, matches.front().location);
+                            mouse_down_up({.clickCount = 4, .clickDelay = false}, matches.front().location);
                         }
                     }
                 }
-                if (!CoortImageMatch({.similar = 0.6}, nullptr, "标志限时活动选择时间").empty()) {
-                    matches = CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
-                    ImageProcessor::removeMatches(matches, last_matches);
-                    if (!matches.empty()) {
-                        mouse_down_up({.clickCount = 3}, matches.front().location);
-                    }
-                }
+
+
+
 
                 break;
             default:

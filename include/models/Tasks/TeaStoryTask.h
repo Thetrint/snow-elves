@@ -13,9 +13,10 @@ protected:
     HWND hwnd; //
     std::mutex& pause_event;
     bool& unbind_event;
+    std::ifstream& ifs;
 
 public:
-    TeaStoryTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event) {}
+    TeaStoryTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted, ifs), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), ifs(ifs) {}
 
     // 实现基类的纯虚函数
     int implementation() override;

@@ -4,26 +4,41 @@
 #include "models/ImageProcess.h"
 using namespace std;
 
-
-
-
 /**
  * 读取指定路径图片
- * @param templ_name 模板图片名称
+ * @param filename 模板图片名称
+ * @param id 窗口id
+ * @param ifs 文件流
  * @return
  */
-cv::Mat ImageProcessor::imread(const std::string &templ_name) {
-    const std::vector<unsigned char> buffer(Images[templ_name], Images[templ_name] + Images_size[templ_name + "_size"]);
+cv::Mat ImageProcessor::imread(const std::string &filename, const int &id, std::ifstream& ifs) {
+    if (!Images.contains(filename)) {
+        std::cerr << "Image not found: " << filename << std::endl;
+        return {};
+    }
+
+    const unsigned char* img_data = Images[filename].data;
+    const size_t img_size = Images[filename].size;
+    // 检查线程局部的文件流对象是否已经打开
+    if (!ifs.is_open()) {
+        ifs.open("resources/images_" + std::to_string(id) + ".dat", std::ios::binary);
+        if (!ifs) {
+            std::cerr << "Failed to open images.dat file" << std::endl;
+            return {};
+        }
+    }
+    // 定位到图像数据的偏移量位置
+    ifs.seekg(reinterpret_cast<std::streamoff>(img_data));
+
+    // 读取图像数据到缓冲区
+    std::vector<unsigned char> buffer(img_size);
+    ifs.read(reinterpret_cast<char*>(buffer.data()), static_cast<std::streamsize>(img_size));
+
+
     cv::Mat image = cv::imdecode(buffer, cv::IMREAD_COLOR);
-
-    // std::string name = getPinyinString(filename);
-    //
-    // string filepath = "D:/Desktop/ChronoSnowDemo/cmake-build-release/" + name + ".bmp";
-    //
-    //
-    // // 使用 cv::imread 读取图片
-    // cv::Mat image = cv::imread(":/resources/images/image1.png", cv::IMREAD_COLOR);
-
+    if (image.empty()) {
+        std::cerr << "Failed to decode image: " << filename << std::endl;
+    }
 
     return image;
 }

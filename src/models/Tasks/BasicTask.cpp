@@ -21,6 +21,10 @@ bool BasicTask::OpenMap() {
 
 }
 
+/**
+ * 打开队伍函数
+ * @return
+ */
 bool BasicTask::OpenTeam() {
     key_down_up("T");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
@@ -50,6 +54,14 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
+bool BasicTask::Defer(const int& count) {
+    for (int i = 0; i <= count; i++) {
+        key_down_up("Tab");
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+    return false;
+}
+
 bool BasicTask::Close(const int &count) {
     for (int i = 0; i < count; ++i) {
         if (ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭").empty()) {
@@ -66,13 +78,13 @@ void BasicTask::LocationDetection() {
     Log("位置检测");
     //打开地图
     if (OpenMap()) {
-        if (!CoortImageMatch({.similar = 0.75}, nullptr, "标志地图金陵坐标").empty()) {
+        if (!CoortImageMatch({.similar = 0.8}, nullptr, "标志地图金陵坐标").empty()) {
             ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
             return;
         }
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
-        ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
         ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("571");
@@ -154,7 +166,7 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
         spdlog::info("图片匹配 {}", templ_name);
         std::cout << templ_name << std::endl;
         //读取模板图片
-        cv::Mat templ = ImageProcessor::imread(templ_name);
+        cv::Mat templ = ImageProcessor::imread(templ_name, id, ifs);
 
         HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
         //模板匹配 数据转换类型
@@ -171,8 +183,8 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
 
         //高斯模糊
         if (match.applyGaussianBlur) {
-            cv::GaussianBlur(templ, templ, cv::Size(3, 3), 1.2);
-            cv::GaussianBlur(image, image, cv::Size(3, 3), 1.2);
+            cv::GaussianBlur(templ, templ, cv::Size(match.gauss.width, match.gauss.height),  match.gauss.sigmaX);
+            cv::GaussianBlur(image, image, cv::Size(match.gauss.width, match.gauss.height),  match.gauss.sigmaX);
         }
 
         //边缘检测

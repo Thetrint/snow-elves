@@ -39,9 +39,12 @@ int PlaceTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
+                // CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
                 // input_text("你好sxy");
                 // Shout("sxy");
+
                 objective("任务退出");
+                return 0;
                 break;
 
             default:

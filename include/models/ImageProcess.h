@@ -38,6 +38,12 @@ struct MatchScope {
     int y2;  // 匹配右下角顶点 y坐标
 };
 
+struct MatchGauss {
+    int width;
+    int height;
+    float sigmaX;
+};
+
 struct MatchParams {
     cv::TemplateMatchModes modes = cv::TM_CCORR_NORMED; // 默认值
     float similar{}; // 相似度
@@ -50,6 +56,7 @@ struct MatchParams {
     bool clickDelay = true;
     bool matchDelay = true;
     MatchScope scope = {0, 0, 1335, 750}; // 匹配范围
+    MatchGauss gauss = {3, 3, 1.2};
     bool convertToGray = true; // h灰度处理开关
     bool applyGaussianBlur = true; // 控制高斯模糊的开关
     bool applyEdgeDetection  = true; // 控制边缘检测
@@ -78,7 +85,7 @@ public:
     static std::vector<Match> matchTemplate_TM_CCORR_NORMED(const cv::Mat& image, const cv::Mat &templ, MatchParams& match);
 
     //读取图片
-    static cv::Mat imread(const std::string &filename);
+    static cv::Mat imread(const std::string &filename, const int& id, std::ifstream& ifs);
 
     //图片类型转换
     static cv::Mat HBITMAPToMat(const HBITMAP &hBitmap);
@@ -88,7 +95,7 @@ public:
         for (const auto& loc1 : matches) {
             bool found = false;
             for (const auto&[location, score] : last_matches) {
-                if (std::sqrt((loc1.location.x - location.x) * (loc1.location.x - location.x) + (loc1.location.y - location.y) * (loc1.location.y - location.y)) < 32 * FACTOR) {
+                if (std::sqrt((loc1.location.x - location.x) * (loc1.location.x - location.x) + (loc1.location.y - location.y) * (loc1.location.y - location.y)) < 22 * FACTOR) {
                     found = true;
                     break;
                 }

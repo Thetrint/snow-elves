@@ -19,13 +19,15 @@ protected:
     std::mutex& pause_event;
     bool& unbind_event;
     bool& disrupted;
+    std::ifstream& ifs;
 
 public:
     virtual ~BasicTask() = default;
 
     // ReSharper disable once CppParameterMayBeConst
-    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : id(id), hwnd(hwnd),
-        pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), detect_count(0), fight_(false) {
+    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : id(id),
+        hwnd(hwnd),  pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), ifs(ifs), detect_count(0),
+        fight_(false) {
         skillMap[1] = "1";
         skillMap[2] = "2";
         skillMap[3] = "E";
@@ -74,6 +76,8 @@ protected:
     bool OpenESC();
 
     bool OpenKnapsack();
+
+    bool Defer(const int &count);
 
     bool Close(const int &count);
 

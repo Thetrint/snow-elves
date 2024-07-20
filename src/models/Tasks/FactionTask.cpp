@@ -64,7 +64,7 @@ int FactionTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                     }
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
-                    ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
+                    ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界帮派仓库", "按钮大世界摆摊购买").empty()) {
@@ -75,7 +75,7 @@ int FactionTask::implementation() {
                         }
                         Close(2);
                     }
-                    ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
+                    ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
                     if (!ClickImageMatch(MatchParams{.similar = 0.6, .y = -65}, nullptr, "按钮大世界摆摊购买").empty()) {
                         if (ClickImageMatch(MatchParams{.similar = 0.6, .scope = {259, 410, 1076, 602}}, nullptr, "按钮交易购买").empty()) {
                             Close(3);

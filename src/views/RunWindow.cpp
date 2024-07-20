@@ -191,12 +191,12 @@ RunWindow::RunWindow(QWidget *parent):
 
         // 应用高斯模糊
         cv::Mat blurred;
-        cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 1.2);
+        cv::GaussianBlur(gray, blurred, cv::Size(5, 5), 2.7);
 
-        // 应用 Canny 边缘检测
-        cv::Mat edges;
-        cv::Canny(blurred, edges, 100, 200);
-        cv::imwrite("2.bmp", edges);
+        // // 应用 Canny 边缘检测
+        // cv::Mat edges;
+        // cv::Canny(blurred, edges, 100, 200);
+        cv::imwrite("2.bmp", blurred);
         // cv::imshow("Source Image", edges);
         // cv::waitKey(0);
 
