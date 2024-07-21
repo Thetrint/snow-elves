@@ -133,6 +133,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/DoorBanTask.h
         src/models/Tasks/BreakBanTask.cpp
         include/models/Tasks/BreakBanTask.h
+        src/models/Tasks/DailyRedemptionTask.cpp
+        include/models/Tasks/DailyRedemptionTask.h
 
 
 )

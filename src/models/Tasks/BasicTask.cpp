@@ -54,7 +54,7 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
-bool BasicTask::Defer(const int& count) {
+bool BasicTask::Defer(const int& count) const {
     for (int i = 0; i <= count; i++) {
         key_down_up("Tab");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));

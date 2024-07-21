@@ -15,7 +15,7 @@
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
 #include <models/Tasks/VientianeTask.h>
-
+#include "models/Tasks/DailyRedemptionTask.h"
 #include "models//TaskManager.h"
 #include "models/ImageProcess.h"
 #include "models/Tasks/BasicTask.h"
@@ -72,6 +72,7 @@ private:
         autoRegister<RiverTask>("山河器");
         autoRegister<DoorBanTask>("门客设宴");
         autoRegister<BreakBanTask>("破阵设宴");
+        autoRegister<DailyRedemptionTask>("每日兑换");
 
     }
 
