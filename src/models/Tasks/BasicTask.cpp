@@ -221,7 +221,7 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
         std::lock_guard lock(pause_event);
         for (int i = 1; i <= match.clickCount; i++) {
             WindowManager::MouseDownUp(hwnd, location.x + match.x, location.y + match.y);
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
 
         if (match.clickDelay) {

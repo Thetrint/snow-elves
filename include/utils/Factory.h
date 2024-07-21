@@ -7,6 +7,7 @@
 #include <qwindowdefs_win.h>
 #include <models/Tasks/BountyMissionsTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
+#include <models/Tasks/DoorBanTask.h>
 #include <models/Tasks/HeroListTask.h>
 #include <models/Tasks/RiverTask.h>
 #include <models/Tasks/TeaStoryTask.h>
@@ -68,6 +69,7 @@ private:
         autoRegister<BountyMissionsTask>("悬赏任务");
         autoRegister<TeaStoryTask>("茶馆说书");
         autoRegister<RiverTask>("山河器");
+        autoRegister<DoorBanTask>("门客设宴");
 
     }
 
