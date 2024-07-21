@@ -16,8 +16,35 @@ void DownloadThread::run(){
     if (name == "Incremental Update") {
 
         const cpr::Url url{"https://gitee.com/api/v5/repos/IceSnowVersion/snow-elves/raw/SnowElvesScript.exe?access_token=b5127c648ab2025e7911e567a7b8b9c1&ref=release"};
+        const cpr::Url url1{"https://gitee.com/api/v5/repos/IceSnowVersion/snow-elves/raw/resources/images.dat?access_token=b5127c648ab2025e7911e567a7b8b9c1&ref=release"};
 
-        const cpr::Response d = Get(cpr::Url{url}, cpr::ProgressCallback([this](cpr::cpr_off_t downloadTotal, cpr::cpr_off_t downloadNow, cpr::cpr_off_t uploadTotal, cpr::cpr_off_t uploadNow, intptr_t userdata) -> bool
+        const cpr::Response a = Get(cpr::Url{url}, cpr::ProgressCallback([this](const cpr::cpr_off_t downloadTotal, const cpr::cpr_off_t downloadNow, cpr::cpr_off_t uploadTotal, cpr::cpr_off_t uploadNow, intptr_t userdata) -> bool
+        {
+
+            emit SetProgressBarSignal(static_cast<int>(downloadTotal));
+            emit UpdateProgressBarSignal(static_cast<int>(downloadNow));
+
+            return true;
+        }));
+
+        // 检查请求是否成功
+        if (a.status_code == 200) {
+            // 获取临时目录路径
+
+            const QString filePath = "./SnowElvesScriptUpdate.exe";
+            // 将响应内容写入文件
+            if (std::ofstream outfile(filePath.toStdString(), std::ofstream::binary); outfile.is_open()) {
+                outfile << a.text;
+                outfile.close();
+                // emit Signals::instance()->Update(name, version);
+            } else {
+                spdlog::error("更新文件写入失败");
+            }
+        } else {
+            spdlog::error("网络请求失败");
+        }
+
+        const cpr::Response d = Get(cpr::Url{url1}, cpr::ProgressCallback([this](const cpr::cpr_off_t downloadTotal, const cpr::cpr_off_t downloadNow, cpr::cpr_off_t uploadTotal, cpr::cpr_off_t uploadNow, intptr_t userdata) -> bool
         {
 
             emit SetProgressBarSignal(static_cast<int>(downloadTotal));
@@ -30,7 +57,7 @@ void DownloadThread::run(){
         if (d.status_code == 200) {
             // 获取临时目录路径
 
-            const QString filePath = "./SnowElvesScriptUpdate.exe";
+            const QString filePath = "./resources/imagesUpdate.dat";
             // 将响应内容写入文件
             if (std::ofstream outfile(filePath.toStdString(), std::ofstream::binary); outfile.is_open()) {
                 outfile << d.text;

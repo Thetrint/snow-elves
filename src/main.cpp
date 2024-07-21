@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create("windows11"));
 
-    SingleInstanceGuard guard("UniqueAppKey");
-    if (guard.isAnotherInstanceRunning()) {
+    if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {
         QMessageBox::warning(nullptr, "Warning", "Another instance is already running.");
         return 1; // 退出程序
     }

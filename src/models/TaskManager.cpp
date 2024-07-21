@@ -15,7 +15,7 @@
 #include "utils/FunctionLibrary.h"
 
 TaskManager::TaskManager(int id, HWND hwnd)
-    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true) {
+    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false) {
     LoadJsonFile::instance().LoadFile(id);
 }
 
@@ -26,17 +26,23 @@ TaskManager::~TaskManager() {
 void TaskManager::stop() {
     unbind_event = false;
     pause_event.unlock(); // 解除任何可能的暂停状态
+
+
 }
 
 void TaskManager::pause() {
-    if (!pause_event.try_lock()) {
-        std::cout << "Failed to pause, task is already paused or lock is held" << std::endl;
+    if(!LOCK) {
+        std::cout << "锁定" << std::endl;
+        pause_event.lock();
+        LOCK = true;
     }
+
 }
 
 void TaskManager::resume() {
     WindowManager::setWinodw(hwnd);
     pause_event.unlock();
+    LOCK = false;
 }
 
 void TaskManager::setState(const std::string &task) const {
@@ -48,8 +54,17 @@ void TaskManager::setState(const std::string &task) const {
 }
 void TaskManager::start(){
     try {
-        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
+        // 生成目标文件路径
+        const std::string source_file = "resources/images.dat";
+        const std::string destination_file = "resources/images_" + std::to_string(id) + ".dat";
+        // 检查并删除目标文件（如果存在）
+        if (std::filesystem::exists(destination_file)) {
+            std::filesystem::remove(destination_file);
+        }
+        // 复制文件，并使用 overwrite_existing 选项自动覆盖已存在的文件
+        std::filesystem::copy(source_file, destination_file, std::filesystem::copy_options::overwrite_existing);
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
         emit Signals::instance()->setPersion(id, hwnd);
 
 
@@ -61,7 +76,7 @@ void TaskManager::start(){
             std::cout << task.toString().toStdString() << std::endl;
         }
 
-        const auto rol = Factory::instance().create("切换角色", id, hwnd, pause_event, unbind_event, disrupted);
+        const auto rol = Factory::instance().create("切换角色", id, hwnd, pause_event, unbind_event, disrupted, ifs);
 
         TaskSchedul schedul(tasks, rol, id);
 
@@ -70,7 +85,7 @@ void TaskManager::start(){
             try {
                 //更新状态
                 setState(task);
-                auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted);
+                auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
                 if (const int result = obj->implementation(); result == -1) {
                 }else {
                     if (task != "占位任务") {

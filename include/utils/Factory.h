@@ -7,7 +7,10 @@
 #include <qwindowdefs_win.h>
 #include <models/Tasks/BountyMissionsTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
+#include <models/Tasks/DoorBanTask.h>
 #include <models/Tasks/HeroListTask.h>
+#include <models/Tasks/RiverTask.h>
+#include <models/Tasks/TeaStoryTask.h>
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
 #include <models/Tasks/VientianeTask.h>
@@ -25,7 +28,7 @@
 // 工厂类
 class Factory {
 public:
-    using CreateFunc = std::function<std::unique_ptr<BasicTask>(int, HWND, std::mutex&, bool&, bool&)>;
+    using CreateFunc = std::function<std::unique_ptr<BasicTask>(int, HWND, std::mutex&, bool&, bool&, std::ifstream&)>;
 
     static Factory& instance() {
         static Factory factory;
@@ -36,17 +39,17 @@ public:
         registry_[className] = func;
     }
 
-    std::unique_ptr<BasicTask> create(const std::string& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) const {
+    std::unique_ptr<BasicTask> create(const std::string& className, int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) const {
         if (auto it = registry_.find(className); it != registry_.end()) {
-            return it->second(id, hwnd, pause_event, unbind_event, disrupted);
+            return it->second(id, hwnd, pause_event, unbind_event, disrupted, ifs);
         }
         return nullptr; // or throw an exception for unknown className
     }
 
     template <typename T>
     void autoRegister(const std::string& className) {
-        registerClass(className, [](int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) {
-            return std::make_unique<T>(id, hwnd, pause_event, unbind_event, disrupted);
+        registerClass(className, [](int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) {
+            return std::make_unique<T>(id, hwnd, pause_event, unbind_event, disrupted, ifs);
         });
     }
 
@@ -64,6 +67,9 @@ private:
         autoRegister<HeroListTask>("江湖英雄榜");
         autoRegister<DailyCopiesTask>("日常副本");
         autoRegister<BountyMissionsTask>("悬赏任务");
+        autoRegister<TeaStoryTask>("茶馆说书");
+        autoRegister<RiverTask>("山河器");
+        autoRegister<DoorBanTask>("门客设宴");
 
     }
 

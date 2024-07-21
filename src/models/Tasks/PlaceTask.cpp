@@ -20,6 +20,7 @@ int PlaceTask::implementation() {
 
         switch (determine()) {
             case 0:
+                Close(3);
                 return 0; // 任务正常退出
             case -1:
                 Close(1);
@@ -31,16 +32,19 @@ int PlaceTask::implementation() {
             case 2:
                 OpenTeam();
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
+                    ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
                 Close(1);
                 objective("开始任务");
                 break;
             case 3:
+                // CoortImageMatch({.similar = 0.9967, .scope = {281, 147, 1056, 597}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮限时活动图标", "按钮限时活动图标1");
                 // input_text("你好sxy");
                 // Shout("sxy");
+
                 objective("任务退出");
+                return 0;
                 break;
 
             default:
