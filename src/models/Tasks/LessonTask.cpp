@@ -44,15 +44,15 @@ int LessonTask::implementation() {
                 break;
             case 3:
                 OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品活动");
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮活动江湖");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动江湖");
 
-                if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, nullptr, "按钮活动吟风", "按钮活动含灵", "按钮活动寻道", "按钮活动归义", "按钮活动悟禅", "按钮活动止杀", "按钮活动漱尘", "按钮活动濯剑", "按钮活动观梦", "按钮活动锻心").empty()) {
+                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动吟风", "按钮活动含灵", "按钮活动寻道", "按钮活动归义", "按钮活动悟禅", "按钮活动止杀", "按钮活动漱尘", "按钮活动濯剑", "按钮活动观梦", "按钮活动锻心").empty()) {
                     objective("任务退出");
                     continue;
                 }
-                ClickImageMatch(MatchParams{.similar = 0.6, .scope = {170, 127, 404, 582}}, nullptr, "按钮前往");
+                ClickImageMatch(MatchParams{.similar = 0.5, .scope = {170, 127, 404, 582}}, nullptr, "按钮前往");
                 Arrive();
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界课业", "按钮大世界悟禅");
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮课业确定");

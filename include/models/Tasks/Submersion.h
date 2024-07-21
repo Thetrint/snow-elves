@@ -15,9 +15,10 @@ protected:
     std::mutex& pause_event;
     bool& unbind_event;
     bool& disrupted;
+    std::ifstream& ifs;
 
 public:
-    Submersion(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted){}
+    Submersion(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted, ifs), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), ifs(ifs){}
 
     // 实现基类的纯虚函数
     int implementation() override;

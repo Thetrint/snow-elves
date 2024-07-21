@@ -13,7 +13,6 @@
 #include "Tasks/LessonTask.h"
 #include "Tasks/FactionTask.h"
 
-
 class TaskManager {
 
 public:
@@ -37,6 +36,11 @@ private:
     bool disrupted;
     std::mutex pause_event;
     bool unbind_event;
+    bool LOCK;
+
+    std::ifstream ifs;
+
+
 };
 #endif //TASKMANAGER_H
 

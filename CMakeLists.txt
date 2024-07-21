@@ -29,45 +29,6 @@ find_package(OpenCV REQUIRED)
 file(GLOB IMAGE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/resources/images/*.bmp")
 set(OUTPUT_HEADER "${CMAKE_CURRENT_BINARY_DIR}/resources/images.h")
 
-# 生成图片资源的头文件
-file(WRITE ${OUTPUT_HEADER} "#ifndef IMAGE_RESOURCES_H_\n#define IMAGE_RESOURCES_H_\n\n")
-set(IMAGE_MAP_CONTENT "")
-set(IMAGE_SIZE_MAP_CONTENT "")
-
-foreach(img ${IMAGE_FILES})
-    get_filename_component(img_name ${img} NAME_WE)
-    string(MD5 img_hash ${img_name})
-    set(img_var_name "img_${img_hash}")
-
-    message(STATUS "Processing image: ${img_name}")
-
-    file(READ ${img} img_content HEX)
-    string(REGEX REPLACE "(..)" "0x\\1, " img_content "${img_content}")
-    string(REGEX REPLACE ", $" "" img_content "${img_content}")
-
-    file(READ ${img} IMG_FILE_CONTENT HEX)
-    string(LENGTH ${IMG_FILE_CONTENT} IMG_FILE_SIZE)
-
-    list(APPEND IMAGE_MAP_CONTENT "    { \"${img_name}\", ${img_var_name} },\n")
-    list(APPEND IMAGE_SIZE_MAP_CONTENT "    { \"${img_name}_size\", ${img_var_name}_size },\n")
-
-    file(APPEND ${OUTPUT_HEADER} "const unsigned char ${img_var_name}[] = { ${img_content} };\n\n")
-    file(APPEND ${OUTPUT_HEADER} "const size_t ${img_var_name}_size = sizeof(${img_var_name});\n\n")
-endforeach()
-
-file(APPEND ${OUTPUT_HEADER} "static std::map<std::string, const unsigned char*> Images = {\n")
-foreach(entry ${IMAGE_MAP_CONTENT})
-    file(APPEND ${OUTPUT_HEADER} "${entry}")
-endforeach()
-file(APPEND ${OUTPUT_HEADER} "};\n\n")
-
-file(APPEND ${OUTPUT_HEADER} "static std::map<std::string, const size_t> Images_size = {\n")
-foreach(entry ${IMAGE_SIZE_MAP_CONTENT})
-    file(APPEND ${OUTPUT_HEADER} "${entry}")
-endforeach()
-file(APPEND ${OUTPUT_HEADER} "};\n\n")
-file(APPEND ${OUTPUT_HEADER} "#endif // IMAGE_RESOURCES_H_\n")
-
 
 # 包含目录
 include_directories(
@@ -164,6 +125,12 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/DailyCopiesTask.h
         src/models/Tasks/BountyMissionsTask.cpp
         include/models/Tasks/BountyMissionsTask.h
+        src/models/Tasks/TeaStoryTask.cpp
+        include/models/Tasks/TeaStoryTask.h
+        src/models/Tasks/RiverTask.cpp
+        include/models/Tasks/RiverTask.h
+        src/models/Tasks/DoorBanTask.cpp
+        include/models/Tasks/DoorBanTask.h
 
 
 )

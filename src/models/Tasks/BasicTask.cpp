@@ -21,6 +21,10 @@ bool BasicTask::OpenMap() {
 
 }
 
+/**
+ * 打开队伍函数
+ * @return
+ */
 bool BasicTask::OpenTeam() {
     key_down_up("T");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
@@ -50,9 +54,19 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
+bool BasicTask::Defer(const int& count) {
+    for (int i = 0; i <= count; i++) {
+        key_down_up("Tab");
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+    return false;
+}
+
 bool BasicTask::Close(const int &count) {
     for (int i = 0; i < count; ++i) {
-        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        if (ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭").empty()) {
+            break;
+        }
     }
     return false;
 }
@@ -64,13 +78,13 @@ void BasicTask::LocationDetection() {
     Log("位置检测");
     //打开地图
     if (OpenMap()) {
-        if (!CoortImageMatch({.similar = 0.75}, nullptr, "标志地图金陵坐标").empty()) {
+        if (!CoortImageMatch({.similar = 0.8}, nullptr, "标志地图金陵坐标").empty()) {
             ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
             return;
         }
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
-        ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
         ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("571");
@@ -107,6 +121,7 @@ void BasicTask::Shout(const std::string &text) {
  * 基础功能 等待寻路结束
  */
 void BasicTask::Arrive() {
+    Log("等待到达");
     int count = 0;
     while (unbind_event) {
         if (CoortImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "标志大世界自动寻路中").empty()) {
@@ -146,56 +161,59 @@ void BasicTask::OffCard() {
 }
 
 void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& matches, MatchParams& match) const {
-    spdlog::info("图片匹配 {}", templ_name);
-    std::cout << templ_name << std::endl;
-    //读取模板图片
-    cv::Mat templ = ImageProcessor::imread(templ_name);
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        spdlog::info("图片匹配 {}", templ_name);
+        std::cout << templ_name << std::endl;
+        //读取模板图片
+        cv::Mat templ = ImageProcessor::imread(templ_name, id, ifs);
 
-    HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
-    //模板匹配 数据转换类型
-    const cv::Mat img = ImageProcessor::HBITMAPToMat(hbitmap);
+        HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
+        //模板匹配 数据转换类型
+        const cv::Mat img = ImageProcessor::HBITMAPToMat(hbitmap);
 
-    const cv::Rect roi(match.scope.x1, match.scope.y1, match.scope.x2 - match.scope.x1, match.scope.y2 - match.scope.y1);
-    cv::Mat image = img(roi);
+        const cv::Rect roi(match.scope.x1, match.scope.y1, match.scope.x2 - match.scope.x1, match.scope.y2 - match.scope.y1);
+        cv::Mat image = img(roi);
 
-    //灰度处理
-    if (match.convertToGray) {
-        cv::cvtColor(templ, templ, cv::COLOR_BGR2GRAY);
-        cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
+        //灰度处理
+        if (match.convertToGray) {
+            cv::cvtColor(templ, templ, cv::COLOR_BGR2GRAY);
+            cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
+        }
+
+        //高斯模糊
+        if (match.applyGaussianBlur) {
+            cv::GaussianBlur(templ, templ, cv::Size(match.gauss.width, match.gauss.height),  match.gauss.sigmaX);
+            cv::GaussianBlur(image, image, cv::Size(match.gauss.width, match.gauss.height),  match.gauss.sigmaX);
+        }
+
+        //边缘检测
+        if (match.applyEdgeDetection) {
+            cv::Canny(templ, templ, match.edgeThreshold.threshold1, match.edgeThreshold.threshold2);
+            cv::Canny(image, image, match.edgeThreshold.threshold1, match.edgeThreshold.threshold2);
+        }
+
+
+        std::vector<Match> matche;
+
+        // ReSharper disable once CppIncompleteSwitchStatement
+        // ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
+        switch (match.modes) {
+            case cv::TM_CCORR_NORMED:
+                matche = ImageProcessor::matchTemplate(image, templ, match, ImageProcessor::matchTemplate_TM_CCORR_NORMED);
+                break;
+            case  cv::TM_SQDIFF_NORMED:
+                matche = ImageProcessor::matchTemplate(image, templ, match, ImageProcessor::matchTemplate_TM_SQDIFF_NORMED);
+                break;
+
+        }
+        //模板匹配
+        // std::vector<ImageProcessor::Match> matches = ImageProcessor::matchTemplate(image, templ, ImageProcessor::matchTemplate_TM_CCORR_NORMED);
+
+
+        matches.insert(matches.end(), matche.begin(), matche.end());
+        DeleteObject(hbitmap);
     }
-
-    //高斯模糊
-    if (match.applyGaussianBlur) {
-        cv::GaussianBlur(templ, templ, cv::Size(3, 3), 1.2);
-        cv::GaussianBlur(image, image, cv::Size(3, 3), 1.2);
-    }
-
-    //边缘检测
-    if (match.applyEdgeDetection) {
-        cv::Canny(templ, templ, match.edgeThreshold.threshold1, match.edgeThreshold.threshold2);
-        cv::Canny(image, image, match.edgeThreshold.threshold1, match.edgeThreshold.threshold2);
-    }
-
-
-    std::vector<Match> matche;
-
-    // ReSharper disable once CppIncompleteSwitchStatement
-    // ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
-    switch (match.modes) {
-        case cv::TM_CCORR_NORMED:
-            matche = ImageProcessor::matchTemplate(image, templ, match, ImageProcessor::matchTemplate_TM_CCORR_NORMED);
-            break;
-        case  cv::TM_SQDIFF_NORMED:
-            matche = ImageProcessor::matchTemplate(image, templ, match, ImageProcessor::matchTemplate_TM_SQDIFF_NORMED);
-            break;
-
-    }
-    //模板匹配
-    // std::vector<ImageProcessor::Match> matches = ImageProcessor::matchTemplate(image, templ, ImageProcessor::matchTemplate_TM_CCORR_NORMED);
-
-
-    matches.insert(matches.end(), matche.begin(), matche.end());
-    DeleteObject(hbitmap);
 }
 
 void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& location) const {
@@ -203,7 +221,7 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
         std::lock_guard lock(pause_event);
         for (int i = 1; i <= match.clickCount; i++) {
             WindowManager::MouseDownUp(hwnd, location.x + match.x, location.y + match.y);
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
 
         if (match.clickDelay) {
