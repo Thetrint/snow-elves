@@ -6,6 +6,7 @@
 #define FACTORY_H
 #include <qwindowdefs_win.h>
 #include <models/Tasks/BountyMissionsTask.h>
+#include <models/Tasks/BreakBanTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
 #include <models/Tasks/DoorBanTask.h>
 #include <models/Tasks/HeroListTask.h>
@@ -70,6 +71,7 @@ private:
         autoRegister<TeaStoryTask>("茶馆说书");
         autoRegister<RiverTask>("山河器");
         autoRegister<DoorBanTask>("门客设宴");
+        autoRegister<BreakBanTask>("破阵设宴");
 
     }
 

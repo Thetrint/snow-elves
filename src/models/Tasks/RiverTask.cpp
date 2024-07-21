@@ -44,7 +44,7 @@ int RiverTask::implementation() {
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品山河器");
                 break;
             case 4:
-                if (ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器探索").empty()) {
+                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮山河器探索").empty()) {
                     if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮山河器免费搜索").empty()) {
                         // 退出
                         Close(3);
