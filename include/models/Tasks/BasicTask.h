@@ -77,7 +77,7 @@ protected:
 
     bool OpenKnapsack();
 
-    bool Defer(const int &count);
+    bool Defer(const int &count) const;
 
     bool Close(const int &count);
 

@@ -110,14 +110,15 @@
     padding-bottom: 5px;
 }
 
+
 #ScriptWindow #stackedWidget .tip {
-    background-color: #ffffff; /* 白色背景 */
+    background-color: rgba(255, 255, 255, 0); /* 透明背景 */
     color: #202124; /* 深色字体 */
     font-size: 14px; /* 字体大小 */
-    border: 1px solid #dcdcdc; /* 浅灰色边框 */
+    border: none; /* 无边框 */
     border-radius: 6px; /* 圆角边框 */
     padding: 8px; /* 内边距 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    box-shadow: none; /* 去除阴影效果 */
 }
 
 QSpinBox {

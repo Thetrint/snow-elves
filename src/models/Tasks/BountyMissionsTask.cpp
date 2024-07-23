@@ -121,6 +121,11 @@ int BountyMissionsTask::implementation() {
                         }else {
 
                             if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志副本完成").empty()) {
+                                if (++record_num[4] <= 3) {
+                                    std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+                                    continue;
+                                }
+                                record_num[4] = 0;
                                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本退出");
                                 if(!ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定").empty()) {
                                     Log("副本退出");
