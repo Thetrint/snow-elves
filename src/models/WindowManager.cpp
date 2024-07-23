@@ -457,11 +457,11 @@ void WindowManager::MouseMove(const HWND &hwnd, const int x1, const int y1, cons
     const POINT endPt = { x2, y2 };
 
     // 定义控制点，使移动路径更平滑
-    POINT controlPt = { (x1 + x2) / 2, y1 - 100 }; // 这个点可以根据需要调整
+    const POINT controlPt = { (x1 + x2) / 2, y1 - 100 }; // 这个点可以根据需要调整
 
     // 生成贝塞尔曲线路径
     std::vector<POINT> path;
-    constexpr int steps = 100; // 步数越多，移动越平滑
+    constexpr int steps = 10; // 步数越多，移动越平滑
     for (int i = 0; i <= steps; ++i) {
         const float t = static_cast<float>(i) / steps;
         const float u = 1 - t;

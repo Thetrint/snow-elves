@@ -60,11 +60,11 @@ int FactionTask::implementation() {
             case 4:
                 if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 30) {
                     record_time[0] = std::chrono::steady_clock::now();
-                    if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界江湖").empty()) {
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
+                    if (CoortImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮大世界江湖").empty()) {
+                        ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮大世界任务栏");
                     }
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
-                    ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
+                    ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮大世界江湖");
+                    ClickImageMatch(MatchParams{.similar = 0.85, .matchCount = 1, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界帮派仓库", "按钮大世界摆摊购买").empty()) {
@@ -95,11 +95,18 @@ int FactionTask::implementation() {
 
                 }
 
-                if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交").empty()) {
-                    if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "标志帮派任务已经完成").empty()) {
-                        objective("任务退出");
-                    }
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
+                    Close(3);
+                }
 
+                if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交").empty()) {
+
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交");
+                }
+
+                if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "标志帮派任务已经完成").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "标志帮派任务已经完成");
+                    objective("任务退出");
                 }
 
                 break;

@@ -30,7 +30,14 @@ public:
 
 private:
     std::string cause;
-    std::vector<int> record_num{0, 0, 0, 0};
+    /**
+     * 0. 判断副本开启成功最大次数
+     * 1. 副本开启次数
+     * 2. 身上悬赏数量
+     * 3. 脱离卡死最大次数
+     * 4. 副本完成判断最大次数
+     */
+    std::vector<int> record_num{0, 0, 0, 0, 0};
     std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point()};
     std::vector<bool> record_event{true, false};
 

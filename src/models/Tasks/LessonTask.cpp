@@ -48,7 +48,9 @@ int LessonTask::implementation() {
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动江湖");
 
-                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动吟风", "按钮活动含灵", "按钮活动寻道", "按钮活动归义", "按钮活动悟禅", "按钮活动止杀", "按钮活动漱尘", "按钮活动濯剑", "按钮活动观梦", "按钮活动锻心").empty()) {
+                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动吟风", "按钮活动含灵",
+                    "按钮活动寻道", "按钮活动归义", "按钮活动悟禅", "按钮活动止杀", "按钮活动漱尘", "按钮活动濯剑", "按钮活动观梦",
+                    "按钮活动锻心", "按钮活动问卜").empty()) {
                     objective("任务退出");
                     continue;
                 }
@@ -82,13 +84,14 @@ int LessonTask::implementation() {
 
                 if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 30) {
                     record_time[0] = std::chrono::steady_clock::now();
-                    if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界江湖").empty()) {
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
+                    if (CoortImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮大世界江湖").empty()) {
+                        ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮大世界任务栏");
                     }
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界江湖");
-                    ClickImageMatch(MatchParams{.similar = 0.9, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
+                    ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮大世界江湖");
+                    ClickImageMatch(MatchParams{.similar = 0.9, .matchCount = 1, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
                         nullptr, "按钮大世界吟风任务", "按钮大世界含灵任务", "按钮大世界寻道任务", "按钮大世界归义任务",
-                        "按钮大世界悟禅任务", "按钮大世界止杀任务", "按钮大世界漱尘任务", "按钮大世界濯剑任务", "按钮大世界观梦任务", "按钮大世界锻心任务");
+                        "按钮大世界悟禅任务", "按钮大世界止杀任务", "按钮大世界漱尘任务", "按钮大世界濯剑任务", "按钮大世界观梦任务",
+                        "按钮大世界锻心任务", "按钮大世界问卜任务");
                 }
 
 
@@ -114,6 +117,11 @@ int LessonTask::implementation() {
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业杂货商人").empty()) {
                     mouse_down_up(MatchParams{}, cv::Point{1003, 617});
+                }
+                if(!CoortImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买");
+                    mouse_down_up({.clickCount = 14}, {988, 694});
+                    Close(1);
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {

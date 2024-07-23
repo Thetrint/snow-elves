@@ -82,6 +82,7 @@ int RiverTask::determine() {
         if (++detect_count >= 15) {
             return -1;
         }
+
     }else {
         detect_count = 0;
     }
