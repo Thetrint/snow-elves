@@ -9,7 +9,7 @@ int HeroListTask::implementation() {
 
     std::vector<Match> matchs;
 
-    objective("开始任务");
+    objective("位置检测");
     timer.start();
     while (unbind_event) {
 
@@ -51,7 +51,6 @@ int HeroListTask::implementation() {
                     objective("任务退出");
                 }
 
-
                 break;
             case 4:
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "标志江湖英雄榜次数").empty()) {
@@ -63,7 +62,7 @@ int HeroListTask::implementation() {
                 objective("任务退出");
                 break;
             case 5:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
+                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 50, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
                     if (LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜秒退").toInt()) {
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出");
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出副本");
@@ -79,9 +78,11 @@ int HeroListTask::implementation() {
                             FightStop();
                         }
                     }
-
+                    Log(std::format("江湖英雄榜完成 {} 次", record_num[0]));
+                    std::cout << LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt() << std::endl;
                     if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt()) {
                         objective("任务退出");
+                        continue;
                     }
                     objective("开始任务");
                 }
@@ -107,6 +108,7 @@ int HeroListTask::determine() {
         if (++detect_count >= 15) {
             return -1;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }else {
         detect_count = 0;
     }

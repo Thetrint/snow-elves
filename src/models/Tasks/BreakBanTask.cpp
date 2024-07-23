@@ -1,9 +1,9 @@
 //
-// Created by y1726 on 24-7-20.
+// Created by y1726 on 24-7-21.
 //
-#include "models/Tasks/DoorBanTask.h"
+#include "models/Tasks/BreakBanTask.h"
 
-int DoorBanTask::implementation() {
+int BreakBanTask::implementation() {
     std::vector<Match> matchs;
     objective("位置检测");
     timer.start();
@@ -44,24 +44,24 @@ int DoorBanTask::implementation() {
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动帮派");
 
-                if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, nullptr, "按钮活动门客设宴").empty()) {
+                if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, nullptr, "按钮活动破阵设宴").empty()) {
                     objective("任务退出");
                     continue;
                 }
                 ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮活动前往邀约");
                 Arrive();
-                ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮门客设宴邀请赴宴");
-                ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮门客设宴确认邀约");
+                ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮破阵设宴邀请赴宴");
+                ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮破阵设宴确认邀约");
                 if (CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面门客设宴").empty()) {
                     objective("任务退出");
                 }
                 break;
             case 4:
                 mouse_down_up({}, {633 + 172 * x, 282 + 182 * y});
-                if(!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮门客设宴获取").empty()) {
+                if(!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮破阵设宴获取").empty()) {
                     for (int i = 1; i <= 6; i++) {
-                        if(ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 2}, nullptr, "按钮门客设宴获取").empty()) {
-                            ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 2}, nullptr, "按钮门客设宴一键提交");
+                        if(ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 2}, nullptr, "按钮破阵设宴获取").empty()) {
+                            ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 2}, nullptr, "按钮破阵设宴一键提交");
                             break;
                         }
 
@@ -92,20 +92,18 @@ int DoorBanTask::implementation() {
 
                     }
                 }else {
-                    ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 2}, nullptr, "按钮门客设宴一键提交");
+                    ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 2}, nullptr, "按钮破阵设宴一键提交");
                 }
 
                 if(++x == 5) {
                     x = 0;
                     if (++y == 2) {
-                        ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 2}, nullptr, "按钮门客设宴开始设宴");
+                        ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 2}, nullptr, "按钮破阵设宴开始设宴");
                         ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
                         Close(4);
                         objective("任务退出");
                     }
-
                 }
-
 
                 break;
             default:
@@ -119,11 +117,11 @@ int DoorBanTask::implementation() {
 
 }
 
-void DoorBanTask::objective(const std::string ve) {
+void BreakBanTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int DoorBanTask::determine() {
+int BreakBanTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 15) {
@@ -176,7 +174,7 @@ int DoorBanTask::determine() {
     return 307;
 }
 
-int DoorBanTask::detect() {
+int BreakBanTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面门客设宴").empty()) {
         return 2;
     }

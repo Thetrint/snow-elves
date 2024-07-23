@@ -1,11 +1,13 @@
 //
-// Created by y1726 on 24-7-17.
+// Created by y1726 on 24-7-21.
 //
-#include "models/Tasks/RiverTask.h"
+#include "models/Tasks/DailyRedemptionTask.h"
 
-int RiverTask::implementation() {
+#include <utils/LoadJsonFile.h>
+
+int DailyRedemptionTask::implementation() {
     std::vector<Match> matchs;
-    objective("位置检测");
+    objective("开始任务");
     timer.start();
     while (unbind_event) {
 
@@ -39,28 +41,23 @@ int RiverTask::implementation() {
                 objective("开始任务");
                 break;
             case 3:
-                OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品山河器");
-                break;
-            case 4:
-                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮山河器探索").empty()) {
-                    if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮山河器免费搜索").empty()) {
-                        // 退出
-                        Close(3);
-                        objective("任务退出");
-                        continue;
+                if (LoadJsonFile::instance().jsonFiles[id].value("银票礼盒兑换").toInt()) {
+                    OpenKnapsack();
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品综合入口");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品珍宝阁");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮珍宝阁商城");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮珍宝阁搜索");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志珍宝阁输入名称");
+                    input_text("银票礼盒");
+                    if(!ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志珍宝阁银票礼盒").empty()) {
+                        mouse_down_up({.clickCount = 30}, {988, 694});
                     }
-                    Log("搜索山河器");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器日晷");
-                    continue;
                 }
-                Arrive();
-                Log("拾取山河器");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器拾取");
-                mouse_down_up({}, {0, 0});
-                mouse_down_up({}, {0, 0});
+
+                objective("任务退出");
+                return 0;
                 break;
+
             default:
                 break;;
         }
@@ -72,17 +69,16 @@ int RiverTask::implementation() {
 
 }
 
-void RiverTask::objective(const std::string ve) {
+void DailyRedemptionTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int RiverTask::determine() {
+int DailyRedemptionTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 15) {
             return -1;
         }
-
     }else {
         detect_count = 0;
     }
@@ -119,8 +115,6 @@ int RiverTask::determine() {
         switch (sw) {
             case 1:
                 return 3;
-            case 2:
-                return 4;
             default:
                 return -1;
         }
@@ -130,10 +124,7 @@ int RiverTask::determine() {
     return 307;
 }
 
-int RiverTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面山河器").empty()) {
-        return 2;
-    }
+int DailyRedemptionTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }

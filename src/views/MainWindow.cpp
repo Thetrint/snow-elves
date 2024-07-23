@@ -412,6 +412,7 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["副本模式"] = script->ui.comboBox_3->currentText();
     root["副本人数"] = script->ui.comboBox_2->currentIndex() + 1;
     root["副本喊话内容"] = script->ui.lineEdit->text();
+    root["银票礼盒兑换"] = script->ui.checkBox_3->checkState();
 
 
     return QJsonDocument(root);
