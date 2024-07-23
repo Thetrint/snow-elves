@@ -79,6 +79,7 @@ int DailyRedemptionTask::determine() {
         if (++detect_count >= 15) {
             return -1;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }else {
         detect_count = 0;
     }

@@ -118,6 +118,11 @@ int LessonTask::implementation() {
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业杂货商人").empty()) {
                     mouse_down_up(MatchParams{}, cv::Point{1003, 617});
                 }
+
+                if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业挑水").empty()) {
+                    mouse_down_up(MatchParams{}, cv::Point{1008, 398});
+                }
+
                 if(!CoortImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买");
                     mouse_down_up({.clickCount = 14}, {988, 694});
@@ -163,6 +168,7 @@ int LessonTask::determine() {
         if (++detect_count >= 15) {
             return -1;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }else {
         detect_count = 0;
     }
