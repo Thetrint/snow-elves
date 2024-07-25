@@ -20,10 +20,10 @@ int RiverTask::implementation() {
 
         switch (determine()) {
             case 0:
-                Close(3);
+                Close({.similar = 0.5}, 3);
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -35,7 +35,7 @@ int RiverTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
@@ -47,7 +47,7 @@ int RiverTask::implementation() {
                 if (ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮山河器探索").empty()) {
                     if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮山河器免费搜索").empty()) {
                         // 退出
-                        Close(3);
+                        Close({.similar = 0.5}, 3);
                         objective("任务退出");
                         continue;
                     }

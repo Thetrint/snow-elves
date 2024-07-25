@@ -22,10 +22,10 @@ int DailyRedemptionTask::implementation() {
 
         switch (determine()) {
             case 0:
-                Close(3);
+               Close({.similar = 0.5}, 3);;
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -37,22 +37,47 @@ int DailyRedemptionTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
-                if (LoadJsonFile::instance().jsonFiles[id].value("银票礼盒兑换").toInt()) {
+                if (config.value("银票礼盒兑换").toBool() && record_event[0]) {
+                    record_event[0] = false;
                     OpenKnapsack();
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品综合入口");
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品珍宝阁");
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮珍宝阁商城");
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮珍宝阁搜索");
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志珍宝阁输入名称");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品珍宝阁");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮珍宝阁商城");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮珍宝阁搜索");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志珍宝阁输入名称");
                     input_text("银票礼盒");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮珍宝阁搜索");
                     if(!ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志珍宝阁银票礼盒").empty()) {
                         mouse_down_up({.clickCount = 30}, {988, 694});
                     }
+                    Close({.similar = 0.5}, 4);
+                    continue;
                 }
+
+                if (config.value("帮派铜钱捐献").toBool() && config.value("帮派银两捐献").toBool() && record_event[1]) {
+                    record_event[1] = false;
+                    OpenFaction();
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮帮派福利");
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮帮派捐献");
+
+                    if(config.value("帮派铜钱捐献").toBool()) {
+                        for(int i = 1; i <= 3; i++) {
+                            // ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮捐献");
+                        }
+                    }
+
+                    if(config.value("帮派银两捐献").toBool()) {
+                        for(int i = 1; i <= 3; i++) {
+                            // ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮捐献");
+                        }
+                    }
+                    Close({.similar = 0.5}, 4);
+                }
+
 
                 objective("任务退出");
                 return 0;

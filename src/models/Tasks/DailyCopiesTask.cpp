@@ -25,7 +25,7 @@ int DailyCopiesTask::implementation() {
                 case 0:
                     return 0; // 任务正常退出
                 case -1:
-                    Close(1);
+                    Close({.similar = 0.5}, 1);
                     break;
                 case 1:
                     LocationDetection();
@@ -71,7 +71,7 @@ int DailyCopiesTask::implementation() {
 
                     }else {
                         if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[1]).count() > 300) {
-                            Close(2);
+                            Close({.similar = 0.5}, 2);
                             Shout(LoadJsonFile::instance().jsonFiles[id].value("副本喊话内容").toString().toStdString());
                             record_time[1] = std::chrono::steady_clock::now();
                         }
@@ -133,7 +133,7 @@ int DailyCopiesTask::implementation() {
                         record_time[0] = std::chrono::steady_clock::now();
                     }
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易").empty()) {
-                        Close(1);
+                        Close({.similar = 0.5}, 1);
                     }
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本跳过剧情").empty()) {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本跳过剧情");
@@ -143,7 +143,7 @@ int DailyCopiesTask::implementation() {
                     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                     break;
                 case 6:
-                    Close(1);
+                    Close({.similar = 0.5}, 1);
                     break;
                 default:
                     break;;
@@ -153,7 +153,7 @@ int DailyCopiesTask::implementation() {
                 case 0:
                     return 0; // 任务正常退出
                 case -1:
-                    Close(1);
+                    Close({.similar = 0.5}, 1);
                     break;
                 case 1:
                     LocationDetection();
@@ -165,7 +165,7 @@ int DailyCopiesTask::implementation() {
                         objective("任务退出");
                         continue;
                     }
-                    Close(2);
+                    Close({.similar = 0.5}, 2);
                     objective("开始任务");
                     break;
                 case 3:
@@ -176,10 +176,10 @@ int DailyCopiesTask::implementation() {
                     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志副本继续").empty()) {
                         mouse_down_up({}, {0, 0});
                         OpenTeam();
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍取消跟随");
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍跟随队长");
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                        Close(2);
+                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 2, .clickCount = 2}, nullptr, "按钮队伍取消跟随");
+                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 2}, nullptr, "按钮队伍跟随队长");
+                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 2}, nullptr, "按钮确定");
+                        Close({.similar = 0.5}, 2);
 
                     }
 

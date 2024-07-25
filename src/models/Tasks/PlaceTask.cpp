@@ -20,10 +20,10 @@ int PlaceTask::implementation() {
 
         switch (determine()) {
             case 0:
-                Close(3);
+               Close({.similar = 0.5}, 3);;
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -35,7 +35,7 @@ int PlaceTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:

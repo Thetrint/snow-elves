@@ -454,6 +454,17 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["副本人数"] = script->ui.comboBox_2->currentIndex() + 1;
     root["副本喊话内容"] = script->ui.lineEdit->text();
     root["银票礼盒兑换"] = script->ui.checkBox_3->isChecked();
+    root["帮派铜钱捐献"] = script->ui.checkBox_4->isChecked();
+    root["帮派银两捐献"] = script->ui.checkBox_5->isChecked();
+    root["宗门试炼1"] = script->ui.comboBox_4->currentText();
+    root["宗门试炼2"] = script->ui.comboBox_5->currentText();
+    root["宗门试炼3"] = script->ui.comboBox_6->currentText();
+    root["宗门试炼队伍1"] = script->ui.comboBox_7->currentIndex();
+    root["宗门试炼队伍2"] = script->ui.comboBox_8->currentIndex();
+    root["宗门试炼队伍3"] = script->ui.comboBox_9->currentIndex();
+    root["宗门生产"] = script->ui.checkBox_6->isChecked();
+    root["宗门生产一键催命"] = script->ui.checkBox_7->isChecked();
+    root["宗门生产心情等级"] = script->ui.comboBox_10->currentIndex();
 
 
     return QJsonDocument(root);
@@ -490,6 +501,8 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.comboBox_2->setCurrentIndex(0);
         script->ui.lineEdit->setText("");
         script->ui.checkBox_3->setChecked(false);
+        script->ui.checkBox_4->setChecked(false);
+        script->ui.checkBox_5->setChecked(false);
         return;
     }
     QJsonDocument settingsDoc;
@@ -508,10 +521,10 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.listWidget_2->clear();
         for (const auto& value : executeTasks) {
             QString text = value.toString();
-            auto *item = new QListWidgetItem(text);
-            item->setTextAlignment(Qt::AlignCenter);
-            item->setSizeHint(QSize(script->ui.listWidget_2->height(), 30));
-            script->ui.listWidget_2->addItem(item);
+            auto items = script->ui.listWidget->findItems(text, Qt::MatchExactly);
+
+            auto *newItem = new QListWidgetItem(*items.first());
+            script->ui.listWidget_2->addItem(newItem);
         }
 
         script->ui.spinBox->setValue(root["华山论剑次数"].toInt());
@@ -522,7 +535,8 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.comboBox_2->setCurrentIndex(root["副本人数"].toInt() - 1);
         script->ui.lineEdit->setText(root["副本喊话内容"].toString());
         script->ui.checkBox_3->setChecked(root["银票礼盒兑换"].toBool());
-
+        script->ui.checkBox_4->setChecked(root["帮派铜钱捐献"].toBool());
+        script->ui.checkBox_5->setChecked(root["帮派银两捐献"].toBool());
 
     }
 }

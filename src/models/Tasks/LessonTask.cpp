@@ -27,7 +27,7 @@ int LessonTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -39,7 +39,7 @@ int LessonTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
@@ -66,7 +66,7 @@ int LessonTask::implementation() {
                         break;
                     }
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("等待完成");
                 break;
             case 4:
@@ -96,7 +96,7 @@ int LessonTask::implementation() {
 
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志课业答题").empty()) {
-                    Close(1);
+                    Close({.similar = 0.5}, 1);
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志论剑倒计时").empty()) {
@@ -126,13 +126,13 @@ int LessonTask::implementation() {
                 if(!CoortImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买");
                     mouse_down_up({.clickCount = 14}, {988, 694});
-                    Close(1);
+                    Close({.similar = 0.5}, 1);
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买");
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
-                    Close(1);
+                    Close({.similar = 0.5}, 1);
                 }
 
                 if (!ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1, .matchDelay = false}, nullptr, "按钮大世界一键提交").empty()) {

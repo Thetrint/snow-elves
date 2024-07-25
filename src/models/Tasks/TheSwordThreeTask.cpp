@@ -24,7 +24,7 @@ int TheSwordThreeTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,7 +36,7 @@ int TheSwordThreeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:

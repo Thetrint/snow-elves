@@ -26,7 +26,7 @@ int HeroListTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -38,7 +38,7 @@ int HeroListTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
@@ -63,7 +63,7 @@ int HeroListTask::implementation() {
                 break;
             case 5:
                 if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 50, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
-                    if (LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜秒退").toInt()) {
+                    if (LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜秒退").toBool()) {
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出");
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出副本");
                         ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
@@ -80,7 +80,7 @@ int HeroListTask::implementation() {
                     }
                     Log(std::format("江湖英雄榜完成 {} 次", record_num[0]));
                     std::cout << LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt() << std::endl;
-                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt()) {
+                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt() + 1) {
                         objective("任务退出");
                         continue;
                     }

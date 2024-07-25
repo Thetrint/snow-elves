@@ -26,7 +26,7 @@ int FactionTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -38,7 +38,7 @@ int FactionTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
@@ -73,12 +73,12 @@ int FactionTask::implementation() {
                         if (!ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮帮派仓库提交").empty()) {
                             Arrive();
                         }
-                        Close(2);
+                        Close({.similar = 0.5}, 2);
                     }
                     ClickImageMatch(MatchParams{.similar = 0.85, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮大世界帮派任务");
                     if (!ClickImageMatch(MatchParams{.similar = 0.6, .y = -65}, nullptr, "按钮大世界摆摊购买").empty()) {
                         if (ClickImageMatch(MatchParams{.similar = 0.65, .scope = {259, 410, 1076, 602}}, nullptr, "按钮交易购买").empty()) {
-                            Close(3);
+                            Close({.similar = 0.5}, 3);
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务任务");
@@ -86,17 +86,17 @@ int FactionTask::implementation() {
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务回帮派复命");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮任务重新接取");
                             ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
-                            Close(3);
+                           Close({.similar = 0.5}, 3);;
                         }
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
-                        Close(1);
+                        Close({.similar = 0.5}, 1);
                     }
 
 
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
-                    Close(3);
+                   Close({.similar = 0.5}, 3);;
                 }
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮大世界一键提交").empty()) {

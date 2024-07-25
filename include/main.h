@@ -60,7 +60,7 @@
 
 
 inline double FACTOR;
-inline int DELAY  = 850;
+inline int DELAY  = 1150;
 
 
 
