@@ -11,6 +11,7 @@
 #include <models/Tasks/DoorBanTask.h>
 #include <models/Tasks/HeroListTask.h>
 #include <models/Tasks/RiverTask.h>
+#include <models/Tasks/SectTask.h>
 #include <models/Tasks/TeaStoryTask.h>
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
@@ -73,6 +74,7 @@ private:
         autoRegister<DoorBanTask>("门客设宴");
         autoRegister<BreakBanTask>("破阵设宴");
         autoRegister<DailyRedemptionTask>("每日兑换");
+        autoRegister<SectTask>("宗门任务");
 
     }
 

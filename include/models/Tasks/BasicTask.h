@@ -5,6 +5,7 @@
 #ifndef BASICTASK_H
 #define BASICTASK_H
 
+#include <utils/LoadJsonFile.h>
 #include "main.h"
 #include "models/ImageProcess.h"
 #include "utils/Utilities.h"
@@ -20,6 +21,7 @@ protected:
     bool& unbind_event;
     bool& disrupted;
     std::ifstream& ifs;
+    QJsonObject config = LoadJsonFile::instance().jsonFiles[id];
 
 public:
     virtual ~BasicTask() = default;
@@ -77,9 +79,11 @@ protected:
 
     bool OpenKnapsack();
 
-    bool Defer(const int &count) const;
+    bool OpenFaction();
 
-    bool Close(const int &count);
+    bool Defer(const int &count);
+
+    bool Close(const MatchParams& match, const int &count);
 
     void LocationDetection();
 
@@ -90,6 +94,8 @@ protected:
     void LeaveTeam();
 
     void OffCard();
+
+    void PassLevel() const;
 
     void ImageMatch(const std::string &templ_name, std::vector<Match> &matches, MatchParams &match) const;
 

@@ -177,7 +177,7 @@ RunWindow::RunWindow(QWidget *parent):
     //截图
     connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
         HWND hwnd = WindowManager::getWindowHandle();
-        WindowManager::setWinodw(hwnd);
+        // WindowManager::setWinodw(hwnd);
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         HBITMAP hBitmap = WindowManager::CaptureAnImage(hwnd);
 

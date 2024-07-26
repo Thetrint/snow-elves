@@ -20,7 +20,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     items
     << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
     << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器" << "门客设宴"
-    << "破阵设宴" << "每日兑换";
+    << "破阵设宴" << "每日兑换" << "宗门任务";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);
@@ -40,6 +40,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.listWidget_2->setDragEnabled(true);
     ui.listWidget_2->setAcceptDrops(true);
     ui.listWidget_2->setDropIndicatorShown(true);
+    // ui.listWidget_2->setResizeMode(QListView::Adjust);
     ui.listWidget_2->setDefaultDropAction(Qt::MoveAction);
     ui.listWidget_2->setSelectionMode(QAbstractItemView::ExtendedSelection);
 

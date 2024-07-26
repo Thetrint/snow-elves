@@ -24,7 +24,7 @@ int TheSwordTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,10 +36,15 @@ int TheSwordTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
+                if (!ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 5, .click = NoTap}, nullptr, "标志华山论剑匹配成功").empty()) {
+                    PassLevel();
+                    objective("等待战斗");
+                    continue;
+                }
                 OpenKnapsack();
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品综合入口");
                 ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮物品活动");
@@ -47,19 +52,20 @@ int TheSwordTask::implementation() {
 
                 if (ClickImageMatch(MatchParams{.similar = 0.6, .x = -60, .y = 45}, nullptr, "按钮活动华山论剑").empty()) {
                     objective("任务退出");
-                    continue;
                 }
-                objective("等待战斗");
                 break;
             case 4:
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮论剑取消匹配").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑匹配");
+                    ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑匹配");
                 }
-                ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑确认");
+                if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确认").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑确认");
+                }
+                Defer(1);
                 break;
             case 5:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
-                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toInt()) {
+                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 5, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
+                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toBool()) {
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
                     }else {
@@ -73,10 +79,14 @@ int TheSwordTask::implementation() {
                             FightStop();
                         }
                     }
-
-                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("华山论剑次数").toInt()) {
+                    PassLevel();
+                    Log(std::format("华山论剑完成 {} 次", record_num[0]));
+                    if (++record_num[0] >= config.value("华山论剑次数").toInt() + 1) {
                         objective("任务退出");
+                        continue;
                     }
+                    objective("开始任务");
+
 
                 }
                 break;
@@ -98,9 +108,10 @@ void TheSwordTask::objective(const std::string ve) {
 int TheSwordTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }else {
         detect_count = 0;
     }
@@ -136,6 +147,8 @@ int TheSwordTask::determine() {
         switch (sw) {
             case 1:
                 return 3;
+            case 2:
+                return 4;
             default:
                 return -1;
         }
@@ -145,8 +158,6 @@ int TheSwordTask::determine() {
         switch (sw) {
             case 1:
                 return 5;
-            case 2:
-                return 4;
             default:
                 return -1;
         }

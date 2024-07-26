@@ -4,6 +4,7 @@
 #listWidget, #listWidget_2{
     border: 1px solid gray;
     color: black;
+
 }
 
 #listWidget::item, #listWidget_2::item{

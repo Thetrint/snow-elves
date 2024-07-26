@@ -132,6 +132,7 @@ MainWindow::MainWindow(QWidget *parent):
             if (QFile file(filePath); file.open(QIODevice::WriteOnly)) {
                 file.write(settingsDoc.toJson());
                 file.close();
+                addConfig(selectedFileName.toStdString());
                 spdlog::info("配置文件已保存: {}", filePath.toStdString());
             } else {
                 spdlog::error("无法打开文件进行写入: {}", filePath.toStdString());
@@ -189,6 +190,7 @@ MainWindow::MainWindow(QWidget *parent):
 
         auto* fileList = new QListWidget;
         fileList->addItems(baseNames);
+        fileList->setSelectionMode(QAbstractItemView::MultiSelection);
         dialogLayout.addWidget(fileList);
 
         auto* deleteButton = new QPushButton(QObject::tr("删除"));
@@ -197,26 +199,37 @@ MainWindow::MainWindow(QWidget *parent):
         dialog.setLayout(&dialogLayout);
         dialog.setFixedSize(350, 200);
 
-        QObject::connect(deleteButton, &QPushButton::clicked, this, [fileList, configPath, &dialog, this]() {
-            const QString selectedFileName = fileList->currentItem() ? fileList->currentItem()->text() : " ";
-
-            if (selectedFileName.isEmpty()) {
+        connect(deleteButton, &QPushButton::clicked, this, [fileList, configPath, &dialog, this]() {
+            QList<QListWidgetItem*> selectedItems = fileList->selectedItems();
+            if (selectedItems.isEmpty()) {
                 spdlog::error("未选择文件名");
                 return;
             }
 
-            const QString filePath = configPath + "/" + selectedFileName + ".json";
+            QStringList selectedFileNames;
+            for (auto* item : selectedItems) {
+                selectedFileNames << item->text();
+            }
 
             // 提示用户确认删除
-
+            const QString confirmMessage = QObject::tr("确定要删除以下文件吗?\n%1").arg(selectedFileNames.join("\n"));
             if (const QMessageBox::StandardButton reply = QMessageBox::question(&dialog, QObject::tr("确认删除"),
-                QObject::tr("确定要删除文件: %1 吗?").arg(selectedFileName),
-                QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
-                if (QFile::remove(filePath)) {
-                    spdlog::info("配置文件已删除: {}", filePath.toStdString());
+                confirmMessage, QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::Yes) {
+
+                bool allDeleted = true;
+                for (const QString& selectedFileName : selectedFileNames) {
+                    const QString filePath = configPath + "/" + selectedFileName + ".json";
+                    if (QFile::remove(filePath)) {
+                        removeConfig(selectedFileName.toStdString());
+                        spdlog::info("配置文件已删除: {}", filePath.toStdString());
+                    } else {
+                        spdlog::error("无法删除文件: {}", filePath.toStdString());
+                        allDeleted = false;
+                    }
+                }
+
+                if (allDeleted) {
                     dialog.accept();
-                } else {
-                    spdlog::error("无法删除文件: {}", filePath.toStdString());
                 }
             }
         });
@@ -332,21 +345,27 @@ MainWindow::MainWindow(QWidget *parent):
 
             // 检查目标文件是否已存在
             if (QFile::exists(destinationPath)) {
-                if (QMessageBox::StandardButton reply = QMessageBox::question(this, tr("文件已存在"),
-                                                                              tr("文件 %1 已存在，是否覆盖？").arg(
-                                                                                  QFileInfo(sourcePath).fileName()),
-                                                                              QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::No) {
+                if (const QMessageBox::StandardButton reply = QMessageBox::question(this, tr("文件已存在"),
+                                                                                    tr("文件 %1 已存在，是否覆盖？").arg(
+                                                                                        QFileInfo(sourcePath).fileName()),
+                                                                                    QMessageBox::Yes | QMessageBox::No); reply == QMessageBox::No) {
                     continue; // 用户选择不覆盖，跳过
                 }
             }
 
             // 复制文件
             if (QFile::copy(sourcePath, destinationPath)) {
+                addConfig(QFileInfo(sourcePath).fileName().toStdString());
                 spdlog::info("配置文件已导入到：{}", destinationPath.toStdString());
             } else {
                 spdlog::error("导入文件失败：{}", destinationPath.toStdString());
             }
         }
+    });
+
+    // 读取配置文件
+    connect(script->ui.comboBox, &QComboBox::currentTextChanged, this, [&](const QString &text) {
+        readUserSettings(text);
     });
     // 创建并安装事件过滤器
     qApp->installNativeEventFilter(eventFilter);
@@ -391,6 +410,28 @@ int MainWindow::getSpacerIndex(const QSpacerItem *spacer) const {
     return -1; // 如果没有找到弹簧，则返回-1
 }
 
+// 下拉框添加配置文件
+
+void MainWindow::addConfig(const std::string& config) const {
+    const QString qConfig = QString::fromStdString(config);
+
+    // 检查下拉框是否包含该配置
+    if (const auto& comboBox = script->ui.comboBox; comboBox->findText(qConfig) == -1) {
+        // 如果不包含，则添加进去
+        comboBox->addItem(qConfig);
+    }
+}
+
+void MainWindow::removeConfig(const std::string& config) const {
+    const QString qConfig = QString::fromStdString(config);
+
+    // 检查下拉框是否包含该配置
+    if (const auto& comboBox = script->ui.comboBox; comboBox->findText(qConfig) != -1) {
+        // 如果包含，则删除
+        comboBox->removeItem(comboBox->findText(qConfig));
+    }
+}
+
 QJsonDocument MainWindow::createJsonDocument() const {
     QJsonArray jsonArray;
     for (int i = 0; i < script->ui.listWidget_2->count(); ++i) {
@@ -406,13 +447,24 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["角色4"] = false;
     root["角色5"] = false;
     root["华山论剑次数"] = script->ui.spinBox->value();
-    root["华山论剑秒退"] = script->ui.checkBox->checkState();
+    root["华山论剑秒退"] = script->ui.checkBox->isChecked();
     root["江湖英雄榜次数"] = script->ui.spinBox_2->value();
-    root["江湖英雄榜秒退"] = script->ui.checkBox_2->checkState();
+    root["江湖英雄榜秒退"] = script->ui.checkBox_2->isChecked();
     root["副本模式"] = script->ui.comboBox_3->currentText();
     root["副本人数"] = script->ui.comboBox_2->currentIndex() + 1;
     root["副本喊话内容"] = script->ui.lineEdit->text();
-    root["银票礼盒兑换"] = script->ui.checkBox_3->checkState();
+    root["银票礼盒兑换"] = script->ui.checkBox_3->isChecked();
+    root["帮派铜钱捐献"] = script->ui.checkBox_4->isChecked();
+    root["帮派银两捐献"] = script->ui.checkBox_5->isChecked();
+    root["宗门试炼1"] = script->ui.comboBox_4->currentText();
+    root["宗门试炼2"] = script->ui.comboBox_5->currentText();
+    root["宗门试炼3"] = script->ui.comboBox_6->currentText();
+    root["宗门试炼队伍1"] = script->ui.comboBox_7->currentIndex();
+    root["宗门试炼队伍2"] = script->ui.comboBox_8->currentIndex();
+    root["宗门试炼队伍3"] = script->ui.comboBox_9->currentIndex();
+    root["宗门生产"] = script->ui.checkBox_6->isChecked();
+    root["宗门生产一键催命"] = script->ui.checkBox_7->isChecked();
+    root["宗门生产心情等级"] = script->ui.comboBox_10->currentIndex();
 
 
     return QJsonDocument(root);
@@ -437,11 +489,25 @@ void MainWindow::writeWinConfig(const int id) const {
 
 
 
+void MainWindow::readUserSettings(const QString& filename) const {
 
-void MainWindow::readUserSettings() const {
+    if (filename.toStdString() == "默认配置") {
+        script->ui.listWidget_2->clear();
+        script->ui.spinBox->setValue(1);
+        script->ui.checkBox->setChecked(false);
+        script->ui.spinBox_2->setValue(1);
+        script->ui.checkBox_2->setChecked(false);
+        script->ui.comboBox_3->setCurrentText("带队模式");
+        script->ui.comboBox_2->setCurrentIndex(0);
+        script->ui.lineEdit->setText("");
+        script->ui.checkBox_3->setChecked(false);
+        script->ui.checkBox_4->setChecked(false);
+        script->ui.checkBox_5->setChecked(false);
+        return;
+    }
     QJsonDocument settingsDoc;
-    if (QFile file(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config.json"); file.open(QIODevice::ReadOnly)) {
-        QByteArray data = file.readAll();
+    if (QFile file(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/" + filename + ".json"); file.open(QIODevice::ReadOnly)) {
+        const QByteArray data = file.readAll();
         file.close();
          settingsDoc = QJsonDocument::fromJson(data);
     }
@@ -454,25 +520,33 @@ void MainWindow::readUserSettings() const {
         // 更新界面或处理数据
         script->ui.listWidget_2->clear();
         for (const auto& value : executeTasks) {
-            auto *item = new QListWidgetItem(value.toString());
-            item->setSizeHint(QSize(script->ui.listWidget_2->height(), 30));
-            item->setTextAlignment(Qt::AlignCenter);
-            script->ui.listWidget_2->addItem(item);
+            QString text = value.toString();
+            auto items = script->ui.listWidget->findItems(text, Qt::MatchExactly);
+
+            auto *newItem = new QListWidgetItem(*items.first());
+            script->ui.listWidget_2->addItem(newItem);
         }
 
-        // 读取其他配置
-        int keyu = root["keyu"].toInt();
-        QString city = root["city"].toString();
+        script->ui.spinBox->setValue(root["华山论剑次数"].toInt());
+        script->ui.checkBox->setChecked(root["华山论剑秒退"].toBool());
+        script->ui.spinBox_2->setValue(root["江湖英雄榜次数"].toInt());
+        script->ui.checkBox_2->setChecked(root["江湖英雄榜秒退"].toBool());
+        script->ui.comboBox_3->setCurrentText(root["副本模式"].toString());
+        script->ui.comboBox_2->setCurrentIndex(root["副本人数"].toInt() - 1);
+        script->ui.lineEdit->setText(root["副本喊话内容"].toString());
+        script->ui.checkBox_3->setChecked(root["银票礼盒兑换"].toBool());
+        script->ui.checkBox_4->setChecked(root["帮派铜钱捐献"].toBool());
+        script->ui.checkBox_5->setChecked(root["帮派银两捐献"].toBool());
 
     }
 }
 
 
 
-void MainWindow::writeSystemSettings() {
+void MainWindow::writeSystemSettings() const {
 
     QJsonObject root;
-    root["当前配置"] = "";
+    root["当前配置"] = script->ui.comboBox->currentText();
     const auto settingsDoc =  QJsonDocument(root);
 
 
@@ -520,7 +594,7 @@ void MainWindow::readSystemSettings() const {
     }
     QJsonObject root = settingsDoc.object();
 
-    script->ui.comboBox->addItem(root["当前配置"].toString());
+    script->ui.comboBox->addItem("默认配置");
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     const QStringList filters = {"*.json"};
@@ -529,6 +603,8 @@ void MainWindow::readSystemSettings() const {
     for (QStringList files = dir.entryList(filters, QDir::Files); const QString& s : files) {
         script->ui.comboBox->addItem(QFileInfo(s).completeBaseName());
     }
+
+    script->ui.comboBox->setCurrentText(root["当前配置"].toString());
 
 
 }

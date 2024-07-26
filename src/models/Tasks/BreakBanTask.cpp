@@ -20,10 +20,10 @@ int BreakBanTask::implementation() {
 
         switch (determine()) {
             case 0:
-                Close(3);
+               Close({.similar = 0.5}, 3);;
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -35,7 +35,7 @@ int BreakBanTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
@@ -69,7 +69,7 @@ int BreakBanTask::implementation() {
                             ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界帮派仓库");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮帮派仓库提交");
                             if(!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面帮派仓库").empty()) {
-                                Close(1);
+                                Close({.similar = 0.5}, 1);
                             }
                         }else {
 
@@ -77,7 +77,7 @@ int BreakBanTask::implementation() {
                                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮交易查看全服");
 
                                 if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买").empty()) {
-                                    Close(1);
+                                    Close({.similar = 0.5}, 1);
                                     continue;
                                 }
                                 ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
@@ -86,7 +86,7 @@ int BreakBanTask::implementation() {
 
                             if(!ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
                                 mouse_down_up({.clickCount = 1}, {988, 694});
-                                Close(1);
+                                Close({.similar = 0.5}, 1);
                             }
                         }
 
@@ -100,7 +100,7 @@ int BreakBanTask::implementation() {
                     if (++y == 2) {
                         ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 2}, nullptr, "按钮破阵设宴开始设宴");
                         ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
-                        Close(4);
+                        Close({.similar = 0.5}, 4);
                         objective("任务退出");
                     }
                 }
@@ -124,9 +124,10 @@ void BreakBanTask::objective(const std::string ve) {
 int BreakBanTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }else {
         detect_count = 0;
     }

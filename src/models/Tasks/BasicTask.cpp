@@ -54,17 +54,27 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
-bool BasicTask::Defer(const int& count) const {
-    for (int i = 0; i <= count; i++) {
-        key_down_up("Tab");
+bool BasicTask::OpenFaction() {
+    key_down_up("O");
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+        return true;
+    }
+
+    return false;
+
+}
+
+bool BasicTask::Defer(const int& count) {
+    for (int i = 0; i < count; i++) {
+        key_down_up("");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
     return false;
 }
 
-bool BasicTask::Close(const int &count) {
+bool BasicTask::Close(const MatchParams& match, const int &count) {
     for (int i = 0; i < count; ++i) {
-        if (ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭").empty()) {
+        if (ClickImageMatch(match, nullptr, "按钮关闭").empty()) {
             break;
         }
     }
@@ -147,7 +157,7 @@ void BasicTask::LeaveTeam() {
     OpenTeam();
     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
-    Close(2);
+    Close({.similar = 0.5}, 2);
 
 }
 
@@ -156,10 +166,16 @@ void BasicTask::OffCard() {
     OpenESC();
     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮设置脱离卡死");
     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮设置确定");
-    Close(3);
+   Close({.similar = 0.5}, 3);;
 
 }
 
+void BasicTask::PassLevel() const {
+    Log("过图中");
+    for(int i = 1; i <= 6; i++) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+    }
+}
 void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& matches, MatchParams& match) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
@@ -256,7 +272,11 @@ void BasicTask::mouse_keep(const MatchParams &match, const cv::Point& location, 
 void BasicTask::mouse_move(const MatchParams &match, const cv::Point &start, const cv::Point &end) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
-        WindowManager::MouseMove(hwnd, start.x, start.y, end.x, end.y);
+
+        for (int i = 1; i <= match.moveCount; i++) {
+            WindowManager::MouseMove(hwnd, start.x, start.y, end.x, end.y);
+        }
+
 
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
