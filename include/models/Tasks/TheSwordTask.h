@@ -31,7 +31,7 @@ public:
 
 private:
     std::string cause;
-    std::vector<int> record_num{0};
+    std::vector<int> record_num{1};
     // std::vector<std::chrono::steady_clock::time_point> record_time{1};
 
 };

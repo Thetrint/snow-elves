@@ -60,6 +60,10 @@ int BountyMissionsTask::implementation() {
                         if (++record_num[1] < 4) {
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍进入副本");
                             ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本确认");
+                            if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+                                Close({.similar = 0.5}, 1);
+                            }
+
                             record_event[0] = true;
                             record_num[3] = 0;
                             record_num[0] = 0;
@@ -281,7 +285,7 @@ void BountyMissionsTask::objective(const std::string ve) {
 int BountyMissionsTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));

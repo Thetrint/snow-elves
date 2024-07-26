@@ -65,8 +65,8 @@ bool BasicTask::OpenFaction() {
 }
 
 bool BasicTask::Defer(const int& count) {
-    for (int i = 0; i <= count; i++) {
-        key_down_up("Tab");
+    for (int i = 0; i < count; i++) {
+        key_down_up("");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
     return false;
@@ -172,7 +172,7 @@ void BasicTask::OffCard() {
 
 void BasicTask::PassLevel() const {
     Log("过图中");
-    for(int i = 1; i <=5; i++) {
+    for(int i = 1; i <= 6; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 }

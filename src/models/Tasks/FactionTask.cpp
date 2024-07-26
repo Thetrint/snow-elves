@@ -128,7 +128,7 @@ void FactionTask::objective(const std::string ve) {
 int FactionTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));

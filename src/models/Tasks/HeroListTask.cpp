@@ -79,8 +79,7 @@ int HeroListTask::implementation() {
                         }
                     }
                     Log(std::format("江湖英雄榜完成 {} 次", record_num[0]));
-                    std::cout << LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt() << std::endl;
-                    if (++record_num[0] >= LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜次数").toInt() + 1) {
+                    if (++record_num[0] >= config.value("江湖英雄榜次数").toInt() + 1) {
                         objective("任务退出");
                         continue;
                     }
@@ -105,7 +104,7 @@ void HeroListTask::objective(const std::string ve) {
 int HeroListTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));

@@ -52,6 +52,7 @@ int RiverTask::implementation() {
                         continue;
                     }
                     Log("搜索山河器");
+                    Defer(1);
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器日晷");
                     continue;
                 }
@@ -79,7 +80,7 @@ void RiverTask::objective(const std::string ve) {
 int RiverTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
 
