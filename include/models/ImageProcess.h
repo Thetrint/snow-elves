@@ -56,11 +56,11 @@ struct MatchParams {
     bool clickDelay = true;
     bool matchDelay = true;
     MatchScope scope = {0, 0, 1335, 750}; // 匹配范围
-    MatchGauss gauss = {3, 3, 1.2};
-    bool convertToGray = true; // h灰度处理开关
+    MatchGauss gauss = {3, 3, 1.2}; //高斯模糊范围
+    bool convertToGray = true; // 灰度处理开关
     bool applyGaussianBlur = true; // 控制高斯模糊的开关
     bool applyEdgeDetection  = true; // 控制边缘检测
-    EdgeThreshold edgeThreshold = {100, 200};
+    EdgeThreshold edgeThreshold = {100, 200}; // 编译检测范围
     bool Show = false;
 };
 

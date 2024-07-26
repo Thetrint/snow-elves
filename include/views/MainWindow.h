@@ -33,7 +33,7 @@ public:
 private slots:
     void writeWinConfig(const int id) const;
 
-    void readUserSettings() const;
+    void readUserSettings(const QString& filename) const;
 
     //     void switchToPage(int index) const;
 
@@ -44,7 +44,7 @@ private:
     NativeEventFilter *eventFilter;
     void writeUserSettings() const;
 
-    void writeSystemSettings();
+    void writeSystemSettings() const;
 
     void readSystemSettings() const;
 
@@ -60,6 +60,10 @@ private:
     QButtonGroup buttonGroup{ui.menu};
     void addPageAndButton(const QString &buttonText, QWidget *page);
     int getSpacerIndex(const QSpacerItem *spacer) const;
+
+    void addConfig(const std::string &config) const;
+
+    void removeConfig(const std::string &config) const;
 
     QJsonDocument createJsonDocument() const;
 protected:

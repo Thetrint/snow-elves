@@ -24,7 +24,7 @@ int TheSwordThreeTask::implementation() {
             case 0:
                 return 0; // 任务正常退出
             case -1:
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 break;
             case 1:
                 LocationDetection();
@@ -36,7 +36,7 @@ int TheSwordThreeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                 }
-                Close(1);
+                Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
@@ -94,9 +94,10 @@ void TheSwordThreeTask::objective(const std::string ve) {
 int TheSwordThreeTask::determine() {
     const int sw = detect();
     if (sw == -5) {
-        if (++detect_count >= 15) {
+        if (++detect_count >= 10) {
             return -1;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }else {
         detect_count = 0;
     }

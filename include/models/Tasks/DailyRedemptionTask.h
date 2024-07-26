@@ -30,6 +30,7 @@ public:
 
 private:
     std::string cause;
+    std::vector<bool> record_event{true, true};
     // std::vector<int> record_num{0};
     // std::vector<std::chrono::steady_clock::time_point> record_time{0};
 

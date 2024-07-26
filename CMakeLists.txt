@@ -135,6 +135,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/BreakBanTask.h
         src/models/Tasks/DailyRedemptionTask.cpp
         include/models/Tasks/DailyRedemptionTask.h
+        src/models/Tasks/SectTask.cpp
+        include/models/Tasks/SectTask.h
 
 
 )
