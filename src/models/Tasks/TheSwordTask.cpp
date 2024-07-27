@@ -42,6 +42,7 @@ int TheSwordTask::implementation() {
             case 3:
                 if (!ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 5, .click = NoTap}, nullptr, "标志华山论剑匹配成功").empty()) {
                     PassLevel();
+                    record_event[0] = true;
                     objective("等待战斗");
                     continue;
                 }
@@ -61,24 +62,22 @@ int TheSwordTask::implementation() {
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确认").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑确认");
                 }
-                Defer(1);
+
                 break;
             case 5:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 5, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志论剑战斗时间", "标志论剑准备时间").empty()) {
-                    if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toBool()) {
-                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
-                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
-                    }else {
-                        if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑准备时间").empty()) {
-                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑准备");
-                        }
-                        if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 60, .click = NoTap}, nullptr, "标志论剑战斗时间").empty()) {
-                            key_keep("W", 3000);
-                            AutoFight();
-                            ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
-                            FightStop();
-                        }
+                if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑战斗时间", "标志论剑准备时间").empty()) {
+                    if (++record_num[1] >= 5) {
+                        objective("开始任务");
+                        continue;
                     }
+                    Defer(1);
+                }else {
+                    record_num[1] = 0;
+                }
+
+                if(!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑离开").empty()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑离开");
+                    FightStop();
                     PassLevel();
                     Log(std::format("华山论剑完成 {} 次", record_num[0]));
                     if (++record_num[0] >= config.value("华山论剑次数").toInt() + 1) {
@@ -86,9 +85,35 @@ int TheSwordTask::implementation() {
                         continue;
                     }
                     objective("开始任务");
+                    continue;
+                }
 
+                if (!record_event[0]) {
+                    continue;
+                }
+                if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toBool()) {
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
+                    PassLevel();
+                    Log(std::format("华山论剑完成 {} 次", record_num[0]));
+                    if (++record_num[0] >= config.value("华山论剑次数").toInt() + 1) {
+                        objective("任务退出");
+                        continue;
+                    }
+                    objective("开始任务");
+                }else {
+                    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑准备时间").empty()) {
+                        ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑准备");
+                    }
+                    if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑战斗时间").empty()) {
+                        continue;
+                    }
+                    key_keep("W", 3000);
+                    AutoFight();
+                    record_event[0] = false;
 
                 }
+
                 break;
             default:
                 break;;
@@ -150,16 +175,14 @@ int TheSwordTask::determine() {
             case 2:
                 return 4;
             default:
-                return -1;
+                return 307;
         }
     }
 
     if (cause == "等待战斗") {
         switch (sw) {
-            case 1:
-                return 5;
             default:
-                return -1;
+                return 5;
         }
     }
 

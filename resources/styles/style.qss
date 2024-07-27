@@ -197,6 +197,28 @@ QLineEdit:focus {
     background-color: #F0F8FF;       /* 焦点状态下的背景颜色 */
 }
 
+
+.button {
+    background-color: #ffffff;
+    border: 1px solid #d1d1d1;
+    border-radius: 12px;
+    color: #000000;
+    font-size: 16px;
+    padding: 1px 2px;
+    min-width: 100px;
+    transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button:hover {
+    background-color: #f6f6f6;
+    border: 1px solid #c0c0c0;
+}
+
+.button:pressed {
+    background-color: #e0e0e0;
+    border: 1px solid #b0b0b0;
+}
+
 /* 运行窗口 */
 #MainWindow #RunWindow #textEdit {
     background-color: black; /* 设置背景颜色 */

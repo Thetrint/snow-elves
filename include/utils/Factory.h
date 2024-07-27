@@ -7,6 +7,7 @@
 #include <qwindowdefs_win.h>
 #include <models/Tasks/BountyMissionsTask.h>
 #include <models/Tasks/BreakBanTask.h>
+#include <models/Tasks/ChivalryShoutTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
 #include <models/Tasks/DoorBanTask.h>
 #include <models/Tasks/HeroListTask.h>
@@ -75,6 +76,7 @@ private:
         autoRegister<BreakBanTask>("破阵设宴");
         autoRegister<DailyRedemptionTask>("每日兑换");
         autoRegister<SectTask>("宗门任务");
+        autoRegister<ChivalryShoutTask>("侠缘喊话");
 
     }
 

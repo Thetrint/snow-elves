@@ -439,6 +439,28 @@ QJsonDocument MainWindow::createJsonDocument() const {
         jsonArray.append(item->text());
     }
 
+    QJsonArray contentArray;
+    // 定义文件路径
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/System";
+    const QString filePath = configPath + "/Chivalry.txt";
+
+    // 尝试打开文件以读取内容
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "无法打开文件:" << file.errorString();
+        contentArray.append("日出日落都浪漫,有风无风都自由。");
+
+    }
+    QTextStream in(&file);
+    const QString fileContent = in.readAll();
+    file.close();
+
+    // 根据换行符分割文件内容
+
+    for (auto contentList = fileContent.split('\n'); const QString &line : contentList) {
+        contentArray.append(line);
+    }
+
     QJsonObject root;
     root["执行任务"] = jsonArray;
     root["角色1"] = false;
@@ -465,6 +487,10 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["宗门生产"] = script->ui.checkBox_6->isChecked();
     root["宗门生产一键催命"] = script->ui.checkBox_7->isChecked();
     root["宗门生产心情等级"] = script->ui.comboBox_10->currentIndex();
+
+    root["侠缘喊话内容"] = contentArray;
+    root["侠缘喊话昵称编号"] = script->ui.lineEdit_2->text();
+    root["侠缘喊话次数"] = script->ui.spinBox_3->value();
 
 
     return QJsonDocument(root);
