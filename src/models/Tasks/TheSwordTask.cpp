@@ -108,7 +108,7 @@ int TheSwordTask::implementation() {
                     if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑战斗时间").empty()) {
                         continue;
                     }
-                    key_keep("W", 3000);
+                    key_keep("W", 4000);
                     AutoFight();
                     record_event[0] = false;
 
