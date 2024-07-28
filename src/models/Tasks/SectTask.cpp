@@ -53,7 +53,6 @@ int SectTask::implementation() {
                 break;
 
             case 4:
-
                 OpenKnapsack();
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品天下宗师");
@@ -66,7 +65,9 @@ int SectTask::implementation() {
                 break;
             case 5:
 
-                ClickImageMatch(MatchParams{.similar = 0.5, .click = LAST, .x = -90, .y = 85}, nullptr, mood[config.value("宗门生产心情等级").toInt()]);
+                if(ClickImageMatch(MatchParams{.similar = 0.5, .click = LAST, .x = -90, .y = 85, .applyGaussianBlur = false}, nullptr, mood[config.value("宗门生产心情等级").toInt()]).empty()) {
+                    mouse_move({}, {437, 363}, {437, 513});
+                }
                 if(ClickImageMatch(MatchParams{.similar = 0.6,}, nullptr, "按钮宗门生产工作").empty()) {
                     mouse_move({}, {934, 461}, {934, 261});
                     if(ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮宗门生产工作").empty()) {

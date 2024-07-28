@@ -492,6 +492,12 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["侠缘喊话昵称编号"] = script->ui.lineEdit_2->text();
     root["侠缘喊话次数"] = script->ui.spinBox_3->value();
 
+    root["剑冢次数"] = script->ui.spinBox_5->value();
+    root["剑冢随机跳伞"] = script->ui.checkBox_8->isChecked();
+
+
+
+
 
     return QJsonDocument(root);
 }
@@ -529,6 +535,22 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.checkBox_3->setChecked(false);
         script->ui.checkBox_4->setChecked(false);
         script->ui.checkBox_5->setChecked(false);
+
+        script->ui.comboBox_4->setCurrentText("~");
+        script->ui.comboBox_5->setCurrentText("~");
+        script->ui.comboBox_6->setCurrentText("~");
+
+        script->ui.comboBox_7->setCurrentIndex(0);
+        script->ui.comboBox_8->setCurrentIndex(0);
+        script->ui.comboBox_9->setCurrentIndex(0);
+
+        script->ui.checkBox_6->setChecked(false);
+        script->ui.checkBox_7->setChecked(false);
+        script->ui.comboBox_10->setCurrentIndex(0);
+
+        script->ui.lineEdit_2->setText("");
+        script->ui.spinBox_3->setValue(100);
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -563,6 +585,21 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.checkBox_3->setChecked(root["银票礼盒兑换"].toBool());
         script->ui.checkBox_4->setChecked(root["帮派铜钱捐献"].toBool());
         script->ui.checkBox_5->setChecked(root["帮派银两捐献"].toBool());
+
+        script->ui.comboBox_4->setCurrentText(root["宗门试炼1"].toString());
+        script->ui.comboBox_5->setCurrentText(root["宗门试炼2"].toString());
+        script->ui.comboBox_6->setCurrentText(root["宗门试炼3"].toString());
+
+        script->ui.comboBox_7->setCurrentIndex(root["宗门试炼队伍1"].toInt());
+        script->ui.comboBox_8->setCurrentIndex(root["宗门试炼队伍2"].toInt());
+        script->ui.comboBox_9->setCurrentIndex(root["宗门试炼队伍3"].toInt());
+
+        script->ui.checkBox_6->setChecked(root["宗门生产"].toBool());
+        script->ui.checkBox_7->setChecked(root["宗门生产一键催命"].toBool());
+        script->ui.comboBox_10->setCurrentIndex(root["宗门生产心情等级"].toInt());
+
+        script->ui.lineEdit_2->setText(root["侠缘喊话昵称编号"].toString());
+        script->ui.spinBox_3->setValue(root["侠缘喊话次数"].toInt());
 
     }
 }

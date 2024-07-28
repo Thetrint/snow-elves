@@ -139,6 +139,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/SectTask.h
         src/models/Tasks/ChivalryShoutTask.cpp
         include/models/Tasks/ChivalryShoutTask.h
+        src/models/Tasks/FateSwordTask.cpp
+        include/models/Tasks/FateSwordTask.h
 
 
 )

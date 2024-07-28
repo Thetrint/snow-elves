@@ -10,6 +10,7 @@
 #include <models/Tasks/ChivalryShoutTask.h>
 #include <models/Tasks/DailyCopiesTask.h>
 #include <models/Tasks/DoorBanTask.h>
+#include <models/Tasks/FateSwordTask.h>
 #include <models/Tasks/HeroListTask.h>
 #include <models/Tasks/RiverTask.h>
 #include <models/Tasks/SectTask.h>
@@ -77,6 +78,7 @@ private:
         autoRegister<DailyRedemptionTask>("每日兑换");
         autoRegister<SectTask>("宗门任务");
         autoRegister<ChivalryShoutTask>("侠缘喊话");
+        autoRegister<FateSwordTask>("生死剑冢");
 
     }
 
