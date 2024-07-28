@@ -2,10 +2,11 @@
 // Created by y1726 on 2024/6/29.
 //
 #include <iostream>
+#include <QFileDialog>
 #include <QMessageBox>
-#include <QTimer>
+#include <QTextEdit>
 #include "views/ScriptWindow.h"
-
+#include "main.h"
 
 ScriptWindow::ScriptWindow(QWidget *parent):
     QWidget(parent)
@@ -15,12 +16,14 @@ ScriptWindow::ScriptWindow(QWidget *parent):
 
     ui.spinBox->setMinimum(1);
     ui.spinBox_2->setMinimum(1);
+    ui.spinBox_3->setMinimum(1);
+    ui.spinBox_3->setMaximum(200);
 
     QStringList items;
     items
     << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
     << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器" << "门客设宴"
-    << "破阵设宴" << "每日兑换" << "宗门任务";
+    << "破阵设宴" << "每日兑换" << "宗门任务" << "侠缘喊话" << "生死剑冢";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);
@@ -102,6 +105,76 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     // 连接 listWidget2 的双击信号到删除槽函数
     connect(ui.listWidget_2, &QListWidget::itemDoubleClicked, [&](const QListWidgetItem *new_item) {
         delete ui.listWidget_2->takeItem(ui.listWidget_2->row(new_item));
+    });
+
+    // 侠缘喊话内容设置
+    connect(ui.pushButton_5, &QPushButton::clicked, [&]() {
+        // 定义文件路径
+        const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/System";
+        const QString filePath = configPath + "/Chivalry.txt";
+
+        // 尝试打开文件，如果文件不存在则创建
+        QFile file(filePath);
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+            // 如果无法打开文件，直接返回
+            return;
+        }
+
+        QTextStream stream(&file);
+
+        // 如果文件为空，则写入默认内容
+        if (file.size() == 0) {
+            stream << "日出日落都浪漫,有风无风都自由。\n"; // 写入默认内容
+            file.flush(); // 确保数据被写入文件
+        }
+        // 关闭文件后重新打开以读取内容
+        file.close();
+
+        // 以只读模式重新打开文件
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+            qDebug() << "无法重新打开文件以读取:" << file.errorString();
+            return;
+        }
+
+        QTextStream in(&file);
+        const QString fileContent = in.readAll();
+        file.close();
+
+        // 创建并展示对话框
+        auto *dialog = new QDialog(this);
+        dialog->setWindowTitle(tr("编辑文件"));
+
+        auto *layout = new QVBoxLayout(dialog);
+        const auto textEdit = new QTextEdit(dialog);
+        textEdit->setText(fileContent);
+        layout->addWidget(textEdit);
+
+        auto *saveButton = new QPushButton(tr("保存"), dialog);
+        connect(saveButton, &QPushButton::clicked, [=]() {
+            // 获取文本编辑器中的内容
+            QString text = textEdit->toPlainText().trimmed();
+
+            // 如果文本内容为空（即没有具体内容，都是空格），则写入默认内容
+            if (text.isEmpty()) {
+                text = "日出日落都浪漫,有风无风都自由。\n";
+            }
+
+            // 保存文本内容到文件
+            QFile file1(filePath);
+            if (!file1.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QMessageBox::warning(dialog, tr("错误"), tr("无法保存文件: ") + file1.errorString());
+                return;
+            }
+
+            QTextStream out(&file1);
+            out << text;
+            file1.close();
+            dialog->accept();
+        });
+        layout->addWidget(saveButton);
+
+        dialog->setLayout(layout);
+        dialog->exec();
     });
 
 

@@ -27,6 +27,7 @@ private:
 
     bool detectWin(int &id, HWND &hwnd);
 
+    std::set<int> idSet;
     std::map<int, std::shared_ptr<TaskManager>> instances; // 存储实例的映射
     std::map<HWND, std::jthread> threads; // 存储线程的映射
     std::map<int, HWND> windowHwnd; // 存储游戏窗口句柄

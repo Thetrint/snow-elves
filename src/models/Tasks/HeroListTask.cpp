@@ -49,8 +49,9 @@ int HeroListTask::implementation() {
 
                 if (ClickImageMatch(MatchParams{.similar = 0.6, .y = 45}, nullptr, "按钮活动江湖英雄榜").empty()) {
                     objective("任务退出");
+                    continue;
                 }
-
+                Defer(4);
                 break;
             case 4:
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "标志江湖英雄榜次数").empty()) {
@@ -62,7 +63,7 @@ int HeroListTask::implementation() {
                 objective("任务退出");
                 break;
             case 5:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 50, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
+                if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
                     if (LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜秒退").toBool()) {
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出");
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出副本");
@@ -78,6 +79,7 @@ int HeroListTask::implementation() {
                             FightStop();
                         }
                     }
+                    PassLevel();
                     Log(std::format("江湖英雄榜完成 {} 次", record_num[0]));
                     if (++record_num[0] >= config.value("江湖英雄榜次数").toInt() + 1) {
                         objective("任务退出");
