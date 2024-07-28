@@ -31,7 +31,11 @@ public:
 
 private:
     std::string cause;
-    std::vector<int> record_num{1};
+    std::vector<int> record_num{1, 0};
+    /**
+     * 1. 战斗标志
+     */
+    std::vector<bool> record_event{true};
     // std::vector<std::chrono::steady_clock::time_point> record_time{1};
 
 };

@@ -88,7 +88,7 @@ int LessonTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮大世界任务栏");
                     }
                     ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮大世界江湖");
-                    ClickImageMatch(MatchParams{.similar = 0.9, .matchCount = 1, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
+                    ClickImageMatch(MatchParams{.similar = 0.9, .matchCount = 1, .scope = {30, 211, 274, 454}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false},
                         nullptr, "按钮大世界吟风任务", "按钮大世界含灵任务", "按钮大世界寻道任务", "按钮大世界归义任务",
                         "按钮大世界悟禅任务", "按钮大世界止杀任务", "按钮大世界漱尘任务", "按钮大世界濯剑任务", "按钮大世界观梦任务",
                         "按钮大世界锻心任务", "按钮大世界问卜任务");

@@ -35,6 +35,10 @@ bool BasicTask::OpenTeam() {
 
 }
 
+/**
+ *  打开设置
+ * @return
+ */
 bool BasicTask::OpenESC() {
     key_down_up("ESC");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面设置").empty()) {
@@ -44,6 +48,10 @@ bool BasicTask::OpenESC() {
     return false;
 }
 
+/**
+ * 打开背包
+ * @return
+ */
 bool BasicTask::OpenKnapsack() {
     key_down_up("B");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
@@ -54,6 +62,10 @@ bool BasicTask::OpenKnapsack() {
 
 }
 
+/**
+ * 打开帮派
+ * @return
+ */
 bool BasicTask::OpenFaction() {
     key_down_up("O");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
@@ -64,12 +76,29 @@ bool BasicTask::OpenFaction() {
 
 }
 
-bool BasicTask::Defer(const int& count) {
+/**
+ * 打开好友
+ * @return
+ */
+bool BasicTask::OpenBuddy() {
+    key_down_up("H");
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * 基础功能 延迟指定倍率
+ * @param count 延迟倍率
+ */
+void BasicTask::Defer(const int& count) const {
     for (int i = 0; i < count; i++) {
         key_down_up("");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
-    return false;
+
 }
 
 bool BasicTask::Close(const MatchParams& match, const int &count) {

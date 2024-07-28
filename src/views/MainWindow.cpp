@@ -439,6 +439,28 @@ QJsonDocument MainWindow::createJsonDocument() const {
         jsonArray.append(item->text());
     }
 
+    QJsonArray contentArray;
+    // 定义文件路径
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/System";
+    const QString filePath = configPath + "/Chivalry.txt";
+
+    // 尝试打开文件以读取内容
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "无法打开文件:" << file.errorString();
+        contentArray.append("日出日落都浪漫,有风无风都自由。");
+
+    }
+    QTextStream in(&file);
+    const QString fileContent = in.readAll();
+    file.close();
+
+    // 根据换行符分割文件内容
+
+    for (auto contentList = fileContent.split('\n'); const QString &line : contentList) {
+        contentArray.append(line);
+    }
+
     QJsonObject root;
     root["执行任务"] = jsonArray;
     root["角色1"] = false;
@@ -465,6 +487,16 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["宗门生产"] = script->ui.checkBox_6->isChecked();
     root["宗门生产一键催命"] = script->ui.checkBox_7->isChecked();
     root["宗门生产心情等级"] = script->ui.comboBox_10->currentIndex();
+
+    root["侠缘喊话内容"] = contentArray;
+    root["侠缘喊话昵称编号"] = script->ui.lineEdit_2->text();
+    root["侠缘喊话次数"] = script->ui.spinBox_3->value();
+
+    root["剑冢次数"] = script->ui.spinBox_5->value();
+    root["剑冢随机跳伞"] = script->ui.checkBox_8->isChecked();
+
+
+
 
 
     return QJsonDocument(root);
@@ -503,6 +535,22 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.checkBox_3->setChecked(false);
         script->ui.checkBox_4->setChecked(false);
         script->ui.checkBox_5->setChecked(false);
+
+        script->ui.comboBox_4->setCurrentText("~");
+        script->ui.comboBox_5->setCurrentText("~");
+        script->ui.comboBox_6->setCurrentText("~");
+
+        script->ui.comboBox_7->setCurrentIndex(0);
+        script->ui.comboBox_8->setCurrentIndex(0);
+        script->ui.comboBox_9->setCurrentIndex(0);
+
+        script->ui.checkBox_6->setChecked(false);
+        script->ui.checkBox_7->setChecked(false);
+        script->ui.comboBox_10->setCurrentIndex(0);
+
+        script->ui.lineEdit_2->setText("");
+        script->ui.spinBox_3->setValue(100);
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -537,6 +585,21 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.checkBox_3->setChecked(root["银票礼盒兑换"].toBool());
         script->ui.checkBox_4->setChecked(root["帮派铜钱捐献"].toBool());
         script->ui.checkBox_5->setChecked(root["帮派银两捐献"].toBool());
+
+        script->ui.comboBox_4->setCurrentText(root["宗门试炼1"].toString());
+        script->ui.comboBox_5->setCurrentText(root["宗门试炼2"].toString());
+        script->ui.comboBox_6->setCurrentText(root["宗门试炼3"].toString());
+
+        script->ui.comboBox_7->setCurrentIndex(root["宗门试炼队伍1"].toInt());
+        script->ui.comboBox_8->setCurrentIndex(root["宗门试炼队伍2"].toInt());
+        script->ui.comboBox_9->setCurrentIndex(root["宗门试炼队伍3"].toInt());
+
+        script->ui.checkBox_6->setChecked(root["宗门生产"].toBool());
+        script->ui.checkBox_7->setChecked(root["宗门生产一键催命"].toBool());
+        script->ui.comboBox_10->setCurrentIndex(root["宗门生产心情等级"].toInt());
+
+        script->ui.lineEdit_2->setText(root["侠缘喊话昵称编号"].toString());
+        script->ui.spinBox_3->setValue(root["侠缘喊话次数"].toInt());
 
     }
 }

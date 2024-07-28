@@ -81,7 +81,9 @@ protected:
 
     bool OpenFaction();
 
-    bool Defer(const int &count);
+    bool OpenBuddy();
+
+    void Defer(const int &count) const;
 
     bool Close(const MatchParams& match, const int &count);
 

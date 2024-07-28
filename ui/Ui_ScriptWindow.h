@@ -31,6 +31,22 @@ class Ui_ScriptWindow
 {
 public:
     QGridLayout *gridLayout;
+    QWidget *widget_4;
+    QVBoxLayout *verticalLayout;
+    QLabel *label;
+    QListWidget *listWidget;
+    QWidget *widget_3;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label_2;
+    QListWidget *listWidget_2;
+    QWidget *widget_2;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QComboBox *comboBox;
+    QPushButton *pushButton_3;
+    QPushButton *pushButton_4;
+    QWidget *widget;
     QStackedWidget *stackedWidget;
     QWidget *page;
     QWidget *page_2;
@@ -96,22 +112,28 @@ public:
     QCheckBox *checkBox_7;
     QSpacerItem *horizontalSpacer_4;
     QSpacerItem *verticalSpacer_4;
-    QWidget *widget_3;
-    QVBoxLayout *verticalLayout_2;
-    QLabel *label_2;
-    QListWidget *listWidget_2;
-    QWidget *widget;
-    QWidget *widget_2;
-    QHBoxLayout *horizontalLayout;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
-    QComboBox *comboBox;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_4;
-    QWidget *widget_4;
-    QVBoxLayout *verticalLayout;
-    QLabel *label;
-    QListWidget *listWidget;
+    QWidget *page_6;
+    QVBoxLayout *verticalLayout_7;
+    QLabel *label_19;
+    QWidget *widget_11;
+    QHBoxLayout *horizontalLayout_8;
+    QLabel *label_20;
+    QLineEdit *lineEdit_2;
+    QLabel *label_21;
+    QSpinBox *spinBox_3;
+    QPushButton *pushButton_5;
+    QSpacerItem *horizontalSpacer_5;
+    QSpacerItem *verticalSpacer_5;
+    QWidget *page_7;
+    QVBoxLayout *verticalLayout_8;
+    QLabel *label_22;
+    QWidget *widget_12;
+    QHBoxLayout *horizontalLayout_9;
+    QLabel *label_23;
+    QSpinBox *spinBox_5;
+    QCheckBox *checkBox_8;
+    QSpacerItem *horizontalSpacer_6;
+    QSpacerItem *verticalSpacer_6;
 
     void setupUi(QWidget *ScriptWindow)
     {
@@ -122,13 +144,102 @@ public:
         gridLayout->setSpacing(0);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(5, 5, 5, 0);
+        widget_4 = new QWidget(ScriptWindow);
+        widget_4->setObjectName("widget_4");
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy.setHorizontalStretch(1);
+        sizePolicy.setVerticalStretch(10);
+        sizePolicy.setHeightForWidth(widget_4->sizePolicy().hasHeightForWidth());
+        widget_4->setSizePolicy(sizePolicy);
+        verticalLayout = new QVBoxLayout(widget_4);
+        verticalLayout->setObjectName("verticalLayout");
+        label = new QLabel(widget_4);
+        label->setObjectName("label");
+        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        verticalLayout->addWidget(label);
+
+        listWidget = new QListWidget(widget_4);
+        listWidget->setObjectName("listWidget");
+
+        verticalLayout->addWidget(listWidget);
+
+
+        gridLayout->addWidget(widget_4, 1, 0, 1, 1);
+
+        widget_3 = new QWidget(ScriptWindow);
+        widget_3->setObjectName("widget_3");
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy1.setHorizontalStretch(1);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(widget_3->sizePolicy().hasHeightForWidth());
+        widget_3->setSizePolicy(sizePolicy1);
+        verticalLayout_2 = new QVBoxLayout(widget_3);
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        label_2 = new QLabel(widget_3);
+        label_2->setObjectName("label_2");
+        label_2->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        verticalLayout_2->addWidget(label_2);
+
+        listWidget_2 = new QListWidget(widget_3);
+        listWidget_2->setObjectName("listWidget_2");
+
+        verticalLayout_2->addWidget(listWidget_2);
+
+
+        gridLayout->addWidget(widget_3, 1, 1, 1, 1);
+
+        widget_2 = new QWidget(ScriptWindow);
+        widget_2->setObjectName("widget_2");
+        horizontalLayout = new QHBoxLayout(widget_2);
+        horizontalLayout->setObjectName("horizontalLayout");
+        pushButton = new QPushButton(widget_2);
+        pushButton->setObjectName("pushButton");
+
+        horizontalLayout->addWidget(pushButton);
+
+        pushButton_2 = new QPushButton(widget_2);
+        pushButton_2->setObjectName("pushButton_2");
+
+        horizontalLayout->addWidget(pushButton_2);
+
+        comboBox = new QComboBox(widget_2);
+        comboBox->setObjectName("comboBox");
+        comboBox->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout->addWidget(comboBox);
+
+        pushButton_3 = new QPushButton(widget_2);
+        pushButton_3->setObjectName("pushButton_3");
+
+        horizontalLayout->addWidget(pushButton_3);
+
+        pushButton_4 = new QPushButton(widget_2);
+        pushButton_4->setObjectName("pushButton_4");
+
+        horizontalLayout->addWidget(pushButton_4);
+
+
+        gridLayout->addWidget(widget_2, 0, 2, 1, 1);
+
+        widget = new QWidget(ScriptWindow);
+        widget->setObjectName("widget");
+        QSizePolicy sizePolicy2(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy2.setHorizontalStretch(1);
+        sizePolicy2.setVerticalStretch(1);
+        sizePolicy2.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy2);
+
+        gridLayout->addWidget(widget, 0, 0, 1, 2);
+
         stackedWidget = new QStackedWidget(ScriptWindow);
         stackedWidget->setObjectName("stackedWidget");
-        QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy.setHorizontalStretch(6);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(stackedWidget->sizePolicy().hasHeightForWidth());
-        stackedWidget->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy3(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy3.setHorizontalStretch(6);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(stackedWidget->sizePolicy().hasHeightForWidth());
+        stackedWidget->setSizePolicy(sizePolicy3);
         page = new QWidget();
         page->setObjectName("page");
         stackedWidget->addWidget(page);
@@ -140,11 +251,11 @@ public:
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
         label_3 = new QLabel(page_2);
         label_3->setObjectName("label_3");
-        QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
-        label_3->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
+        label_3->setSizePolicy(sizePolicy4);
         label_3->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         verticalLayout_3->addWidget(label_3);
@@ -155,18 +266,18 @@ public:
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         label_4 = new QLabel(widget_5);
         label_4->setObjectName("label_4");
-        sizePolicy1.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
-        label_4->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
+        label_4->setSizePolicy(sizePolicy4);
 
         horizontalLayout_2->addWidget(label_4);
 
         spinBox = new QSpinBox(widget_5);
         spinBox->setObjectName("spinBox");
-        QSizePolicy sizePolicy2(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(spinBox->sizePolicy().hasHeightForWidth());
-        spinBox->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy5(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(spinBox->sizePolicy().hasHeightForWidth());
+        spinBox->setSizePolicy(sizePolicy5);
 
         horizontalLayout_2->addWidget(spinBox);
 
@@ -208,8 +319,8 @@ public:
         verticalLayout_4->setObjectName("verticalLayout_4");
         label_6 = new QLabel(page_3);
         label_6->setObjectName("label_6");
-        sizePolicy1.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy4);
         label_6->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         verticalLayout_4->addWidget(label_6);
@@ -220,8 +331,8 @@ public:
         horizontalLayout_3->setObjectName("horizontalLayout_3");
         label_7 = new QLabel(widget_6);
         label_7->setObjectName("label_7");
-        sizePolicy1.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
-        label_7->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy4);
 
         horizontalLayout_3->addWidget(label_7);
 
@@ -232,8 +343,8 @@ public:
 
         label_8 = new QLabel(widget_6);
         label_8->setObjectName("label_8");
-        sizePolicy1.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
-        label_8->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
+        label_8->setSizePolicy(sizePolicy4);
 
         horizontalLayout_3->addWidget(label_8);
 
@@ -254,8 +365,8 @@ public:
 
         label_9 = new QLabel(widget_6);
         label_9->setObjectName("label_9");
-        sizePolicy1.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
-        label_9->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
+        label_9->setSizePolicy(sizePolicy4);
 
         horizontalLayout_3->addWidget(label_9);
 
@@ -284,8 +395,8 @@ public:
         verticalLayout_5->setObjectName("verticalLayout_5");
         label_10 = new QLabel(page_4);
         label_10->setObjectName("label_10");
-        sizePolicy1.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
-        label_10->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
+        label_10->setSizePolicy(sizePolicy4);
         label_10->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         verticalLayout_5->addWidget(label_10);
@@ -327,8 +438,8 @@ public:
         verticalLayout_6->setObjectName("verticalLayout_6");
         label_11 = new QLabel(page_5);
         label_11->setObjectName("label_11");
-        sizePolicy1.setHeightForWidth(label_11->sizePolicy().hasHeightForWidth());
-        label_11->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_11->sizePolicy().hasHeightForWidth());
+        label_11->setSizePolicy(sizePolicy4);
         label_11->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         verticalLayout_6->addWidget(label_11);
@@ -339,8 +450,8 @@ public:
         horizontalLayout_5->setObjectName("horizontalLayout_5");
         label_12 = new QLabel(widget_8);
         label_12->setObjectName("label_12");
-        sizePolicy1.setHeightForWidth(label_12->sizePolicy().hasHeightForWidth());
-        label_12->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_12->sizePolicy().hasHeightForWidth());
+        label_12->setSizePolicy(sizePolicy4);
 
         horizontalLayout_5->addWidget(label_12);
 
@@ -355,8 +466,8 @@ public:
 
         label_13 = new QLabel(widget_8);
         label_13->setObjectName("label_13");
-        sizePolicy1.setHeightForWidth(label_13->sizePolicy().hasHeightForWidth());
-        label_13->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_13->sizePolicy().hasHeightForWidth());
+        label_13->setSizePolicy(sizePolicy4);
 
         horizontalLayout_5->addWidget(label_13);
 
@@ -371,8 +482,8 @@ public:
 
         label_14 = new QLabel(widget_8);
         label_14->setObjectName("label_14");
-        sizePolicy1.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
-        label_14->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
+        label_14->setSizePolicy(sizePolicy4);
 
         horizontalLayout_5->addWidget(label_14);
 
@@ -394,8 +505,8 @@ public:
         horizontalLayout_6->setObjectName("horizontalLayout_6");
         label_16 = new QLabel(widget_9);
         label_16->setObjectName("label_16");
-        sizePolicy1.setHeightForWidth(label_16->sizePolicy().hasHeightForWidth());
-        label_16->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_16->sizePolicy().hasHeightForWidth());
+        label_16->setSizePolicy(sizePolicy4);
 
         horizontalLayout_6->addWidget(label_16);
 
@@ -409,8 +520,8 @@ public:
 
         label_17 = new QLabel(widget_9);
         label_17->setObjectName("label_17");
-        sizePolicy1.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
-        label_17->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
+        label_17->setSizePolicy(sizePolicy4);
 
         horizontalLayout_6->addWidget(label_17);
 
@@ -424,8 +535,8 @@ public:
 
         label_15 = new QLabel(widget_9);
         label_15->setObjectName("label_15");
-        sizePolicy1.setHeightForWidth(label_15->sizePolicy().hasHeightForWidth());
-        label_15->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_15->sizePolicy().hasHeightForWidth());
+        label_15->setSizePolicy(sizePolicy4);
 
         horizontalLayout_6->addWidget(label_15);
 
@@ -451,8 +562,8 @@ public:
 
         label_18 = new QLabel(widget_10);
         label_18->setObjectName("label_18");
-        sizePolicy1.setHeightForWidth(label_18->sizePolicy().hasHeightForWidth());
-        label_18->setSizePolicy(sizePolicy1);
+        sizePolicy4.setHeightForWidth(label_18->sizePolicy().hasHeightForWidth());
+        label_18->setSizePolicy(sizePolicy4);
 
         horizontalLayout_7->addWidget(label_18);
 
@@ -480,102 +591,115 @@ public:
         verticalLayout_6->addItem(verticalSpacer_4);
 
         stackedWidget->addWidget(page_5);
+        page_6 = new QWidget();
+        page_6->setObjectName("page_6");
+        verticalLayout_7 = new QVBoxLayout(page_6);
+        verticalLayout_7->setObjectName("verticalLayout_7");
+        label_19 = new QLabel(page_6);
+        label_19->setObjectName("label_19");
+        sizePolicy4.setHeightForWidth(label_19->sizePolicy().hasHeightForWidth());
+        label_19->setSizePolicy(sizePolicy4);
+        label_19->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        verticalLayout_7->addWidget(label_19);
+
+        widget_11 = new QWidget(page_6);
+        widget_11->setObjectName("widget_11");
+        horizontalLayout_8 = new QHBoxLayout(widget_11);
+        horizontalLayout_8->setObjectName("horizontalLayout_8");
+        label_20 = new QLabel(widget_11);
+        label_20->setObjectName("label_20");
+        sizePolicy4.setHeightForWidth(label_20->sizePolicy().hasHeightForWidth());
+        label_20->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_8->addWidget(label_20);
+
+        lineEdit_2 = new QLineEdit(widget_11);
+        lineEdit_2->setObjectName("lineEdit_2");
+
+        horizontalLayout_8->addWidget(lineEdit_2);
+
+        label_21 = new QLabel(widget_11);
+        label_21->setObjectName("label_21");
+        sizePolicy4.setHeightForWidth(label_21->sizePolicy().hasHeightForWidth());
+        label_21->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_8->addWidget(label_21);
+
+        spinBox_3 = new QSpinBox(widget_11);
+        spinBox_3->setObjectName("spinBox_3");
+
+        horizontalLayout_8->addWidget(spinBox_3);
+
+        pushButton_5 = new QPushButton(widget_11);
+        pushButton_5->setObjectName("pushButton_5");
+
+        horizontalLayout_8->addWidget(pushButton_5);
+
+        horizontalSpacer_5 = new QSpacerItem(171, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_8->addItem(horizontalSpacer_5);
+
+
+        verticalLayout_7->addWidget(widget_11);
+
+        verticalSpacer_5 = new QSpacerItem(20, 478, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        verticalLayout_7->addItem(verticalSpacer_5);
+
+        stackedWidget->addWidget(page_6);
+        page_7 = new QWidget();
+        page_7->setObjectName("page_7");
+        verticalLayout_8 = new QVBoxLayout(page_7);
+        verticalLayout_8->setObjectName("verticalLayout_8");
+        label_22 = new QLabel(page_7);
+        label_22->setObjectName("label_22");
+        sizePolicy4.setHeightForWidth(label_22->sizePolicy().hasHeightForWidth());
+        label_22->setSizePolicy(sizePolicy4);
+        label_22->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        verticalLayout_8->addWidget(label_22);
+
+        widget_12 = new QWidget(page_7);
+        widget_12->setObjectName("widget_12");
+        horizontalLayout_9 = new QHBoxLayout(widget_12);
+        horizontalLayout_9->setObjectName("horizontalLayout_9");
+        label_23 = new QLabel(widget_12);
+        label_23->setObjectName("label_23");
+        sizePolicy4.setHeightForWidth(label_23->sizePolicy().hasHeightForWidth());
+        label_23->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_9->addWidget(label_23);
+
+        spinBox_5 = new QSpinBox(widget_12);
+        spinBox_5->setObjectName("spinBox_5");
+
+        horizontalLayout_9->addWidget(spinBox_5);
+
+        checkBox_8 = new QCheckBox(widget_12);
+        checkBox_8->setObjectName("checkBox_8");
+
+        horizontalLayout_9->addWidget(checkBox_8);
+
+        horizontalSpacer_6 = new QSpacerItem(171, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_9->addItem(horizontalSpacer_6);
+
+
+        verticalLayout_8->addWidget(widget_12);
+
+        verticalSpacer_6 = new QSpacerItem(20, 480, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        verticalLayout_8->addItem(verticalSpacer_6);
+
+        stackedWidget->addWidget(page_7);
 
         gridLayout->addWidget(stackedWidget, 1, 2, 1, 1);
-
-        widget_3 = new QWidget(ScriptWindow);
-        widget_3->setObjectName("widget_3");
-        QSizePolicy sizePolicy3(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy3.setHorizontalStretch(1);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(widget_3->sizePolicy().hasHeightForWidth());
-        widget_3->setSizePolicy(sizePolicy3);
-        verticalLayout_2 = new QVBoxLayout(widget_3);
-        verticalLayout_2->setObjectName("verticalLayout_2");
-        label_2 = new QLabel(widget_3);
-        label_2->setObjectName("label_2");
-        label_2->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        verticalLayout_2->addWidget(label_2);
-
-        listWidget_2 = new QListWidget(widget_3);
-        listWidget_2->setObjectName("listWidget_2");
-
-        verticalLayout_2->addWidget(listWidget_2);
-
-
-        gridLayout->addWidget(widget_3, 1, 1, 1, 1);
-
-        widget = new QWidget(ScriptWindow);
-        widget->setObjectName("widget");
-        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy4.setHorizontalStretch(1);
-        sizePolicy4.setVerticalStretch(1);
-        sizePolicy4.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
-        widget->setSizePolicy(sizePolicy4);
-
-        gridLayout->addWidget(widget, 0, 0, 1, 2);
-
-        widget_2 = new QWidget(ScriptWindow);
-        widget_2->setObjectName("widget_2");
-        horizontalLayout = new QHBoxLayout(widget_2);
-        horizontalLayout->setObjectName("horizontalLayout");
-        pushButton = new QPushButton(widget_2);
-        pushButton->setObjectName("pushButton");
-
-        horizontalLayout->addWidget(pushButton);
-
-        pushButton_2 = new QPushButton(widget_2);
-        pushButton_2->setObjectName("pushButton_2");
-
-        horizontalLayout->addWidget(pushButton_2);
-
-        comboBox = new QComboBox(widget_2);
-        comboBox->setObjectName("comboBox");
-        comboBox->setMaximumSize(QSize(100, 16777215));
-
-        horizontalLayout->addWidget(comboBox);
-
-        pushButton_3 = new QPushButton(widget_2);
-        pushButton_3->setObjectName("pushButton_3");
-
-        horizontalLayout->addWidget(pushButton_3);
-
-        pushButton_4 = new QPushButton(widget_2);
-        pushButton_4->setObjectName("pushButton_4");
-
-        horizontalLayout->addWidget(pushButton_4);
-
-
-        gridLayout->addWidget(widget_2, 0, 2, 1, 1);
-
-        widget_4 = new QWidget(ScriptWindow);
-        widget_4->setObjectName("widget_4");
-        QSizePolicy sizePolicy5(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy5.setHorizontalStretch(1);
-        sizePolicy5.setVerticalStretch(10);
-        sizePolicy5.setHeightForWidth(widget_4->sizePolicy().hasHeightForWidth());
-        widget_4->setSizePolicy(sizePolicy5);
-        verticalLayout = new QVBoxLayout(widget_4);
-        verticalLayout->setObjectName("verticalLayout");
-        label = new QLabel(widget_4);
-        label->setObjectName("label");
-        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        verticalLayout->addWidget(label);
-
-        listWidget = new QListWidget(widget_4);
-        listWidget->setObjectName("listWidget");
-
-        verticalLayout->addWidget(listWidget);
-
-
-        gridLayout->addWidget(widget_4, 1, 0, 1, 1);
 
 
         retranslateUi(ScriptWindow);
 
-        stackedWidget->setCurrentIndex(4);
+        stackedWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(ScriptWindow);
@@ -584,6 +708,12 @@ public:
     void retranslateUi(QWidget *ScriptWindow)
     {
         ScriptWindow->setWindowTitle(QCoreApplication::translate("ScriptWindow", "Form", nullptr));
+        label->setText(QCoreApplication::translate("ScriptWindow", "\344\273\273\345\212\241\345\210\227\350\241\250", nullptr));
+        label_2->setText(QCoreApplication::translate("ScriptWindow", "\346\211\247\350\241\214\345\210\227\350\241\250", nullptr));
+        pushButton->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\205\245\351\205\215\347\275\256", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("ScriptWindow", "\344\277\235\345\255\230\351\205\215\347\275\256", nullptr));
+        pushButton_3->setText(QCoreApplication::translate("ScriptWindow", "\345\210\240\351\231\244\351\205\215\347\275\256", nullptr));
+        pushButton_4->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\207\272\351\205\215\347\275\256", nullptr));
         label_3->setText(QCoreApplication::translate("ScriptWindow", "\345\237\272\347\241\200\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_3->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         label_4->setText(QCoreApplication::translate("ScriptWindow", "\345\215\216\345\261\261\350\256\272\345\211\221\346\254\241\346\225\260:", nullptr));
@@ -667,12 +797,19 @@ public:
         comboBox_10->setItemText(1, QCoreApplication::translate("ScriptWindow", "\344\275\216", nullptr));
 
         checkBox_7->setText(QCoreApplication::translate("ScriptWindow", "\344\270\200\351\224\256\345\202\254\345\221\275", nullptr));
-        label_2->setText(QCoreApplication::translate("ScriptWindow", "\346\211\247\350\241\214\345\210\227\350\241\250", nullptr));
-        pushButton->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\205\245\351\205\215\347\275\256", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("ScriptWindow", "\344\277\235\345\255\230\351\205\215\347\275\256", nullptr));
-        pushButton_3->setText(QCoreApplication::translate("ScriptWindow", "\345\210\240\351\231\244\351\205\215\347\275\256", nullptr));
-        pushButton_4->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\207\272\351\205\215\347\275\256", nullptr));
-        label->setText(QCoreApplication::translate("ScriptWindow", "\344\273\273\345\212\241\345\210\227\350\241\250", nullptr));
+        label_19->setText(QCoreApplication::translate("ScriptWindow", "\344\276\240\347\274\230/\344\270\226\347\225\214\345\226\212\350\257\235\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
+        label_19->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
+        label_20->setText(QCoreApplication::translate("ScriptWindow", "\344\276\240\347\274\230\346\230\265\347\247\260/\347\274\226\345\217\267:", nullptr));
+        label_20->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        label_21->setText(QCoreApplication::translate("ScriptWindow", "\344\276\240\347\274\230\345\226\212\350\257\235\346\254\241\346\225\260:", nullptr));
+        label_21->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        pushButton_5->setText(QCoreApplication::translate("ScriptWindow", "\344\276\240\347\274\230\345\226\212\350\257\235\345\206\205\345\256\271", nullptr));
+        pushButton_5->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "button", nullptr)));
+        label_22->setText(QCoreApplication::translate("ScriptWindow", "\347\224\237\346\255\273\345\211\221\345\206\242\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
+        label_22->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
+        label_23->setText(QCoreApplication::translate("ScriptWindow", "\347\224\237\346\255\273\345\211\221\345\206\242\346\254\241\346\225\260:", nullptr));
+        label_23->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        checkBox_8->setText(QCoreApplication::translate("ScriptWindow", "\351\232\217\346\234\272\350\267\263\344\274\236", nullptr));
     } // retranslateUi
 
 };

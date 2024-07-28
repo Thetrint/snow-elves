@@ -53,6 +53,7 @@ int VientianeTask::implementation() {
                     ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
                     Arrive();
                     ClickImageMatch({.similar = 0.5}, nullptr, "按钮大世界拍照");
+                    Defer(2);
 
                 }
 
@@ -65,7 +66,7 @@ int VientianeTask::implementation() {
                 ClickImageMatch({.similar = 0.5}, nullptr, "按钮江湖万象打卡");
                 ClickImageMatch({.similar = 0.5}, nullptr, "按钮江湖万象上传打卡");
                 ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
-                Defer(2);
+                Defer(3);
                 break;
             case 5:
                 ClickImageMatch({.similar = 0.5, .x = -240, .y = -55}, nullptr, "按钮拍照打卡立刻拍照");

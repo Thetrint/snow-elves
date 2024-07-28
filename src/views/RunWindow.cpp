@@ -28,6 +28,7 @@ RunWindow::RunWindow(QWidget *parent):
             // 将新创建的实例存储在 instances 容器中
             instances[id] = instance;
             windowHwnd[id] = hwnd;
+            idSet.insert(id);
             try {
                 threads[hwnd] = std::jthread(&TaskManager::start, instance);
             } catch (const std::exception& e) {
@@ -49,6 +50,7 @@ RunWindow::RunWindow(QWidget *parent):
             instances.erase(id);
             threads.erase(windowHwnd[id]);
             windowHwnd.erase(id);
+            idSet.erase(id);
         }
 
     });
@@ -61,17 +63,18 @@ RunWindow::RunWindow(QWidget *parent):
 
     connect(ui.pushButton_6, &QPushButton::clicked, this, [&](){
 
-        for(int id = 0; id < 10; id++) {
+        for (int id : idSet) {
             if(QTableWidgetItem* item = ui.tableWidget->item(id, 0)) {
                 item->setData(Qt::DecorationRole, QVariant());
             }
-            if (instances.contains(id)) {
-                instances[id]->stop();
-                instances.erase(id);
-                threads.erase(windowHwnd[id]);
-                windowHwnd.erase(id);
-            }
+
+            instances[id]->stop();
+            instances.erase(id);
+            threads.erase(windowHwnd[id]);
+            windowHwnd.erase(id);
+
         }
+        idSet.clear();
 
     });
 
@@ -180,8 +183,8 @@ RunWindow::RunWindow(QWidget *parent):
         // WindowManager::setWinodw(hwnd);
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         HBITMAP hBitmap = WindowManager::CaptureAnImage(hwnd);
-
-        WindowManager::SaveBitmapToFile(hBitmap, L"1.bmp");
+        auto name = std::chrono::system_clock::now().time_since_epoch().count();
+        WindowManager::SaveBitmapToFile(hBitmap, std::format(L"Testing/{}.bmp", name).c_str());
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
 
 
@@ -196,7 +199,7 @@ RunWindow::RunWindow(QWidget *parent):
         // 应用 Canny 边缘检测
         cv::Mat edges;
         cv::Canny(blurred, edges, 100, 200);
-        cv::imwrite("2.bmp", edges);
+        cv::imwrite(std::format("Testing/{}_edges.bmp", name), edges);
         // cv::imshow("Source Image", edges);
         // cv::waitKey(0);
 

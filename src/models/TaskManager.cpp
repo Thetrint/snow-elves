@@ -25,7 +25,11 @@ TaskManager::~TaskManager() {
 
 void TaskManager::stop() {
     unbind_event = false;
-    pause_event.unlock(); // 解除任何可能的暂停状态
+    if(LOCK) {
+        pause_event.unlock(); // 解除任何可能的暂停状态
+        LOCK = false;
+    }
+
 
 
 }
