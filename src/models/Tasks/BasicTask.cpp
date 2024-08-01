@@ -94,7 +94,7 @@ bool BasicTask::OpenBuddy() {
  * @param count 延迟倍率
  */
 void BasicTask::Defer(const int& count) const {
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count && unbind_event; i++) {
         key_down_up("");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }

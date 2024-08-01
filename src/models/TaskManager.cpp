@@ -44,7 +44,6 @@ void TaskManager::pause() {
 }
 
 void TaskManager::resume() {
-    WindowManager::setWinodw(hwnd);
     pause_event.unlock();
     LOCK = false;
 }
