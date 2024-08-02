@@ -296,7 +296,6 @@ RunWindow::RunWindow(QWidget *parent):
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
 
 
-
         cv::Mat gray;
         cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
 

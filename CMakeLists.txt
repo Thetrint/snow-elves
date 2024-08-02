@@ -144,6 +144,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/FateSwordTask.h
         src/utils/LocalServer.cpp
         include/utils/LocalServer.h
+        src/models/Tasks/HouseClockTask.cpp
+        include/models/Tasks/HouseClockTask.h
 
 
 )
