@@ -84,7 +84,7 @@ int BountyMissionsTask::implementation() {
                     }
                     break;
                 case 4:
-                    if (record_num[2] == 0) {
+                    if (record_num[2] <= 0) {
                         Log("接取悬赏");
                         OpenKnapsack();
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
@@ -96,7 +96,7 @@ int BountyMissionsTask::implementation() {
                                 break;
                             }
                             if(!CoortImageMatch(MatchParams{.similar = 0.85, .clickDelay = false}, nullptr, "标志悬赏完成").empty()) {
-                                if(record_num[2] == 0) {
+                                if(record_num[2] <= 0) {
                                     objective("任务退出");
                                 }
                                Close({.similar = 0.5}, 3);;
@@ -158,12 +158,12 @@ int BountyMissionsTask::implementation() {
                         }
 
                     }
-                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 300 && record_event[1]) {
+                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 420 && record_event[1]) {
                         //脱离卡死
                         OffCard();
                         record_event[1] = false;
                         record_event[0] = true;
-                        if(++record_num[3] >= 2) {
+                        if(++record_num[3] > 2) {
                             //离开队伍
                             LeaveTeam();
                             objective("队伍检测");

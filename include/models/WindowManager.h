@@ -10,7 +10,7 @@
 class WindowManager
 {
 public:
-    [[nodiscard]] static HWND getWindowHandle();
+    [[nodiscard]] static HWND getWindowHandle(std::wstring& wintitle);
 
     static void setWinodw(HWND const &hwnd);
 

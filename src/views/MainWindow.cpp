@@ -497,8 +497,6 @@ QJsonDocument MainWindow::createJsonDocument() const {
 
 
 
-
-
     return QJsonDocument(root);
 }
 

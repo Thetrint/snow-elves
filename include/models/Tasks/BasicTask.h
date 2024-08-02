@@ -85,6 +85,10 @@ protected:
 
     void Defer(const int &count) const;
 
+    void Defer(const int &count, const int &delay) const;
+
+    bool CloseReward(const int &count);
+
     bool Close(const MatchParams& match, const int &count);
 
     void LocationDetection();

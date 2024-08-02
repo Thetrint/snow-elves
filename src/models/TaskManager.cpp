@@ -44,15 +44,14 @@ void TaskManager::pause() {
 }
 
 void TaskManager::resume() {
-    WindowManager::setWinodw(hwnd);
     pause_event.unlock();
     LOCK = false;
 }
 
 void TaskManager::setState(const std::string &task) const {
-    if (task != "占位任务") {
-        emit Signals::instance()->Log(id, task);
-    }
+
+    emit Signals::instance()->Log(id, task);
+
 
 
 }
@@ -87,18 +86,27 @@ void TaskManager::start(){
         std::string task;
         while ((task = schedul.get_task()).empty() == false && unbind_event) {
             try {
-                //更新状态
-                setState(task);
-                auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
-                if (const int result = obj->implementation(); result == -1) {
-                }else {
-                    if (task != "占位任务") {
-                        emit Signals::instance()->Log(id, task + "结束");
+                if (task != "占位任务") {
+                    //更新状态
+                    setState(task);
+                    auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
+                    if (const int result = obj->implementation(); result == -1) {
+
                     }
 
+                    emit Signals::instance()->Log(id, task + "结束");
+
+                    obj.reset();
+                }else {
+
+                    auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
+
+                    if (const int result = obj->implementation(); result == -1) {
+
+                    }
+                    obj.reset();
                 }
 
-                obj.reset();
             } catch (const std::exception& e) {
                 spdlog::error("Failed to thread: {}", e.what());
             }

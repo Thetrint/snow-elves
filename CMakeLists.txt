@@ -44,6 +44,7 @@ find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
+        Network
         REQUIRED
 )
 
@@ -141,6 +142,10 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/ChivalryShoutTask.h
         src/models/Tasks/FateSwordTask.cpp
         include/models/Tasks/FateSwordTask.h
+        src/utils/LocalServer.cpp
+        include/utils/LocalServer.h
+        src/models/Tasks/HouseClockTask.cpp
+        include/models/Tasks/HouseClockTask.h
 
 
 )
@@ -153,6 +158,7 @@ target_link_libraries(SnowElvesScript PRIVATE
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt::Network
         cpr::cpr
         spdlog::spdlog
         ${OpenCV_LIBS}

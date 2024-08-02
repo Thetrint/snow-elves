@@ -54,6 +54,14 @@
 #include <QLineEdit>
 #include <QFileDevice>
 #include <QSharedMemory>
+#include <QMainWindow>
+#include <QWindow>
+#include <QWidget>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QApplication>
+#include <QThread>
+#include <QLocalSocket>
 
 
 #include "resources/images.h"

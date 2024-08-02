@@ -1,9 +1,9 @@
 //
-// Created by y1726 on 24-7-17.
+// Created by y1726 on 24-8-2.
 //
-#include "models/Tasks/TeaStoryTask.h"
+#include "models/Tasks/HouseClockTask.h"
 
-int TeaStoryTask::implementation() {
+int HouseClockTask::implementation() {
     std::vector<Match> matchs;
     objective("位置检测");
     timer.start();
@@ -20,7 +20,9 @@ int TeaStoryTask::implementation() {
 
         switch (determine()) {
             case 0:
-               Close({.similar = 0.5}, 3);;
+                Close({.similar = 0.5}, 3);
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮退出");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮前往金陵");
                 return 0; // 任务正常退出
             case -1:
                 Close({.similar = 0.5}, 1);
@@ -41,28 +43,51 @@ int TeaStoryTask::implementation() {
             case 3:
                 OpenKnapsack();
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动江湖");
-                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动茶馆说书").empty()) {
-                    objective("任务退出");
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品宅邸");
+
+                if (!ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮宅邸不再显示").empty()) {
+                    Close({.similar = 0.5}, 1);
+                }
+
+                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮宅邸街坊");
+
+                for (auto&[location, score] : CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志宅邸江南坊")) {
+                    mouse_down_up({}, location);
+
+                    for (auto&[location, score] : CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志宅邸房子")) {
+                        mouse_down_up({}, location);
+                        if (CoortImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮宅邸发送消息").empty()) {
+                            mouse_down_up({}, {0, 0});
+                            continue;
+                        }
+                        if (ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮宅邸拜访宅邸").empty()) {
+                            mouse_down_up({}, {0, 0});
+                            continue;
+                        }
+                        PassLevel();
+                        Defer(25, 1000);
+                        CloseReward(3);
+                        if(++record_num[0] >= 8) {
+                            objective("任务退出");
+                            break;
+                        }
+                    }
+
+                    Close({.similar = 0.5}, 1);
+                    if(record_num[0] >= 5) {
+                        Close({.similar = 0.5}, 2);
+                        break;
+                    }
+
+                }
+
+                if(record_num[0] >= 5) {
                     continue;
                 }
-                Arrive();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书进入茶馆");
-                PassLevel();
-                objective("等待完成");
-                break;
-            case 4:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, std::make_unique<CAUSE>(cause, "开始任务"), "界面茶馆").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书甲", "按钮茶馆说书乙", "按钮茶馆说书丙", "按钮茶馆说书丁");
-
-                    if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆").empty()) {
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆");
-                        objective("任务退出");
-                    }
-                }
+                mouse_move({}, {1000, 625}, {1008, 325});
 
                 break;
+
             default:
                 break;;
         }
@@ -74,11 +99,11 @@ int TeaStoryTask::implementation() {
 
 }
 
-void TeaStoryTask::objective(const std::string ve) {
+void HouseClockTask::objective(const std::string ve) {
     cause = ve;
 }
 
-int TeaStoryTask::determine() {
+int HouseClockTask::determine() {
     const int sw = detect();
     if (sw == -5) {
         if (++detect_count >= 10) {
@@ -126,20 +151,11 @@ int TeaStoryTask::determine() {
         }
     }
 
-    if (cause == "等待完成") {
-        switch (sw) {
-            case 1:
-                return 4;
-            default:
-                return -1;
-        }
-    }
-
 
     return 307;
 }
 
-int TeaStoryTask::detect() {
+int HouseClockTask::detect() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }

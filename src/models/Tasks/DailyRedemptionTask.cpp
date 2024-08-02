@@ -65,15 +65,26 @@ int DailyRedemptionTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮帮派捐献");
 
                     if(config.value("帮派铜钱捐献").toBool()) {
-                        for(int i = 1; i <= 3; i++) {
-                            // ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮捐献");
+
+                        ClickImageMatch(MatchParams{.similar = 0.6, .clickCount = 3, .scope = {132, 203, 448, 655}}, nullptr, "按钮捐献");
+                        if(!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示").empty()) {
+                            ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮帮派捐献确定");
+                            ClickImageMatch(MatchParams{.similar = 0.6, .clickCount = 3, .scope = {132, 203, 448, 655}}, nullptr, "按钮捐献");
                         }
+
+
                     }
 
                     if(config.value("帮派银两捐献").toBool()) {
-                        for(int i = 1; i <= 3; i++) {
-                            // ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮捐献");
+
+                        ClickImageMatch(MatchParams{.similar = 0.6, .clickCount = 3, .scope = {514, 212, 811, 646}}, nullptr, "按钮捐献");
+                        if(!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示").empty()) {
+                            ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮帮派捐献确定");
+                            ClickImageMatch(MatchParams{.similar = 0.6, .clickCount = 3, .scope = {514, 212, 811, 646}}, nullptr, "按钮捐献");
                         }
+
                     }
                     Close({.similar = 0.5}, 4);
                 }
