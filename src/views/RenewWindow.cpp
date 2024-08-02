@@ -36,6 +36,7 @@ void RenewWindow::checkupdae() {
 
     if (r.status_code != 200) {
         std::cerr << "Failed to fetch releases. Status code: " << r.status_code << std::endl;
+        emit login();
         return;
     }
 

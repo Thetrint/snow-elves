@@ -133,45 +133,31 @@
          </sizepolicy>
         </property>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="4" column="0" colspan="2">
-          <widget class="QPushButton" name="pushButton_7">
+         <item row="4" column="1">
+          <widget class="QPushButton" name="pushButton_10">
            <property name="text">
-            <string>开始</string>
+            <string>全部隐藏</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="pushButton_4">
-           <property name="text">
-            <string>全部恢复</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QPushButton" name="pushButton_3">
            <property name="text">
             <string>恢复</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="pushButton_5">
+         <item row="5" column="1">
+          <widget class="QPushButton" name="pushButton_14">
            <property name="text">
-            <string>解绑</string>
+            <string>全部虚化</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QPushButton" name="pushButton_6">
+         <item row="4" column="0">
+          <widget class="QPushButton" name="pushButton_9">
            <property name="text">
-            <string>全部解绑</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="text">
-            <string>全部暂停</string>
+            <string>隐藏</string>
            </property>
           </widget>
          </item>
@@ -185,10 +171,66 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item row="3" column="0">
+          <widget class="QPushButton" name="pushButton_5">
+           <property name="text">
+            <string>解绑</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QPushButton" name="pushButton_6">
+           <property name="text">
+            <string>全部解绑</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QPushButton" name="pushButton_13">
+           <property name="text">
+            <string>虚化</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QPushButton" name="pushButton_11">
+           <property name="text">
+            <string>显示/实化</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QPushButton" name="pushButton_12">
+           <property name="text">
+            <string>全部显示/实化</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>全部暂停</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QPushButton" name="pushButton_4">
+           <property name="text">
+            <string>全部恢复</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
           <widget class="QPushButton" name="pushButton_8">
            <property name="text">
             <string>截图</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QPushButton" name="pushButton_7">
+           <property name="text">
+            <string>开始</string>
            </property>
           </widget>
          </item>

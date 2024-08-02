@@ -33,6 +33,7 @@ public:
 
 private:
     std::string cause;
+    std::vector<Match> matche;
     int index;
     std::map<int, std::string> team {
         {0, "标志天下宗师队伍1"},
@@ -44,14 +45,23 @@ private:
             {1, "标志宗门生产心情2"},
             {2, "标志宗门生产心情3"}
     };
+
+    std::map<std::string, std::string> moods {
+                {"五军之炼", "按钮宗门试炼五军"},
+                {"七星之炼", "按钮宗门试炼七星"},
+                {"八门之炼", "按钮宗门试炼八门"}
+    };
     /**
      *  1. 宗门试炼设置目标判断
      *  2. 宗门试炼五军
      *  3. 宗门试炼七星
      *  4. 宗门试炼八门
+     *  5. 宗门试炼快速战斗
+     *  6. 门人选择滑动
+     *
      */
-    std::vector<bool> record_event{true, true, true, true};
-    // std::vector<int> record_num{0};
+    std::vector<bool> record_event{true, true, true, true, true, true};
+    std::vector<int> record_num{0};
     // std::vector<std::chrono::steady_clock::time_point> record_time{0};
 
 };

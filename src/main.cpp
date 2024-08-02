@@ -1,5 +1,8 @@
 
 #include "main.h"
+
+#include <utils/LocalServer.h>
+
 #include "views/MainWindow.h"
 
 #include "models/ImageProcess.h"
@@ -7,6 +10,7 @@
 #include "views/LoginWindow.h"
 #include "views/RenewWindow.h"
 #include <utils/signals.h>
+
 #include "utils/Utilities.h"
 
 int main(int argc, char *argv[])
@@ -17,6 +21,9 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create("windows11"));
+
+
+     LocalServer::getInstance().startServer("SnowElvesLocalServer");
 
     if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {
         QMessageBox::warning(nullptr, "Warning", "Another instance is already running.");
@@ -51,7 +58,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     RenewWindow Renew;
     LoginWindow Login;
-
 
 
     // 连接 loginSuccess 信号到主窗口的 show 槽

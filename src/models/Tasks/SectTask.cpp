@@ -31,18 +31,18 @@ int SectTask::implementation() {
                 break;
             case 2:
                 OpenTeam();
-                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                if (CoortImageMatch({.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
+                    ClickImageMatch({.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
                 }
                 Close({.similar = 0.5}, 1);
                 objective("开始任务");
                 break;
             case 3:
                 OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品天下宗师");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师回宗门");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品综合入口");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品天下宗师");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师回宗门");
                 PassLevel();
 
                 if (config.value("宗门生产").toBool()) {
@@ -54,62 +54,107 @@ int SectTask::implementation() {
 
             case 4:
                 OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品天下宗师");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师生产");
-                ClickImageMatch(MatchParams{.similar = 0.5, .x = -60}, nullptr, "按钮宗门生产劳作中");
-                ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮宗门生产一键停工");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                ClickImageMatch(MatchParams{.similar = 0.6, .x = -60}, nullptr, "按钮宗门生产空闲中");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品综合入口");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品天下宗师");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师生产");
+                ClickImageMatch({.similar = 0.5, .x = -60}, nullptr, "按钮宗门生产劳作中");
+                ClickImageMatch({.similar = 0.6}, nullptr, "按钮宗门生产一键停工");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
+                ClickImageMatch({.similar = 0.6, .x = -60}, nullptr, "按钮宗门生产空闲中");
                 mouse_move({.moveCount = 30}, {466, 582}, {466, 282});
                 break;
             case 5:
+                matche = CoortImageMatch({.similar = 0.5, .applyGaussianBlur = false}, nullptr, mood[config.value("宗门生产心情等级").toInt()]);
+                if (matche.empty()) {
 
-                if(ClickImageMatch(MatchParams{.similar = 0.5, .click = LAST, .x = -90, .y = 85, .applyGaussianBlur = false}, nullptr, mood[config.value("宗门生产心情等级").toInt()]).empty()) {
-                    mouse_move({}, {437, 363}, {437, 513});
                 }
-                if(ClickImageMatch(MatchParams{.similar = 0.6,}, nullptr, "按钮宗门生产工作").empty()) {
-                    mouse_move({}, {934, 461}, {934, 261});
-                    if(ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮宗门生产工作").empty()) {
-                        mouse_down_up({}, {0, 0});
-                        if(config.value("宗门生产一键催命").toBool()) {
-                            ClickImageMatch(MatchParams{.similar = 0.6, .x = -60}, nullptr, "按钮宗门生产劳作中");
-                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮宗门生产一键催命");
-                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                record_event[5] = true;
+                for (auto &[location, score] : std::ranges::reverse_view(matche)) {
+                    mouse_down_up({.x = -90, .y = 85}, location);
+                    Defer(1);
+                    if(!CoortImageMatch({.similar = 0.5}, nullptr, "标志宗门生产心情已满").empty()) {
+                        record_event[5] = false;
+                        if(ClickImageMatch({.similar = 0.6,}, nullptr, "按钮宗门生产工作").empty()) {
+                            mouse_down_up({}, {0, 0});
+                            if(config.value("宗门生产一键催命").toBool()) {
+                                ClickImageMatch({.similar = 0.6, .x = -60}, nullptr, "按钮宗门生产劳作中");
+                                ClickImageMatch({.similar = 0.6}, nullptr, "按钮宗门生产一键催命");
+                                ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
+                            }
+                            Close({.similar = 0.5}, 3);
+                            objective("宗门试炼");
                         }
-                        Close({.similar = 0.5}, 3);
-                        objective("宗门试炼");
+                        continue;
                     }
+                    mouse_down_up({}, {0, 0});
                 }
+                if (record_event[5]) {
+                    mouse_move({}, {437, 363}, {437, 523});
+                }
+
+
                 break;
             case 6:
                 OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品天下宗师");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师宗门玩法");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮宗门玩法宗门试炼");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品综合入口");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品天下宗师");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师宗门玩法");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门玩法宗门试炼");
                 break;
 
             case 7:
                 if(record_event[0]) {
                     record_event[0] = false;
-                    if(config.value("宗门试炼1").toString() == "五军之炼" and record_event[1]) {
+                    if(config.value("宗门试炼1").toString() != "~" and record_event[1]) {
                         record_event[1] = false;
-                        ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮宗门试炼五军");
+                        ClickImageMatch({.similar = 0.6, .applyGaussianBlur = false}, nullptr, moods[config.value("宗门试炼1").toString().toStdString()]);
+                        mouse_move({.moveCount = 30}, {221, 386}, {621, 286});
+                        if (!CoortImageMatch({.similar = 0.5}, nullptr, "按钮宗门任务快速战斗").empty()) {
+                            record_event[4] = true;
+                            if (CoortImageMatch({.similar = 0.5}, nullptr, "标志宗门任务快速战斗").empty()) {
+                                ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门任务快速战斗");
+                            }
+
+                        }else {
+                            record_event[4] = false;
+                        }
+                        ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门试炼回到当前");
                         index = config.value("宗门试炼队伍1").toInt();
                         continue;
                     }
 
-                    if(config.value("宗门试炼2").toString() == "七星之炼" and record_event[2]) {
+                    if(config.value("宗门试炼2").toString() != "~" and record_event[2]) {
                         record_event[2] = false;
-                        ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮宗门试炼七星");
+                        ClickImageMatch({.similar = 0.6, .applyGaussianBlur = false}, nullptr, moods[config.value("宗门试炼2").toString().toStdString()]);
+                        mouse_move({.moveCount = 30}, {221, 386}, {621, 286});
+                        if (!CoortImageMatch({.similar = 0.5}, nullptr, "按钮宗门任务快速战斗").empty()) {
+                            record_event[4] = true;
+                            if (CoortImageMatch({.similar = 0.5}, nullptr, "标志宗门任务快速战斗").empty()) {
+                                ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门任务快速战斗");
+                            }
+
+                        }else {
+                            record_event[4] = false;
+                        }
+                        ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门试炼回到当前");
                         index = config.value("宗门试炼队伍2").toInt();
                         continue;
                     }
 
-                    if(config.value("宗门试炼3").toString() == "八门之炼" and record_event[3]) {
+                    if(config.value("宗门试炼3").toString() != "~" and record_event[3]) {
                         record_event[3] = false;
-                        ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮宗门试炼八门");
+                        ClickImageMatch({.similar = 0.6, .applyGaussianBlur = false}, nullptr, moods[config.value("宗门试炼3").toString().toStdString()]);
+                        mouse_move({.moveCount = 30}, {221, 386}, {621, 286});
+                        if (!CoortImageMatch({.similar = 0.5}, nullptr, "按钮宗门任务快速战斗").empty()) {
+                            record_event[4] = true;
+                            if (CoortImageMatch({.similar = 0.5}, nullptr, "标志宗门任务快速战斗").empty()) {
+                                ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门任务快速战斗");
+                            }
+
+                        }else {
+                            record_event[4] = false;
+                        }
+                        ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门试炼回到当前");
                         index = config.value("宗门试炼队伍3").toInt();
                         continue;
                     }
@@ -118,44 +163,57 @@ int SectTask::implementation() {
 
                 }
 
-
-                if(!ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮宗门试炼挑战").empty()) {
-                    std::vector<Match> match = ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, team[index]);
+                // ClickImageMatch({.similar = 0.5, .x = -62, .y = 82}, nullptr, "标志宗门试炼当前")
+                if(!ClickImageMatch({.similar = 0.5, .x = -65, .y = 80}, nullptr, "标志宗门试炼当前").empty()) {
+                    std::vector<Match> match = ClickImageMatch({.similar = 0.5}, nullptr, team[index]);
                     if(match.empty()) {
                         record_event[0] = true;
                         continue;
                     }
-                    if (!CoortImageMatch(MatchParams{.similar = 0.5, .scope = {match.front().location.x - 60, match.front().location.y + 110, match.front().location.x + 120, match.front().location.y + 220}}, nullptr, "按钮宗门试炼体力不足").empty()) {
+                    if (!CoortImageMatch({.similar = 0.5, .scope = {match.front().location.x - 60, match.front().location.y + 110, match.front().location.x + 120, match.front().location.y + 220}}, nullptr, "按钮宗门试炼体力不足").empty()) {
                         record_event[0] = true;
                         Close({.similar = 0.5}, 1);
+                        Defer(1);
                         continue;
                     }
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师补充气血");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮气血补充快速分药");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮气血补充确定");
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师补充气血");
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮气血补充快速分药");
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮气血补充确定");
                     Close({.similar = 0.5, .scope = {1085, 0, 1242, 211}}, 1);
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师确认");
-                    ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 150}, nullptr, "按钮天下宗师返回");
-                    PassLevel();
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师确认");
+                    if (record_event[4]) {
+                        Defer(2);
+                        mouse_down_up({}, {669, 544});
+                        Defer(2);
+                    }else {
+                        ClickImageMatch({.similar = 0.5, .matchCount = 150}, nullptr, "按钮天下宗师返回");
+                        PassLevel();
+                    }
                     mouse_down_up({}, {0, 0});
+                    Defer(3);
+                }
+                if (++record_num[0] > 3) {
+                    record_num[0] = 0;
+                    mouse_move({.moveCount = 30}, {221, 386}, {621, 286});
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门试炼回到当前");
                 }
                 break;
             case 8:
                 OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品天下宗师");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师宗门玩法");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮宗门玩法以武会友");
-                ClickImageMatch(MatchParams{.similar = 0.5, .scope = {1030, 570, 1335, 750}}, nullptr, "按钮以武会友匹配");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志天下宗师队伍1");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师确认");
-                if(ClickImageMatch(MatchParams{.similar = 0.5, .click = NoTap}, nullptr, "标志以武会友匹配消耗").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮天下宗师确定");
-                    ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 150}, nullptr, "按钮天下宗师返回");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品综合入口");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮物品天下宗师");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师宗门玩法");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮宗门玩法以武会友");
+                ClickImageMatch({.similar = 0.5, .scope = {1030, 570, 1335, 750}}, nullptr, "按钮以武会友匹配");
+                ClickImageMatch({.similar = 0.5}, nullptr, "标志天下宗师队伍1");
+                ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师确认");
+                if(ClickImageMatch({.similar = 0.5, .click = NoTap}, nullptr, "标志以武会友匹配消耗").empty()) {
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮天下宗师确定");
+                    ClickImageMatch({.similar = 0.5, .matchCount = 150}, nullptr, "按钮天下宗师返回");
                     PassLevel();
                     mouse_down_up({}, {0, 0});
                 }else {
-                    ClickImageMatch(MatchParams{.similar = 0.5, .scope = {318, 468, 611, 595}}, nullptr, "按钮取消");
+                    ClickImageMatch({.similar = 0.5, .scope = {318, 468, 611, 595}}, nullptr, "按钮取消");
                     Close({.similar = 0.5, .click = FORWARD}, 3);
                 }
 
@@ -233,7 +291,7 @@ int SectTask::determine() {
             case 3:
                 return 5;
             default:
-                return -1;
+                return 307;
         }
     }
 
@@ -244,7 +302,7 @@ int SectTask::determine() {
             case 2:
                 return 7;
             default:
-                return -1;
+                return 307;
         }
     }
 
@@ -254,7 +312,7 @@ int SectTask::determine() {
                 return 8;
 
             default:
-                return -1;
+                return 307;
         }
     }
 
@@ -263,15 +321,15 @@ int SectTask::determine() {
 }
 
 int SectTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面宗门生产").empty()) {
+    if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面宗门生产").empty()) {
         return 3;
     }
 
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面宗门试炼").empty()) {
+    if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面宗门试炼").empty()) {
         return 2;
     }
 
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
+    if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
         return 1;
     }
 

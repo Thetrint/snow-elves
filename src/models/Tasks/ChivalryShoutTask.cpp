@@ -60,6 +60,7 @@ int ChivalryShoutTask::implementation() {
                 if(++record_num[0] > config.value("侠缘喊话次数").toInt()) {
                     objective("任务退出");
                 }
+                Defer(1);
                 break;
             default:
                 break;

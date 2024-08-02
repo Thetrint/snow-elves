@@ -57,9 +57,7 @@ bool BasicTask::OpenKnapsack() {
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
-
     return false;
-
 }
 
 /**
@@ -94,11 +92,33 @@ bool BasicTask::OpenBuddy() {
  * @param count 延迟倍率
  */
 void BasicTask::Defer(const int& count) const {
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count && unbind_event; i++) {
         key_down_up("");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 
+}
+
+/**
+ * 基础功能 延迟指定倍率
+ * @param count 延迟倍率
+ * @param delay 延迟
+ */
+void BasicTask::Defer(const int& count, const int& delay) const {
+    for (int i = 0; i < count && unbind_event; i++) {
+        key_down_up("");
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+
+}
+
+bool BasicTask::CloseReward(const int &count) {
+    for (int i = 0; i < count; ++i) {
+        if (ClickImageMatch({.similar = 0.5, .scope = {842, 173, 1118, 469}}, nullptr, "按钮关闭").empty()) {
+            break;
+        }
+    }
+    return false;
 }
 
 bool BasicTask::Close(const MatchParams& match, const int &count) {
