@@ -128,6 +128,7 @@ QSpinBox {
     background-color: #ffffff; /* 背景颜色 */
     color: #000000; /* 字体颜色 */
     font: 14px;
+    min-width: 50px; /* 最小宽度 */
 }
 
 QSpinBox::up-button, QSpinBox::down-button {
@@ -141,6 +142,29 @@ QSpinBox::up-button:hover, QSpinBox::down-button:hover {
 }
 
 QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {
+    background-color: #d4d4d4; /* 按钮按下时的背景色 */
+}
+
+QDoubleSpinBox {
+    border: 1px solid #dcdcdc; /* 边框颜色 */
+    border-radius: 6px; /* 边框圆角 */
+    background-color: #ffffff; /* 背景颜色 */
+    color: #000000; /* 字体颜色 */
+    font: 14px;
+    min-width: 50px; /* 最小宽度 */
+}
+
+QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+    width: 15px; /* 按钮宽度 */
+    background: transparent; /* 按钮背景透明 */
+    border: none; /* 无边框 */
+}
+
+QDoubleSpinBox::up-button:hover, QDoubleSpinBox::down-button:hover {
+    background-color: #e6e6e6; /* 按钮悬停时的背景色 */
+}
+
+QDoubleSpinBox::up-button:pressed, QDoubleSpinBox::down-button:pressed {
     background-color: #d4d4d4; /* 按钮按下时的背景色 */
 }
 

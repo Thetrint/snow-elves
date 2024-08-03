@@ -221,7 +221,7 @@ void BasicTask::OffCard() {
 
 void BasicTask::PassLevel() const {
     Log("过图中");
-    for(int i = 1; i <= 6; i++) {
+    for(int i = 1; i <= DELAY_MAGNIFICATION; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 }

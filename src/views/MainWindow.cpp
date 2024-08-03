@@ -608,6 +608,8 @@ void MainWindow::writeSystemSettings() const {
 
     QJsonObject root;
     root["当前配置"] = script->ui.comboBox->currentText();
+    root["全局延迟"] = script->ui.spinBox_4->value();
+    root["过图倍率"] = script->ui.spinBox_6->value();
     const auto settingsDoc =  QJsonDocument(root);
 
 
@@ -665,7 +667,10 @@ void MainWindow::readSystemSettings() const {
         script->ui.comboBox->addItem(QFileInfo(s).completeBaseName());
     }
 
+    // 当前配置文件
     script->ui.comboBox->setCurrentText(root["当前配置"].toString());
+    script->ui.spinBox_4->setValue(root["全局延迟"].toInt());
+    script->ui.spinBox_6->setValue(root["过图倍率"].toInt());
 
 
 }

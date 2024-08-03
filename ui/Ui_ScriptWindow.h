@@ -49,6 +49,15 @@ public:
     QWidget *widget;
     QStackedWidget *stackedWidget;
     QWidget *page;
+    QVBoxLayout *verticalLayout_9;
+    QWidget *widget_13;
+    QHBoxLayout *horizontalLayout_10;
+    QLabel *label_24;
+    QSpinBox *spinBox_4;
+    QLabel *label_25;
+    QSpinBox *spinBox_6;
+    QSpacerItem *horizontalSpacer_7;
+    QSpacerItem *verticalSpacer_7;
     QWidget *page_2;
     QVBoxLayout *verticalLayout_3;
     QLabel *label_3;
@@ -242,6 +251,53 @@ public:
         stackedWidget->setSizePolicy(sizePolicy3);
         page = new QWidget();
         page->setObjectName("page");
+        verticalLayout_9 = new QVBoxLayout(page);
+        verticalLayout_9->setObjectName("verticalLayout_9");
+        widget_13 = new QWidget(page);
+        widget_13->setObjectName("widget_13");
+        horizontalLayout_10 = new QHBoxLayout(widget_13);
+        horizontalLayout_10->setObjectName("horizontalLayout_10");
+        label_24 = new QLabel(widget_13);
+        label_24->setObjectName("label_24");
+        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(label_24->sizePolicy().hasHeightForWidth());
+        label_24->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_10->addWidget(label_24);
+
+        spinBox_4 = new QSpinBox(widget_13);
+        spinBox_4->setObjectName("spinBox_4");
+        QSizePolicy sizePolicy5(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(spinBox_4->sizePolicy().hasHeightForWidth());
+        spinBox_4->setSizePolicy(sizePolicy5);
+
+        horizontalLayout_10->addWidget(spinBox_4);
+
+        label_25 = new QLabel(widget_13);
+        label_25->setObjectName("label_25");
+
+        horizontalLayout_10->addWidget(label_25);
+
+        spinBox_6 = new QSpinBox(widget_13);
+        spinBox_6->setObjectName("spinBox_6");
+
+        horizontalLayout_10->addWidget(spinBox_6);
+
+        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_10->addItem(horizontalSpacer_7);
+
+
+        verticalLayout_9->addWidget(widget_13);
+
+        verticalSpacer_7 = new QSpacerItem(20, 501, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        verticalLayout_9->addItem(verticalSpacer_7);
+
         stackedWidget->addWidget(page);
         page_2 = new QWidget();
         page_2->setObjectName("page_2");
@@ -251,9 +307,6 @@ public:
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
         label_3 = new QLabel(page_2);
         label_3->setObjectName("label_3");
-        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
         label_3->setSizePolicy(sizePolicy4);
         label_3->setAlignment(Qt::AlignmentFlag::AlignCenter);
@@ -273,9 +326,6 @@ public:
 
         spinBox = new QSpinBox(widget_5);
         spinBox->setObjectName("spinBox");
-        QSizePolicy sizePolicy5(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
         sizePolicy5.setHeightForWidth(spinBox->sizePolicy().hasHeightForWidth());
         spinBox->setSizePolicy(sizePolicy5);
 
@@ -699,7 +749,7 @@ public:
 
         retranslateUi(ScriptWindow);
 
-        stackedWidget->setCurrentIndex(6);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(ScriptWindow);
@@ -714,6 +764,10 @@ public:
         pushButton_2->setText(QCoreApplication::translate("ScriptWindow", "\344\277\235\345\255\230\351\205\215\347\275\256", nullptr));
         pushButton_3->setText(QCoreApplication::translate("ScriptWindow", "\345\210\240\351\231\244\351\205\215\347\275\256", nullptr));
         pushButton_4->setText(QCoreApplication::translate("ScriptWindow", "\345\257\274\345\207\272\351\205\215\347\275\256", nullptr));
+        label_24->setText(QCoreApplication::translate("ScriptWindow", "\345\205\250\345\261\200\345\273\266\350\277\237:", nullptr));
+        label_24->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        label_25->setText(QCoreApplication::translate("ScriptWindow", "\350\277\207\345\233\276\345\273\266\350\277\237:", nullptr));
+        label_25->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_3->setText(QCoreApplication::translate("ScriptWindow", "\345\237\272\347\241\200\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_3->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         label_4->setText(QCoreApplication::translate("ScriptWindow", "\345\215\216\345\261\261\350\256\272\345\211\221\346\254\241\346\225\260:", nullptr));
