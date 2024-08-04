@@ -2,18 +2,20 @@
 #include "views/RunWindow.h"
 #include <QProcess>
 #include <utils/LocalServer.h>
+#include <views/MainWindow.h>
 
 #include "models/WindowManager.h"
 #include "utils/Signals.h"
 
 RunWindow::RunWindow(QWidget *parent):
-    QWidget(parent)
+    QWidget(parent),
+    mainWindow(nullptr)
 
 {
     ui.setupUi(this);  // 初始化界面布局和元素
 
     // 使用 Lambda 表达式作为槽函数
-    //任务开始
+    // 任务开始
     connect(Signals::instance(), &Signals::Start, this, [&]() {
         emit ui.pushButton_7->click();
     });
@@ -66,7 +68,7 @@ RunWindow::RunWindow(QWidget *parent):
 
 
             // 如果不存在，创建一个新的 MyClass 实例并存储在共享指针中
-            const auto instance = std::make_shared<TaskManager>(id, hwnd);
+            const auto instance = std::make_shared<TaskManager>(id, hwnd, mainWindow->createJsonDocument());
             winHwnd.push_back(hwnd);
             managerDictionary[id] = {instance, std::jthread(&TaskManager::start, instance), hwnd};
 
@@ -336,6 +338,10 @@ RunWindow::RunWindow(QWidget *parent):
     ui.tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
+}
+
+void RunWindow::setMainWindow(const MainWindow* mainWindow) {
+    this->mainWindow = mainWindow;
 }
 
 int RunWindow::getrowindex() const {

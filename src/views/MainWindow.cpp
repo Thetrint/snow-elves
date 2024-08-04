@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent):
 
 
     run = new RunWindow(this);
+    run->setMainWindow(this);
     addPageAndButton("运行", run);
 
     // connect(RunWindow)

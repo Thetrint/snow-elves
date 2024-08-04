@@ -5,7 +5,6 @@
 
 #include "models//TaskManager.h"
 
-#include <codecvt>
 #include <utils/signals.h>
 
 #include "models/WindowManager.h"
@@ -14,13 +13,46 @@
 #include "utils/LoadJsonFile.h"
 #include "utils/FunctionLibrary.h"
 
-TaskManager::TaskManager(int id, HWND hwnd)
-    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false) {
+TaskManager::TaskManager(int id, HWND hwnd, const QJsonDocument& configJson)
+    :id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false) {
+    this->config = configJson.object();
+
     LoadJsonFile::instance().LoadFile(id);
+    Init();
+
+    std::cout << getTask() << std::endl;
+    std::cout << getTask() << std::endl;
 }
 
 TaskManager::~TaskManager() {
     LoadJsonFile::instance().jsonFiles.erase(id);
+}
+
+/**
+ * 任务队列初始化
+ */
+void TaskManager::Init() {
+    for (QJsonValue task : config.value("执行任务").toArray()) {
+        taskQueue.emplace(task.toString().toStdString(), 1);
+    }
+    taskQueue.emplace("12", 2);
+    taskQueue.emplace("11", 1);
+}
+
+/**
+ * 获取下一个任务名称
+ * @return 返回优先级别任务
+ */
+std::string TaskManager::getTask() {
+    if (!taskQueue.empty()) {
+        Task highestPriorityTask = taskQueue.top();
+
+        // 删除优先级最高的任务
+        taskQueue.pop();
+        return highestPriorityTask.name;
+    }
+
+    return "";
 }
 
 void TaskManager::stop() {
@@ -29,9 +61,6 @@ void TaskManager::stop() {
         pause_event.unlock(); // 解除任何可能的暂停状态
         LOCK = false;
     }
-
-
-
 }
 
 void TaskManager::pause() {

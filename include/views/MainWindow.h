@@ -26,6 +26,7 @@ class MainWindow final: public QWidget
 public:
     explicit MainWindow(QWidget *parent = nullptr);
 
+    QJsonDocument createJsonDocument() const;
 
     std::string username{};
 
@@ -65,7 +66,6 @@ private:
 
     void removeConfig(const std::string &config) const;
 
-    QJsonDocument createJsonDocument() const;
 protected:
     void closeEvent(QCloseEvent *event) override {
         if (const QMessageBox::StandardButton reply =

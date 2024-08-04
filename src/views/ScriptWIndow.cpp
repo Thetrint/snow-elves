@@ -48,6 +48,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     // ui.listWidget->setAcceptDrops(true);
     // ui.listWidget->setDropIndicatorShown(true);
     // ui.listWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    ui.listWidget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     ui.listWidget_2->setSelectionMode(QAbstractItemView::SingleSelection);
     ui.listWidget_2->setDragEnabled(true);
@@ -56,6 +57,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     // ui.listWidget_2->setResizeMode(QListView::Adjust);
     ui.listWidget_2->setDefaultDropAction(Qt::MoveAction);
     ui.listWidget_2->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    ui.listWidget_2.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(ui.spinBox_4, &QSpinBox::valueChanged, [&](const int value) {
         std::cout << DELAY << std::endl;
