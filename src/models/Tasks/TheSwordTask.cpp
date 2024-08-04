@@ -16,7 +16,7 @@ int TheSwordTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(720 * config.value("华山论剑次数").toInt())) {
             return 0;
         }
 
@@ -80,7 +80,7 @@ int TheSwordTask::implementation() {
                     FightStop();
                     PassLevel();
                     Log(std::format("华山论剑完成 {} 次", record_num[0]));
-                    if (++record_num[0] >= config.value("华山论剑次数").toInt() + 1) {
+                    if (++record_num[0] > config.value("华山论剑次数").toInt()) {
                         objective("任务退出");
                         continue;
                     }
@@ -108,7 +108,7 @@ int TheSwordTask::implementation() {
                     if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志论剑战斗时间").empty()) {
                         continue;
                     }
-                    key_keep("W", 4000);
+                    key_keep({}, "W", 4000);
                     AutoFight();
                     record_event[0] = false;
 

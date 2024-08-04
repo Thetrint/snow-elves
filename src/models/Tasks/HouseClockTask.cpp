@@ -54,7 +54,16 @@ int HouseClockTask::implementation() {
                 for (auto&[location, score] : CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志宅邸江南坊")) {
                     mouse_down_up({}, location);
 
-                    for (auto&[location, score] : CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志宅邸房子")) {
+                    for (const auto& [location, score]
+                        : std::vector<Match>{{{722, 490}, 1},
+                                            {{933, 251}, 1},
+                                            {{511, 251}, 1},
+                                            {{1144, 490}, 1},
+                                            {{512, 567}, 1},
+                                            {{933, 567}, 1},
+                                            {{722, 174}, 1},
+                                            {{1144, 174}, 1},
+                        })  {
                         mouse_down_up({}, location);
                         if (CoortImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮宅邸发送消息").empty()) {
                             mouse_down_up({}, {0, 0});

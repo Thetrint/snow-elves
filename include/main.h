@@ -62,6 +62,7 @@
 #include <QApplication>
 #include <QThread>
 #include <QLocalSocket>
+#include <regex>
 
 
 #include "resources/images.h"
@@ -69,6 +70,7 @@
 
 inline double FACTOR;
 inline int DELAY  = 1150;
+inline int DELAY_MAGNIFICATION  = 5;
 
 
 

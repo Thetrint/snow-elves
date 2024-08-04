@@ -73,7 +73,7 @@ int HeroListTask::implementation() {
                             ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜准备");
                         }
                         if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 60, .click = NoTap}, nullptr, "标志江湖英雄榜战斗时间").empty()) {
-                            key_keep("W", 4000);
+                            key_keep({}, "W", 4000);
                             AutoFight();
                             ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");
                             FightStop();

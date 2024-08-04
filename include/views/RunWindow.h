@@ -9,6 +9,8 @@
 #include <thread>
 
 
+class MainWindow;
+
 namespace Ui {
     class RunWindow;
 }
@@ -19,9 +21,11 @@ class RunWindow final: public QWidget
 
 public:
     explicit RunWindow(QWidget *parent = nullptr);
+
     Ui::RunWindow ui{};
-    // ~MainWindow();
-    //
+
+    void setMainWindow(const MainWindow *mainWindow);
+
 protected:
 
     bool eventFilter(QObject *obj, QEvent *event) override {
@@ -32,6 +36,7 @@ protected:
         return QWidget::eventFilter(obj, event);
     }
 private:
+    const MainWindow* mainWindow;
     // 结构体保存窗口属性
     struct WindowAttributes {
         RECT geometry;

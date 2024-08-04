@@ -11,7 +11,7 @@
  * @return
  */
 bool BasicTask::OpenMap() {
-    key_down_up("M");
+    key_down_up({}, "M");
     if (!CoortImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "标志地图当前坐标").empty()) {
 
         return true;
@@ -26,7 +26,7 @@ bool BasicTask::OpenMap() {
  * @return
  */
 bool BasicTask::OpenTeam() {
-    key_down_up("T");
+    key_down_up({}, "T");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -40,7 +40,7 @@ bool BasicTask::OpenTeam() {
  * @return
  */
 bool BasicTask::OpenESC() {
-    key_down_up("ESC");
+    key_down_up({}, "ESC");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面设置").empty()) {
         return true;
     }
@@ -53,7 +53,7 @@ bool BasicTask::OpenESC() {
  * @return
  */
 bool BasicTask::OpenKnapsack() {
-    key_down_up("B");
+    key_down_up({}, "B");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -65,7 +65,7 @@ bool BasicTask::OpenKnapsack() {
  * @return
  */
 bool BasicTask::OpenFaction() {
-    key_down_up("O");
+    key_down_up({}, "O");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -79,7 +79,7 @@ bool BasicTask::OpenFaction() {
  * @return
  */
 bool BasicTask::OpenBuddy() {
-    key_down_up("H");
+    key_down_up({}, "H");
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -93,7 +93,7 @@ bool BasicTask::OpenBuddy() {
  */
 void BasicTask::Defer(const int& count) const {
     for (int i = 0; i < count && unbind_event; i++) {
-        key_down_up("");
+        key_down_up({.keyDelay = false}, "");
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 
@@ -106,7 +106,7 @@ void BasicTask::Defer(const int& count) const {
  */
 void BasicTask::Defer(const int& count, const int& delay) const {
     for (int i = 0; i < count && unbind_event; i++) {
-        key_down_up("");
+        key_down_up({.keyDelay = false}, "");
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
 
@@ -221,7 +221,7 @@ void BasicTask::OffCard() {
 
 void BasicTask::PassLevel() const {
     Log("过图中");
-    for(int i = 1; i <= 6; i++) {
+    for(int i = 1; i <= DELAY_MAGNIFICATION; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
     }
 }
@@ -331,22 +331,51 @@ void BasicTask::mouse_move(const MatchParams &match, const cv::Point &start, con
     }
 }
 
-void BasicTask::key_down_up(const std::string& key) const {
+void BasicTask::key_down_up(const MatchParams &match, const std::string& key) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
         WindowManager::KeyDownUp(hwnd, key);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        if(match.keyDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
+
     }
 
 }
 
-void BasicTask::key_keep(const std::string& key, const int dealy) const {
+void BasicTask::key_keep(const MatchParams &match, const std::string& key, const int dealy) const {
     if (unbind_event) {
         std::lock_guard lock(pause_event);
         WindowManager::KeyKeep(hwnd, key, dealy);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        if(match.keyDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
+    }
+
+}
+
+void BasicTask::key_down(const MatchParams &match, const std::string& key) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        WindowManager::KeyDown(hwnd, key);
+
+        if(match.keyDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
+    }
+
+}
+
+void BasicTask::key_up(const MatchParams &match, const std::string& key) const {
+    if (unbind_event) {
+        std::lock_guard lock(pause_event);
+        WindowManager::KeyUp(hwnd, key);
+
+        if(match.keyDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
     }
 
 }
@@ -366,32 +395,43 @@ void BasicTask::Log(const std::string &message) const {
 }
 
 void BasicTask::AutoFight() {
-    fight_ = true;
-    std::string skillSequence = "1-2000; 2-2000; 3-2000; 4-2000; 5-2000; 6-2000; 7-2000; 8-2000";
-    std::vector<Skill> skills;
-    std::stringstream ss(skillSequence);
+    if(!fight_) {
+        fight_ = true;
 
-    std::string item;
-
-    while (std::getline(ss, item, ';')) {
-        std::stringstream itemStream(item);
-        std::string idStr, intervalStr;
-        std::getline(itemStream, idStr, '-');
-        std::getline(itemStream, intervalStr);
-        skills.push_back({std::stoi(idStr), std::stoi(intervalStr)});
+        fight = std::jthread([this]() {
+            this->Fight();
+        });
     }
 
-    fight = std::jthread(&BasicTask::Fight, this, skills);
 
 }
 
-void BasicTask::Fight(const std::vector<Skill> &skills) {
+void BasicTask::Fight() {
     while (unbind_event && fight_) {
-        for (const auto&[id, interval] : skills) {
-            if (!fight_ || !unbind_event) break;
-            key_down_up(skillMap[id]);
-            std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+        // 取出第一个元素
+        Skill firstSkill = skills[0];
+
+        // 将第一个元素添加到末尾
+        skills.push_back(firstSkill);
+
+        // 删除第一个元素
+        skills.erase(skills.begin());
+
+
+        // 根据不同的 action 执行不同的逻辑
+        if (firstSkill.action == "按下") {
+            std::cout << "Processing '按下' action for " << firstSkill.skill << std::endl;
+            key_down({.keyDelay = false}, skillMap[firstSkill.skill]);
+        } else if (firstSkill.action == "点击") {
+            std::cout << "Processing '点击' action for " << firstSkill.skill << std::endl;
+            key_down_up({.keyDelay = false}, skillMap[firstSkill.skill]);
+        } else if (firstSkill.action == "抬起") {
+            std::cout << "Processing '抬起' action for " << firstSkill.skill << std::endl;
+            key_up({.keyDelay = false}, skillMap[firstSkill.skill]);
         }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(firstSkill.time));
+
     }
 }
 

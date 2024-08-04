@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QTextEdit>
 #include "views/ScriptWindow.h"
+#include "QtUtils/CustomLineEdit.h"
 #include "main.h"
 
 ScriptWindow::ScriptWindow(QWidget *parent):
@@ -18,6 +19,18 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_2->setMinimum(1);
     ui.spinBox_3->setMinimum(1);
     ui.spinBox_3->setMaximum(200);
+
+    ui.spinBox_4->setMinimum(1000);
+    ui.spinBox_4->setSingleStep(100);
+    ui.spinBox_4->setMaximum(10000);
+
+    ui.spinBox_6->setMinimum(5);
+    ui.spinBox_6->setMaximum(30);
+
+
+    // 输入框重构
+
+
 
     QStringList items;
     items
@@ -38,6 +51,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     // ui.listWidget->setAcceptDrops(true);
     // ui.listWidget->setDropIndicatorShown(true);
     // ui.listWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    ui.listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     ui.listWidget_2->setSelectionMode(QAbstractItemView::SingleSelection);
     ui.listWidget_2->setDragEnabled(true);
@@ -46,7 +60,19 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     // ui.listWidget_2->setResizeMode(QListView::Adjust);
     ui.listWidget_2->setDefaultDropAction(Qt::MoveAction);
     ui.listWidget_2->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    ui.listWidget_2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    connect(ui.spinBox_4, &QSpinBox::valueChanged, [&](const int value) {
+        std::cout << DELAY << std::endl;
+        DELAY = value;
+        std::cout << DELAY << std::endl;
+    });
+
+    connect(ui.spinBox_6, &QSpinBox::valueChanged, [&](const int value) {
+        std::cout << DELAY_MAGNIFICATION << std::endl;
+        DELAY_MAGNIFICATION = value;
+        std::cout << DELAY_MAGNIFICATION << std::endl;
+    });
 
     // 任务导航
     connect(ui.listWidget, &QListWidget::itemClicked, [&](const QListWidgetItem *new_item) {
