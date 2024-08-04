@@ -567,6 +567,34 @@ void WindowManager::KeyKeep(const HWND& hwnd, const std::string &key, const int 
     PostMessage(hwnd, WM_KEYUP, wparam, lparam);
 }
 
+void WindowManager::KeyDown(const HWND& hwnd, const std::string &key) {
+    const int vk_code = GetVkCode(key);
+    if (vk_code == 0) {
+        std::cerr << "Invalid key: " << key << std::endl;
+        return; // 无效键值
+    }
+
+    const UINT scan_code = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
+    const WPARAM wparam = vk_code;
+    const LPARAM lparam = (scan_code << 16) | 1;
+
+    PostMessage(hwnd, WM_KEYDOWN, wparam, lparam);
+}
+
+void WindowManager::KeyUp(const HWND& hwnd, const std::string &key) {
+    const int vk_code = GetVkCode(key);
+    if (vk_code == 0) {
+        std::cerr << "Invalid key: " << key << std::endl;
+        return; // 无效键值
+    }
+
+    const UINT scan_code = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
+    const WPARAM wparam = vk_code;
+    const LPARAM lparam = (scan_code << 16) | 1;
+
+    PostMessageW(hwnd, WM_KEYUP, wparam, lparam);
+}
+
 
 void WindowManager::InputText(HWND hwnd, const std::string& text) {
     for (std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter; const wchar_t c : converter.from_bytes(text)) {

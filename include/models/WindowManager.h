@@ -38,6 +38,10 @@ public:
 
     static void KeyKeep(const HWND &hwnd, const std::string &key, int dealy);
 
+    static void KeyDown(const HWND &hwnd, const std::string &key);
+
+    static void KeyUp(const HWND &hwnd, const std::string &key);
+
     static void InputText(HWND hwnd, const std::string &text);
 
 private:

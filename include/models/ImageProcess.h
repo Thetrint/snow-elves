@@ -55,6 +55,7 @@ struct MatchParams {
     int clickCount = 1;
     bool clickDelay = true;
     bool matchDelay = true;
+    bool keyDelay = true;
     MatchScope scope = {0, 0, 1335, 750}; // 匹配范围
     MatchGauss gauss = {3, 3, 1.2}; //高斯模糊范围
     bool convertToGray = true; // 灰度处理开关
