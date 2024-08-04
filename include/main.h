@@ -62,6 +62,7 @@
 #include <QApplication>
 #include <QThread>
 #include <QLocalSocket>
+#include <regex>
 
 
 #include "resources/images.h"

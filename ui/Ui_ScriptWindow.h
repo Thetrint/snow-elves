@@ -10,6 +10,7 @@
 #define UI_SCRIPTWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtUtils/CustomLineEdit.h>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
@@ -22,6 +23,7 @@
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -57,6 +59,42 @@ public:
     QLabel *label_25;
     QSpinBox *spinBox_6;
     QSpacerItem *horizontalSpacer_7;
+    QWidget *widget_14;
+    QHBoxLayout *horizontalLayout_11;
+    QLabel *label_26;
+    CustomLineEdit *lineEdit_3;
+    QLabel *label_27;
+    CustomLineEdit *lineEdit_4;
+    QLabel *label_29;
+    CustomLineEdit *lineEdit_5;
+    QLabel *label_28;
+    CustomLineEdit *lineEdit_6;
+    QSpacerItem *horizontalSpacer_8;
+    QWidget *widget_15;
+    QHBoxLayout *horizontalLayout_12;
+    QLabel *label_30;
+    CustomLineEdit *lineEdit_7;
+    QLabel *label_31;
+    CustomLineEdit *lineEdit_8;
+    QLabel *label_33;
+    CustomLineEdit *lineEdit_9;
+    QLabel *label_32;
+    CustomLineEdit *lineEdit_10;
+    QSpacerItem *horizontalSpacer_9;
+    QWidget *widget_16;
+    QHBoxLayout *horizontalLayout_13;
+    QLabel *label_34;
+    CustomLineEdit *lineEdit_11;
+    QLabel *label_35;
+    CustomLineEdit *lineEdit_12;
+    QLabel *label_36;
+    CustomLineEdit *lineEdit_13;
+    QLabel *label_37;
+    CustomLineEdit *lineEdit_14;
+    QSpacerItem *horizontalSpacer_10;
+    QWidget *widget_17;
+    QHBoxLayout *horizontalLayout_14;
+    QTextEdit *textEdit;
     QSpacerItem *verticalSpacer_7;
     QWidget *page_2;
     QVBoxLayout *verticalLayout_3;
@@ -293,6 +331,183 @@ public:
 
 
         verticalLayout_9->addWidget(widget_13);
+
+        widget_14 = new QWidget(page);
+        widget_14->setObjectName("widget_14");
+        horizontalLayout_11 = new QHBoxLayout(widget_14);
+        horizontalLayout_11->setObjectName("horizontalLayout_11");
+        label_26 = new QLabel(widget_14);
+        label_26->setObjectName("label_26");
+        sizePolicy4.setHeightForWidth(label_26->sizePolicy().hasHeightForWidth());
+        label_26->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_11->addWidget(label_26);
+
+        lineEdit_3 = new CustomLineEdit(widget_14);
+        lineEdit_3->setObjectName("lineEdit_3");
+
+        horizontalLayout_11->addWidget(lineEdit_3);
+
+        label_27 = new QLabel(widget_14);
+        label_27->setObjectName("label_27");
+
+        horizontalLayout_11->addWidget(label_27);
+
+        lineEdit_4 = new CustomLineEdit(widget_14);
+        lineEdit_4->setObjectName("lineEdit_4");
+
+        horizontalLayout_11->addWidget(lineEdit_4);
+
+        label_29 = new QLabel(widget_14);
+        label_29->setObjectName("label_29");
+        sizePolicy4.setHeightForWidth(label_29->sizePolicy().hasHeightForWidth());
+        label_29->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_11->addWidget(label_29);
+
+        lineEdit_5 = new CustomLineEdit(widget_14);
+        lineEdit_5->setObjectName("lineEdit_5");
+
+        horizontalLayout_11->addWidget(lineEdit_5);
+
+        label_28 = new QLabel(widget_14);
+        label_28->setObjectName("label_28");
+
+        horizontalLayout_11->addWidget(label_28);
+
+        lineEdit_6 = new CustomLineEdit(widget_14);
+        lineEdit_6->setObjectName("lineEdit_6");
+
+        horizontalLayout_11->addWidget(lineEdit_6);
+
+        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_11->addItem(horizontalSpacer_8);
+
+
+        verticalLayout_9->addWidget(widget_14);
+
+        widget_15 = new QWidget(page);
+        widget_15->setObjectName("widget_15");
+        horizontalLayout_12 = new QHBoxLayout(widget_15);
+        horizontalLayout_12->setObjectName("horizontalLayout_12");
+        label_30 = new QLabel(widget_15);
+        label_30->setObjectName("label_30");
+        sizePolicy4.setHeightForWidth(label_30->sizePolicy().hasHeightForWidth());
+        label_30->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_12->addWidget(label_30);
+
+        lineEdit_7 = new CustomLineEdit(widget_15);
+        lineEdit_7->setObjectName("lineEdit_7");
+
+        horizontalLayout_12->addWidget(lineEdit_7);
+
+        label_31 = new QLabel(widget_15);
+        label_31->setObjectName("label_31");
+
+        horizontalLayout_12->addWidget(label_31);
+
+        lineEdit_8 = new CustomLineEdit(widget_15);
+        lineEdit_8->setObjectName("lineEdit_8");
+
+        horizontalLayout_12->addWidget(lineEdit_8);
+
+        label_33 = new QLabel(widget_15);
+        label_33->setObjectName("label_33");
+        sizePolicy4.setHeightForWidth(label_33->sizePolicy().hasHeightForWidth());
+        label_33->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_12->addWidget(label_33);
+
+        lineEdit_9 = new CustomLineEdit(widget_15);
+        lineEdit_9->setObjectName("lineEdit_9");
+
+        horizontalLayout_12->addWidget(lineEdit_9);
+
+        label_32 = new QLabel(widget_15);
+        label_32->setObjectName("label_32");
+
+        horizontalLayout_12->addWidget(label_32);
+
+        lineEdit_10 = new CustomLineEdit(widget_15);
+        lineEdit_10->setObjectName("lineEdit_10");
+
+        horizontalLayout_12->addWidget(lineEdit_10);
+
+        horizontalSpacer_9 = new QSpacerItem(18, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_12->addItem(horizontalSpacer_9);
+
+
+        verticalLayout_9->addWidget(widget_15);
+
+        widget_16 = new QWidget(page);
+        widget_16->setObjectName("widget_16");
+        horizontalLayout_13 = new QHBoxLayout(widget_16);
+        horizontalLayout_13->setObjectName("horizontalLayout_13");
+        label_34 = new QLabel(widget_16);
+        label_34->setObjectName("label_34");
+        sizePolicy4.setHeightForWidth(label_34->sizePolicy().hasHeightForWidth());
+        label_34->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_13->addWidget(label_34);
+
+        lineEdit_11 = new CustomLineEdit(widget_16);
+        lineEdit_11->setObjectName("lineEdit_11");
+
+        horizontalLayout_13->addWidget(lineEdit_11);
+
+        label_35 = new QLabel(widget_16);
+        label_35->setObjectName("label_35");
+
+        horizontalLayout_13->addWidget(label_35);
+
+        lineEdit_12 = new CustomLineEdit(widget_16);
+        lineEdit_12->setObjectName("lineEdit_12");
+
+        horizontalLayout_13->addWidget(lineEdit_12);
+
+        label_36 = new QLabel(widget_16);
+        label_36->setObjectName("label_36");
+        sizePolicy4.setHeightForWidth(label_36->sizePolicy().hasHeightForWidth());
+        label_36->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_13->addWidget(label_36);
+
+        lineEdit_13 = new CustomLineEdit(widget_16);
+        lineEdit_13->setObjectName("lineEdit_13");
+
+        horizontalLayout_13->addWidget(lineEdit_13);
+
+        label_37 = new QLabel(widget_16);
+        label_37->setObjectName("label_37");
+
+        horizontalLayout_13->addWidget(label_37);
+
+        lineEdit_14 = new CustomLineEdit(widget_16);
+        lineEdit_14->setObjectName("lineEdit_14");
+
+        horizontalLayout_13->addWidget(lineEdit_14);
+
+        horizontalSpacer_10 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_13->addItem(horizontalSpacer_10);
+
+
+        verticalLayout_9->addWidget(widget_16);
+
+        widget_17 = new QWidget(page);
+        widget_17->setObjectName("widget_17");
+        horizontalLayout_14 = new QHBoxLayout(widget_17);
+        horizontalLayout_14->setObjectName("horizontalLayout_14");
+        textEdit = new QTextEdit(widget_17);
+        textEdit->setObjectName("textEdit");
+
+        horizontalLayout_14->addWidget(textEdit);
+
+
+        verticalLayout_9->addWidget(widget_17);
 
         verticalSpacer_7 = new QSpacerItem(20, 501, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 
@@ -768,6 +983,42 @@ public:
         label_24->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_25->setText(QCoreApplication::translate("ScriptWindow", "\350\277\207\345\233\276\345\273\266\350\277\237:", nullptr));
         label_25->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        label_26->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2751:", nullptr));
+        label_26->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_3->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_27->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2752:", nullptr));
+        label_27->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_4->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_29->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2753:", nullptr));
+        label_29->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_5->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_28->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2754:", nullptr));
+        label_28->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_6->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_30->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2755:", nullptr));
+        label_30->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_7->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_31->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2756:", nullptr));
+        label_31->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_8->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_33->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2757:", nullptr));
+        label_33->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_9->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_32->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2758:", nullptr));
+        label_32->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_10->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_34->setText(QCoreApplication::translate("ScriptWindow", "\346\231\256\346\224\273:", nullptr));
+        label_34->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_11->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_35->setText(QCoreApplication::translate("ScriptWindow", "\347\273\235\345\255\246:", nullptr));
+        label_35->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_12->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_36->setText(QCoreApplication::translate("ScriptWindow", "\350\267\263\350\267\203:", nullptr));
+        label_36->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_13->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
+        label_37->setText(QCoreApplication::translate("ScriptWindow", "\351\227\252\351\201\277:", nullptr));
+        label_37->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
+        lineEdit_14->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
         label_3->setText(QCoreApplication::translate("ScriptWindow", "\345\237\272\347\241\200\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_3->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         label_4->setText(QCoreApplication::translate("ScriptWindow", "\345\215\216\345\261\261\350\256\272\345\211\221\346\254\241\346\225\260:", nullptr));

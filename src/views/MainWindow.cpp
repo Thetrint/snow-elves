@@ -497,6 +497,21 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["剑冢随机跳伞"] = script->ui.checkBox_8->isChecked();
 
 
+    root["技能1"] = script->ui.lineEdit_3->text();
+    root["技能2"] = script->ui.lineEdit_4->text();
+    root["技能3"] = script->ui.lineEdit_5->text();
+    root["技能4"] = script->ui.lineEdit_6->text();
+    root["技能5"] = script->ui.lineEdit_7->text();
+    root["技能6"] = script->ui.lineEdit_8->text();
+    root["技能7"] = script->ui.lineEdit_9->text();
+    root["技能8"] = script->ui.lineEdit_10->text();
+    root["普攻"] = script->ui.lineEdit_11->text();
+    root["绝学"] = script->ui.lineEdit_12->text();
+    root["跳跃"] = script->ui.lineEdit_13->text();
+    root["闪避"] = script->ui.lineEdit_14->text();
+
+    root["自定义连招"] = script->ui.textEdit->toPlainText();
+
 
     return QJsonDocument(root);
 }
@@ -550,6 +565,25 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_2->setText("");
         script->ui.spinBox_3->setValue(100);
 
+
+        script->ui.spinBox_5->setValue(1);
+        script->ui.checkBox_8->setChecked(false);
+
+        script->ui.lineEdit_3->setText("1");
+        script->ui.lineEdit_4->setText("2");
+        script->ui.lineEdit_5->setText("3");
+        script->ui.lineEdit_6->setText("4");
+        script->ui.lineEdit_7->setText("5");
+        script->ui.lineEdit_8->setText("6");
+        script->ui.lineEdit_9->setText("7");
+        script->ui.lineEdit_10->setText("8");
+        script->ui.lineEdit_11->setText("9");
+        script->ui.lineEdit_12->setText("R");
+        script->ui.lineEdit_13->setText("space");
+        script->ui.lineEdit_14->setText("shift");
+
+        script->ui.textEdit->setText("点击#技能1#2000 点击#普攻#2000 点击#技能2#2000 点击#技能3#2000 点击#技能4#2000 点击#技能5#2000 点击#技能6#2000 点击#技能7#2000 点击#技能8#2000 点击#绝学#2000");
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -600,6 +634,24 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_2->setText(root["侠缘喊话昵称编号"].toString());
         script->ui.spinBox_3->setValue(root["侠缘喊话次数"].toInt());
 
+        script->ui.spinBox_5->setValue(root["剑冢次数"].toInt());
+        script->ui.checkBox_8->setChecked(root["剑冢随机跳伞"].toBool());
+
+
+        script->ui.lineEdit_3->setText(root["技能1"].toString());
+        script->ui.lineEdit_4->setText(root["技能2"].toString());
+        script->ui.lineEdit_5->setText(root["技能3"].toString());
+        script->ui.lineEdit_6->setText(root["技能4"].toString());
+        script->ui.lineEdit_7->setText(root["技能5"].toString());
+        script->ui.lineEdit_8->setText(root["技能6"].toString());
+        script->ui.lineEdit_9->setText(root["技能7"].toString());
+        script->ui.lineEdit_10->setText(root["技能8"].toString());
+        script->ui.lineEdit_11->setText(root["普攻"].toString());
+        script->ui.lineEdit_12->setText(root["绝学"].toString());
+        script->ui.lineEdit_13->setText(root["跳跃"].toString());
+        script->ui.lineEdit_14->setText(root["闪避"].toString());
+
+        script->ui.textEdit->setText(root["自定义连招"].toString());
     }
 }
 

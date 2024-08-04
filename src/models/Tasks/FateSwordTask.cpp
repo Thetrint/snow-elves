@@ -75,7 +75,7 @@ int FateSwordTask::implementation() {
 
                 }
 
-                key_down_up("Q");
+                key_down_up({}, "Q");
 
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮生死剑冢离开").empty()) {

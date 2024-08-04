@@ -22,8 +22,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create("windows11"));
 
-
-     LocalServer::getInstance().startServer("SnowElvesLocalServer");
+    LocalServer::getInstance().startServer("SnowElvesLocalServer");
 
     if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {
         QMessageBox::warning(nullptr, "Warning", "Another instance is already running.");
@@ -66,8 +65,6 @@ int main(int argc, char *argv[])
         Login.show();
     });
 
-    Renew.checkupdae();
-
     // 连接 loginSuccess 信号到主窗口的 show 槽
     QObject::connect(&Login, &LoginWindow::loginSuccess, [&]() {
         spdlog::info("主窗口启动");
@@ -87,9 +84,8 @@ int main(int argc, char *argv[])
 
     });
 
+    Renew.checkupdae();
 
-
-    // QResource::unregisterResource("RESOURCE.rcc");
     return QApplication::exec();
 }
 
