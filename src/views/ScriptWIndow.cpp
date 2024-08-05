@@ -27,8 +27,9 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_6->setMinimum(5);
     ui.spinBox_6->setMaximum(30);
 
+    ui.scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // 输入框重构
+
 
 
 
@@ -37,7 +38,8 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     << "全局设置" << "#####"
     << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
     << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器" << "门客设宴"
-    << "破阵设宴" << "每日兑换" << "宗门任务" << "侠缘喊话" << "生死剑冢" << "宅邸打卡";
+    << "破阵设宴" << "每日兑换" << "宗门任务" << "侠缘喊话" << "生死剑冢" << "宅邸打卡"
+    << "每日一卦";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);

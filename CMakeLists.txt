@@ -150,6 +150,8 @@ add_executable(SnowElvesScript WIN32
         include/QtUtils/CustomLineEdit.h
         src/utils/TaskScheduler.cpp
         include/utils/TaskScheduler.h
+        src/models/Tasks/HexagramDayTask.cpp
+        include/models/Tasks/HexagramDayTask.h
 
 
 )

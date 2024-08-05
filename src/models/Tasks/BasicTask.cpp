@@ -11,7 +11,7 @@
  * @return
  */
 bool BasicTask::OpenMap() {
-    key_down_up({}, "M");
+    key_down_up({}, config.value("地图").toString().toStdString());
     if (!CoortImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "标志地图当前坐标").empty()) {
 
         return true;
@@ -26,7 +26,7 @@ bool BasicTask::OpenMap() {
  * @return
  */
 bool BasicTask::OpenTeam() {
-    key_down_up({}, "T");
+    key_down_up({}, config.value("队伍").toString().toStdString());
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -53,7 +53,7 @@ bool BasicTask::OpenESC() {
  * @return
  */
 bool BasicTask::OpenKnapsack() {
-    key_down_up({}, "B");
+    key_down_up({}, config.value("背包").toString().toStdString());
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -65,7 +65,7 @@ bool BasicTask::OpenKnapsack() {
  * @return
  */
 bool BasicTask::OpenFaction() {
-    key_down_up({}, "O");
+    key_down_up({}, config.value("帮派").toString().toStdString());
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -124,6 +124,15 @@ bool BasicTask::CloseReward(const int &count) {
 bool BasicTask::Close(const MatchParams& match, const int &count) {
     for (int i = 0; i < count; ++i) {
         if (ClickImageMatch(match, nullptr, "按钮关闭").empty()) {
+            break;
+        }
+    }
+    return false;
+}
+
+bool BasicTask::Close(const int &count) {
+    for (int i = 0; i < count; ++i) {
+        if (ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭").empty()) {
             break;
         }
     }

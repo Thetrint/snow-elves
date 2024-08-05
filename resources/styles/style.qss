@@ -86,6 +86,15 @@
     background-color: white;
 }
 
+.scroll {
+    background-color: #F7F9F2;
+
+}
+
+QScrollArea {
+    border: none;
+}
+
 #ScriptWindow #stackedWidget {
     background-color: #F7F9F2;
     border: 2px solid #a0a0a0;
@@ -234,6 +243,15 @@ QLineEdit:focus {
     background-color: #F0F8FF;       /* 焦点状态下的背景颜色 */
 }
 
+.kill {
+    border: 2px solid #B0B0B0;       /* 边框颜色 */
+    border-radius: 5px;              /* 圆角半径 */
+    padding: 5px;                    /* 内边距 */
+    background-color: #FFFFFF;       /* 背景颜色 */
+    color: #000000;                  /* 字体颜色 */
+    min-width: 10px;
+    max-width: 65px;
+}
 
 .button {
     background-color: #ffffff;

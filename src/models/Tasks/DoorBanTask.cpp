@@ -74,6 +74,7 @@ int DoorBanTask::implementation() {
                         }else {
 
                             if(!ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界摆摊购买").empty()) {
+                                Defer(2);
                                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮交易查看全服");
 
                                 if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买").empty()) {

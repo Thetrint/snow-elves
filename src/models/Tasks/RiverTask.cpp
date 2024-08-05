@@ -52,7 +52,7 @@ int RiverTask::implementation() {
                         continue;
                     }
                     Log("搜索山河器");
-                    Defer(1);
+                    Defer(2);
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮山河器日晷");
                     continue;
                 }
