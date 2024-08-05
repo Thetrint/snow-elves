@@ -13,6 +13,7 @@
 #include "utils/LoadJsonFile.h"
 #include "utils/FunctionLibrary.h"
 
+
 TaskManager::TaskManager(int id, HWND hwnd, const QJsonDocument& configJson)
     :id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false) {
     this->config = configJson.object();
@@ -22,6 +23,23 @@ TaskManager::TaskManager(int id, HWND hwnd, const QJsonDocument& configJson)
 
     std::cout << getTask() << std::endl;
     std::cout << getTask() << std::endl;
+
+    scheduler = std::make_unique<TaskScheduler>();
+
+    scheduler->addTask(TaskScheduler::TimerTask(
+        "宅邸农场任务",
+        TaskScheduler::TaskMode::Interval,
+        std::chrono::milliseconds(5000),
+        TaskScheduler::DateTime::Builder().build(),
+        []() {
+            std::cout << 1 << std::endl;
+        }
+    ));
+
+    // scheduler->start();
+
+
+
 }
 
 TaskManager::~TaskManager() {
@@ -57,6 +75,7 @@ std::string TaskManager::getTask() {
 
 void TaskManager::stop() {
     unbind_event = false;
+    scheduler->stop();
     if(LOCK) {
         pause_event.unlock(); // 解除任何可能的暂停状态
         LOCK = false;

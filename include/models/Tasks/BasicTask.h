@@ -43,7 +43,7 @@ public:
         skillMap["跳跃"] = config.value("跳跃").toString().toStdString();
         skillMap["闪避"] = config.value("闪避").toString().toStdString();
 
-                std::string text = config.value("自定义连招").toString().toStdString();
+        std::string text = config.value("自定义连招").toString().toStdString();
         const std::regex pattern("(按下|点击|抬起)#([^#]+)#(\\d+)");
 
         for (std::sregex_iterator it(text.begin(), text.end(), pattern), end_it; it != end_it; ++it) {
@@ -52,25 +52,10 @@ public:
             skill.action = match.str(1);
             skill.skill = match.str(2);
             skill.time = std::stoi(match.str(3)); // 将字符串转换为整数
-            std::cout << skill.action  << std::endl;
-            std::cout << skill.skill  << std::endl;
-            std::cout << skill.time  << std::endl;
             // 将匹配结果存储到 skills 向量中
             skills.push_back(skill);
         }
 
-        for (std::sregex_iterator it(text.begin(), text.end(), pattern), end_it; it != end_it; ++it) {
-            const std::smatch& match = *it;
-            Skill skill;
-            skill.action = match.str(1);
-            skill.skill = match.str(2);
-            skill.time = std::stoi(match.str(3)); // 将字符串转换为整数
-            std::cout << skill.action  << std::endl;
-            std::cout << skill.skill  << std::endl;
-            std::cout << skill.time  << std::endl;
-            // 将匹配结果存储到 skills 向量中
-            skills.push_back(skill);
-        }
         if(skills.empty()) {
             text = "点击#技能1#2000 点击#普攻#2000 点击#技能2#2000 点击#技能3#2000 点击#技能4#2000 点击#技能5#2000 点击#技能6#2000 点击#技能7#2000 点击#技能8#2000 点击#绝学#2000";
 
@@ -80,9 +65,6 @@ public:
                 skill.action = match.str(1);
                 skill.skill = match.str(2);
                 skill.time = std::stoi(match.str(3)); // 将字符串转换为整数
-                std::cout << skill.action  << std::endl;
-                std::cout << skill.skill  << std::endl;
-                std::cout << skill.time  << std::endl;
                 // 将匹配结果存储到 skills 向量中
                 skills.push_back(skill);
             }

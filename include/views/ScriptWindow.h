@@ -21,6 +21,7 @@ private:
     void AddTask() const;
 
     std::map<std::string, int> TaskMap{
+        {"全局设置", 0},
         {"华山论剑", 1},
         {"日常副本", 2},
         {"每日兑换", 3},

@@ -148,6 +148,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/HouseClockTask.h
         src/QtUtils/CustomLineEdit.cpp
         include/QtUtils/CustomLineEdit.h
+        src/utils/TaskScheduler.cpp
+        include/utils/TaskScheduler.h
 
 
 )
