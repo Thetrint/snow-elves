@@ -11,7 +11,7 @@
 #include "models/ImageProcess.h"
 #include "models/Tasks/BasicTask.h"
 #include "utils/TaskScheduler.h"
-
+#include "models/Tasks/SwitchRolesTask.h"
 class TaskManager {
 
 public:
@@ -38,27 +38,39 @@ private:
     bool unbind_event;
     bool LOCK;
     std::ifstream ifs;
+    SwitchRolesTask rolesTask;
 
     std::unique_ptr<TaskScheduler> scheduler;
     struct Task {
         std::string name;
         int priority;
+        long long timestamp; // 用于记录插入时间戳
 
-        Task(const std::string &name, const int priority) : name(name), priority(priority) {}
+        // 构造函数自动分配时间戳
+        Task(const std::string &name, const int priority)
+            : name(name), priority(priority), timestamp(currentTimestamp()) {}
+
+        // 获取当前时间戳
+        static long long currentTimestamp() {
+            return std::chrono::duration_cast<std::chrono::nanoseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+        }
 
         // 比较函数，放入结构体内部
         bool operator<(const Task& other) const {
-            // 优先级高的任务优先
-            return this->priority < other.priority;
+            if (this->priority == other.priority) {
+                return this->timestamp > other.timestamp; // 时间戳越小，优先级越高
+            }
+            return this->priority < other.priority; // 优先级越高，优先级越高
         }
 
         // 自定义输出，便于测试
         friend std::ostream& operator<<(std::ostream& os, const Task& task) {
-            os << "Task name: " << task.name << ", Priority: " << task.priority;
+            os << "Task name: " << task.name << ", Priority: " << task.priority << ", Timestamp: " << task.timestamp;
             return os;
         }
-
     };
+
 
 
 

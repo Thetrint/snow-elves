@@ -81,6 +81,33 @@ std::map<std::string, int> WindowManager::VkCode = {
     {"Enter", 0x0D}
 };
 
+
+
+// 查找指定标题的子窗口句柄
+
+HWND WindowManager::GetOwnedWindows(HWND owner) {
+    std::vector<HWND> ownedWindows;
+    HWND hwnd = GetWindow(GetDesktopWindow(), GW_CHILD); // 获取第一个顶层窗口
+
+    while (hwnd != nullptr) {
+        if (GetWindow(hwnd, GW_OWNER) == owner) {
+            ownedWindows.push_back(hwnd);
+        }
+        hwnd = GetWindow(hwnd, GW_HWNDNEXT); // 获取下一个顶层窗口
+    }
+    for (const auto &owned : ownedWindows) {
+        wchar_t  title[256];
+        GetWindowText(owned, title, sizeof(title));
+
+        std::cout << owned << std::endl;
+    }
+    return nullptr;
+}
+
+
+
+
+
 HWND WindowManager::getWindowHandle(std::wstring& wintitle)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(1500));
@@ -97,7 +124,8 @@ HWND WindowManager::getWindowHandle(std::wstring& wintitle)
             std::cout << hwnd << std::endl;
 
             return hwnd;
-        }else if (std::wstring(title) == L"一梦江湖-时雪") {
+        }
+        if (std::wstring(title) == L"一梦江湖-时雪") {
             wintitle = std::wstring(title);
             std::cout << childHandle << std::endl;
 

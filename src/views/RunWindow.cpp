@@ -358,6 +358,8 @@ bool RunWindow::detectWin(int &id, HWND &hwnd, std::wstring& wintitle) {
 
     id = getrowindex();
     hwnd = WindowManager::getWindowHandle(wintitle);
+    // std::cout << WindowManager::GetOwnedWindows(hwnd) << std::endl;
+    // return false;
     if (hwnd == nullptr) {
         auto *msgBox = new QMessageBox();
         msgBox->setWindowTitle("提示");

@@ -10,6 +10,8 @@
 class WindowManager
 {
 public:
+    static HWND GetOwnedWindows(HWND owner);
+
     [[nodiscard]] static HWND getWindowHandle(std::wstring& wintitle);
 
     static void setWinodw(HWND const &hwnd);
@@ -45,6 +47,7 @@ public:
     static void InputText(HWND hwnd, const std::string &text);
 
 private:
+
     // 键值到虚拟键码的映射
     static std::map<std::string, int> VkCode;
     // 私有成员变量和函数
