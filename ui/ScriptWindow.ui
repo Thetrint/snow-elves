@@ -63,7 +63,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -159,7 +159,33 @@
                </widget>
               </item>
               <item>
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+               <widget class="QComboBox" name="comboBox_11">
+                <item>
+                 <property name="text">
+                  <string>1.00</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>1.25</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>1.50</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>1.75</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>2.00</string>
+                 </property>
+                </item>
+               </widget>
               </item>
               <item>
                <spacer name="horizontalSpacer_7">
@@ -888,6 +914,32 @@
            <widget class="QCheckBox" name="checkBox_2">
             <property name="text">
              <string>江湖英雄榜秒退</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_51">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>华山论剑3v3次数:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinBox_7">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
            </widget>
           </item>

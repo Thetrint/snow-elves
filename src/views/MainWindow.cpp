@@ -525,6 +525,8 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["队伍"] = script->ui.lineEdit_25->text();
     root["地图"] = script->ui.lineEdit_26->text();
 
+    root["华山论剑3v3次数"] = script->ui.spinBox_7->value();
+
 
 
     return QJsonDocument(root);
@@ -611,6 +613,8 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_25->setText("T");
         script->ui.lineEdit_26->setText("M");
 
+        script->ui.spinBox_7->setValue(1);
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -675,7 +679,7 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_10->setText(root["技能8"].toString());
         script->ui.lineEdit_11->setText(root["普攻"].toString());
         script->ui.lineEdit_12->setText(root["绝学"].toString());
-        script->ui.lineEdit_13->setText(root["跳跃"].toString());
+        script->ui.lineEdit_13->setText(root["关山"].toString());
         script->ui.lineEdit_14->setText(root["闪避"].toString());
 
         script->ui.textEdit->setText(root["自定义连招"].toString());
@@ -692,6 +696,8 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_24->setText(root["帮派"].toString());
         script->ui.lineEdit_25->setText(root["队伍"].toString());
         script->ui.lineEdit_26->setText(root["地图"].toString());
+
+        script->ui.spinBox_7->setValue(root["华山论剑3v3次数"].toInt());
     }
 }
 
@@ -703,6 +709,7 @@ void MainWindow::writeSystemSettings() const {
     root["当前配置"] = script->ui.comboBox->currentText();
     root["全局延迟"] = script->ui.spinBox_4->value();
     root["过图倍率"] = script->ui.spinBox_6->value();
+    root["缩放比例"] = script->ui.comboBox_11->currentIndex();
     const auto settingsDoc =  QJsonDocument(root);
 
 
@@ -764,6 +771,7 @@ void MainWindow::readSystemSettings() const {
     script->ui.comboBox->setCurrentText(root["当前配置"].toString());
     script->ui.spinBox_4->setValue(root["全局延迟"].toInt());
     script->ui.spinBox_6->setValue(root["过图倍率"].toInt());
+    script->ui.comboBox_11->setCurrentIndex(root["缩放比例"].toInt());
 
 
 }

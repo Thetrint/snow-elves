@@ -68,7 +68,7 @@
 #include "resources/images.h"
 
 
-inline double FACTOR;
+inline double FACTOR = 1.00;
 inline int DELAY  = 1150;
 inline int DELAY_MAGNIFICATION  = 5;
 

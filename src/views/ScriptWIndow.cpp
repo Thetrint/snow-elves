@@ -65,6 +65,12 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.listWidget_2->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui.listWidget_2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    connect(ui.comboBox_11, &QComboBox::currentIndexChanged, [&]() {
+        std::cout << FACTOR << std::endl;
+        FACTOR = ui.comboBox_11->currentText().toDouble();
+        std::cout << FACTOR << std::endl;
+    });
+
     connect(ui.spinBox_4, &QSpinBox::valueChanged, [&](const int value) {
         std::cout << DELAY << std::endl;
         DELAY = value;

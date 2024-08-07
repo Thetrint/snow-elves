@@ -14,7 +14,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
-#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -52,7 +51,7 @@ public:
     QLabel *label_25;
     QSpinBox *spinBox_6;
     QLabel *label_50;
-    QDoubleSpinBox *doubleSpinBox_7;
+    QComboBox *comboBox_11;
     QSpacerItem *horizontalSpacer_7;
     QWidget *widget_14;
     QHBoxLayout *horizontalLayout_11;
@@ -135,6 +134,8 @@ public:
     QLabel *label_5;
     QSpinBox *spinBox_2;
     QCheckBox *checkBox_2;
+    QLabel *label_51;
+    QSpinBox *spinBox_7;
     QSpacerItem *horizontalSpacer;
     QSpacerItem *verticalSpacer;
     QWidget *page_3;
@@ -315,10 +316,15 @@ public:
 
         horizontalLayout_10->addWidget(label_50);
 
-        doubleSpinBox_7 = new QDoubleSpinBox(widget_13);
-        doubleSpinBox_7->setObjectName("doubleSpinBox_7");
+        comboBox_11 = new QComboBox(widget_13);
+        comboBox_11->addItem(QString());
+        comboBox_11->addItem(QString());
+        comboBox_11->addItem(QString());
+        comboBox_11->addItem(QString());
+        comboBox_11->addItem(QString());
+        comboBox_11->setObjectName("comboBox_11");
 
-        horizontalLayout_10->addWidget(doubleSpinBox_7);
+        horizontalLayout_10->addWidget(comboBox_11);
 
         horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
@@ -729,6 +735,20 @@ public:
         checkBox_2->setObjectName("checkBox_2");
 
         horizontalLayout_2->addWidget(checkBox_2);
+
+        label_51 = new QLabel(widget_5);
+        label_51->setObjectName("label_51");
+        sizePolicy2.setHeightForWidth(label_51->sizePolicy().hasHeightForWidth());
+        label_51->setSizePolicy(sizePolicy2);
+
+        horizontalLayout_2->addWidget(label_51);
+
+        spinBox_7 = new QSpinBox(widget_5);
+        spinBox_7->setObjectName("spinBox_7");
+        sizePolicy3.setHeightForWidth(spinBox_7->sizePolicy().hasHeightForWidth());
+        spinBox_7->setSizePolicy(sizePolicy3);
+
+        horizontalLayout_2->addWidget(spinBox_7);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
@@ -1194,7 +1214,7 @@ public:
 
         retranslateUi(ScriptWindow);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(ScriptWindow);
@@ -1211,6 +1231,12 @@ public:
         label_25->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_50->setText(QCoreApplication::translate("ScriptWindow", "\347\274\251\346\224\276\346\257\224\344\276\213:", nullptr));
         label_50->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_11->setItemText(0, QCoreApplication::translate("ScriptWindow", "1.00", nullptr));
+        comboBox_11->setItemText(1, QCoreApplication::translate("ScriptWindow", "1.25", nullptr));
+        comboBox_11->setItemText(2, QCoreApplication::translate("ScriptWindow", "1.50", nullptr));
+        comboBox_11->setItemText(3, QCoreApplication::translate("ScriptWindow", "1.75", nullptr));
+        comboBox_11->setItemText(4, QCoreApplication::translate("ScriptWindow", "2.00", nullptr));
+
         label_26->setText(QCoreApplication::translate("ScriptWindow", "\346\212\200\350\203\2751:", nullptr));
         label_26->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip1", nullptr)));
         lineEdit_3->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "kill", nullptr)));
@@ -1291,6 +1317,8 @@ public:
         label_5->setText(QCoreApplication::translate("ScriptWindow", "\346\261\237\346\271\226\350\213\261\351\233\204\346\246\234\346\254\241\346\225\260", nullptr));
         label_5->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         checkBox_2->setText(QCoreApplication::translate("ScriptWindow", "\346\261\237\346\271\226\350\213\261\351\233\204\346\246\234\347\247\222\351\200\200", nullptr));
+        label_51->setText(QCoreApplication::translate("ScriptWindow", "\345\215\216\345\261\261\350\256\272\345\211\2213v3\346\254\241\346\225\260:", nullptr));
+        label_51->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_6->setText(QCoreApplication::translate("ScriptWindow", "\346\227\245\345\270\270\346\202\254\350\265\217\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_6->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         label_7->setText(QCoreApplication::translate("ScriptWindow", "\345\211\257\346\234\254\345\226\212\350\257\235\345\206\205\345\256\271:", nullptr));

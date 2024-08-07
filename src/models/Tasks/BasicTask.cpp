@@ -242,9 +242,8 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
         //读取模板图片
         cv::Mat templ = ImageProcessor::imread(templ_name, id, ifs);
 
-        HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
         //模板匹配 数据转换类型
-        const cv::Mat img = ImageProcessor::HBITMAPToMat(hbitmap);
+        const cv::Mat img = ImageProcessor::HBITMAPToMat( WindowManager::CaptureAnImage(hwnd));
 
         const cv::Rect roi(match.scope.x1, match.scope.y1, match.scope.x2 - match.scope.x1, match.scope.y2 - match.scope.y1);
         cv::Mat image = img(roi);
@@ -286,7 +285,6 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
 
 
         matches.insert(matches.end(), matche.begin(), matche.end());
-        DeleteObject(hbitmap);
     }
 }
 

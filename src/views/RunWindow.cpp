@@ -289,10 +289,7 @@ RunWindow::RunWindow(QWidget *parent):
     //截图
     connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
         std::wstring wintitle;
-        HWND hwnd = WindowManager::getWindowHandle(wintitle);
-        // WindowManager::setWinodw(hwnd);
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        HBITMAP hBitmap = WindowManager::CaptureAnImage(hwnd);
+        HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle(wintitle));
         auto name = std::chrono::system_clock::now().time_since_epoch().count();
         WindowManager::SaveBitmapToFile(hBitmap, std::format(L"Testing/{}.bmp", name).c_str());
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
@@ -301,13 +298,13 @@ RunWindow::RunWindow(QWidget *parent):
         cv::Mat gray;
         cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
 
-        // 应用高斯模糊
-        cv::Mat blurred;
-        cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 1.2);
+        // // 应用高斯模糊
+        // cv::Mat blurred;
+        // cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 1.2);
 
         // 应用 Canny 边缘检测
         cv::Mat edges;
-        cv::Canny(blurred, edges, 100, 200);
+        cv::Canny(gray, edges, 50, 150);
         cv::imwrite(std::format("Testing/{}_edges.bmp", name), edges);
         // cv::imshow("Source Image", edges);
         // cv::waitKey(0);

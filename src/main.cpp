@@ -16,7 +16,7 @@
 int main(int argc, char *argv[])
 {
     //获取屏幕缩放
-    WindowManager::GetFactor();
+    // WindowManager::GetFactor();
     Logger::init(); // 初始化日志
 
     QApplication app(argc, argv);
