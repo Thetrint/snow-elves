@@ -39,7 +39,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
     << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器" << "门客设宴"
     << "破阵设宴" << "每日兑换" << "宗门任务" << "侠缘喊话" << "生死剑冢" << "宅邸打卡"
-    << "每日一卦";
+    << "每日一卦" << "江湖急送";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);

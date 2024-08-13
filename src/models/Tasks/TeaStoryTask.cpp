@@ -14,7 +14,7 @@ int TeaStoryTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(720 * 5)) {
             return 0;
         }
 
@@ -53,7 +53,7 @@ int TeaStoryTask::implementation() {
                 objective("等待完成");
                 break;
             case 4:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, std::make_unique<CAUSE>(cause, "开始任务"), "界面茶馆").empty()) {
+                if (!ClickImageMatch(MatchParams{.similar = 0.65}, std::make_unique<CAUSE>(cause, "开始任务"), "界面茶馆").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书甲", "按钮茶馆说书乙", "按钮茶馆说书丙", "按钮茶馆说书丁");
 
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆").empty()) {

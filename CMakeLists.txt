@@ -18,6 +18,7 @@ set(CMAKE_AUTOUIC ON)
 set(THREADS_PREFER_PTHREAD_FLAG OFF)
 set(CMAKE_PREFIX_PATH "D:/Qt/6.7.2/mingw_64/lib/cmake")
 set(CMAKE_TOOLCHAIN_FILE "D:/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};D:/vcpkg/installed/x64-mingw-dynamic")
 
 
 # 设置CMake找到OpenCV的路径
@@ -155,6 +156,8 @@ add_executable(SnowElvesScript WIN32
         include/utils/TaskScheduler.h
         src/models/Tasks/HexagramDayTask.cpp
         include/models/Tasks/HexagramDayTask.h
+        src/models/Tasks/UrgentDeliveryTask.cpp
+        include/models/Tasks/UrgentDeliveryTask.h
 
 
 )

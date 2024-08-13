@@ -139,6 +139,8 @@ protected:
 
     bool Close(const int &count);
 
+    bool BackInterface();
+
     void LocationDetection();
 
     void Shout(const std::string &text);

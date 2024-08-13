@@ -59,7 +59,7 @@ struct MatchParams {
     MatchScope scope = {0, 0, 1335, 750}; // 匹配范围
     MatchGauss gauss = {3, 3, 1.2}; //高斯模糊范围
     bool convertToGray = true; // 灰度处理开关
-    bool applyGaussianBlur = false; // 控制高斯模糊的开关
+    bool applyGaussianBlur = true; // 控制高斯模糊的开关
     bool applyEdgeDetection  = true; // 控制边缘检测
     EdgeThreshold edgeThreshold = {50, 150}; // 编译检测范围
     bool Show = false;
@@ -68,7 +68,8 @@ struct MatchParams {
 class ImageProcessor {
 public:
 
-
+    // 文字识别
+    // static std::string performOCR(const cv::Mat& mat);
 
     // 定义一个函数指针类型
     typedef std::vector<Match> (*FunctionPointer)(const cv::Mat& image, const cv::Mat &templ, MatchParams& match);

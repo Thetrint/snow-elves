@@ -22,6 +22,23 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create("windows11"));
 
+    QPalette win11Palette;
+    win11Palette.setColor(QPalette::Window, QColor(255, 255, 255));          // White background
+    win11Palette.setColor(QPalette::WindowText, QColor(0, 0, 0));            // Black text
+    win11Palette.setColor(QPalette::Base, QColor(245, 245, 245));            // Light gray for input fields
+    win11Palette.setColor(QPalette::AlternateBase, QColor(240, 240, 240));   // Slightly darker gray for alternate rows in views
+    win11Palette.setColor(QPalette::ToolTipBase, QColor(255, 255, 255));     // White for tooltips
+    win11Palette.setColor(QPalette::ToolTipText, QColor(0, 0, 0));           // Black text in tooltips
+    win11Palette.setColor(QPalette::Text, QColor(0, 0, 0));                  // Black text in input fields
+    win11Palette.setColor(QPalette::Button, QColor(240, 240, 240));          // Light gray for buttons
+    win11Palette.setColor(QPalette::ButtonText, QColor(0, 0, 0));            // Black text on buttons
+    win11Palette.setColor(QPalette::BrightText, QColor(255, 0, 0));          // Bright red for warnings
+    win11Palette.setColor(QPalette::Link, QColor(0, 120, 215));              // Blue for links
+    win11Palette.setColor(QPalette::Highlight, QColor(0, 120, 215));         // Blue highlight color
+    win11Palette.setColor(QPalette::HighlightedText, QColor(255, 255, 255)); // White text on highlighted areas
+    // Apply the palette to your application
+    QApplication::setPalette(win11Palette);
+
     LocalServer::getInstance().startServer("SnowElvesLocalServer");
 
     if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {

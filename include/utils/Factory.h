@@ -19,6 +19,7 @@
 #include <models/Tasks/TeaStoryTask.h>
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
+#include <models/Tasks/UrgentDeliveryTask.h>
 #include <models/Tasks/VientianeTask.h>
 #include "models/Tasks/DailyRedemptionTask.h"
 #include "models//TaskManager.h"
@@ -83,6 +84,7 @@ private:
         autoRegister<FateSwordTask>("生死剑冢");
         autoRegister<HouseClockTask>("宅邸打卡");
         autoRegister<HexagramDayTask>("每日一卦");
+        autoRegister<UrgentDeliveryTask>("江湖急送");
 
     }
 

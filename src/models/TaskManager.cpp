@@ -85,7 +85,7 @@ std::string TaskManager::getTask() {
             Init();
             return "占位任务";
         }
-        if (std::ranges::all_of(rolesTask.roles, [](const bool role) { return role; })) {
+        if (std::ranges::all_of(rolesTask.roles, [](const bool event) { return event; })) {
             rolesTask.roles[0] = false;
             Init();
             return "占位任务";

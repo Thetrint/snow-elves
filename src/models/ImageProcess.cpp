@@ -286,3 +286,66 @@ void ImageProcessor::nonMaxSuppression(std::vector<Match>& matches, const double
 
     matches = std::move(suppressedMatches);
 }
+
+// 将 cv::Mat 转换为 Pix
+// Pix* matToPix(const cv::Mat& mat) {
+//     // 确保图像是灰度图像（如果不是，可以进行转换）
+//     cv::Mat gray;
+//     if (mat.channels() != 1) {
+//         cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
+//     } else {
+//         gray = mat;
+//     }
+//
+//     // 创建 Pix 对象
+//     Pix* pix = pixCreate(gray.cols, gray.rows, 8);
+//     if (!pix) {
+//         std::cerr << "无法创建 Pix 对象。\n";
+//         return nullptr;
+//     }
+//
+//     // 将 cv::Mat 数据复制到 Pix 中
+//     memcpy(pixGetData(pix), gray.data, gray.total() * gray.elemSize());
+//
+//     return pix;
+// }
+//
+// // 文字识别
+// std::string ImageProcessor::performOCR(const cv::Mat& mat) {
+//     // 创建 Tesseract API 实例
+//     tesseract::TessBaseAPI api;
+//
+//     // 初始化 Tesseract，指定使用的中文语言数据（例如简体中文 "chi_sim"）
+//     if (api.Init(nullptr, "chi_sim")) {
+//         std::cerr << "无法初始化 Tesseract。\n"; // 输出中文错误信息
+//         return "";
+//     }
+//
+//     // 将 cv::Mat 转换为 Pix
+//     Pix* image = matToPix(mat);
+//     if (!image) {
+//         std::cerr << "无法将图像转换为 Pix。\n"; // 输出中文错误信息
+//         return "";
+//     }
+//
+//     // 设置图像进行 OCR 处理
+//     api.SetImage(image);
+//
+//     // 获取识别结果
+//     const char* outText = api.GetUTF8Text();
+//     if (!outText) {
+//         std::cerr << "无法从图像中提取文本。\n"; // 输出中文错误信息
+//         pixDestroy(&image);
+//         return "";
+//     }
+//
+//     // 将结果转换为 std::string
+//     std::string result(outText);
+//
+//     // 清理资源
+//     api.End();
+//     pixDestroy(&image);
+//     delete[] outText;
+//
+//     return result;
+// }

@@ -56,7 +56,7 @@ int TheSwordThreeTask::implementation() {
                 }
                 break;
             case 4:
-                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮论剑取消匹配").empty()) {
+                if (CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑取消匹配").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑匹配");
                 }
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确认").empty()) {

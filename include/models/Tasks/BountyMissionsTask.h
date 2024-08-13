@@ -31,15 +31,23 @@ public:
 private:
     std::string cause;
     /**
-     * 0. 判断副本开启成功最大次数
-     * 1. 副本开启次数
-     * 2. 身上悬赏数量
-     * 3. 脱离卡死最大次数
-     * 4. 副本完成判断最大次数
+     * 1. 记录判断是否在副本内次数
+     * 2. 记录翻页次数
+     * 3. 记录副本延迟退出
+     * 4. 记录脱离卡死次数
      */
-    std::vector<int> record_num{0, 0, 0, 0, 0};
+    std::vector<int> record_num{0, 0, 0, 0};
+    /**
+     * 1. 脱离卡死
+     * 2. 喊话间隔
+     */
     std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point()};
-    std::vector<bool> record_event{true, false};
+    /**
+     * 1. 副本内任务激活标志
+     * 2. 副本脱离卡死启动标志
+     * 3. 第一次接悬赏标志
+     */
+    std::vector<bool> record_event{true, false, true};
 
 };
 #endif //BOUNTYMISSIONSTASK_H

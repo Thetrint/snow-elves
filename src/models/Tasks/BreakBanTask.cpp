@@ -75,17 +75,24 @@ int BreakBanTask::implementation() {
 
                             if(!ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界摆摊购买").empty()) {
                                 Defer(2);
-                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮交易查看全服");
+                                ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮交易查看全服");
 
-                                if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买").empty()) {
-                                    Close({.similar = 0.5}, 1);
+                                if(!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .scope = {259, 410, 1076, 602}}, nullptr, "按钮交易购买").empty()) {
+                                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                                     continue;
                                 }
-                                ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
+
+                                if(!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .scope = {859, 536, 1170, 662}}, nullptr, "按钮交易批量购买").empty()) {
+                                    ClickImageMatch(MatchParams{.similar = 0.6, .clickCount = 15}, nullptr, "按钮确认");
+                                    continue;
+                                }
+                                Close(1);
                                 continue;
+
                             }
 
                             if(!ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
+                                Defer(2);
                                 mouse_down_up({.clickCount = 1}, {988, 694});
                                 Close({.similar = 0.5}, 1);
                             }
@@ -100,7 +107,7 @@ int BreakBanTask::implementation() {
                     x = 0;
                     if (++y == 2) {
                         ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 2}, nullptr, "按钮破阵设宴开始设宴");
-                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
+                        ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                         Close({.similar = 0.5}, 4);
                         objective("任务退出");
                     }
