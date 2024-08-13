@@ -46,11 +46,11 @@ int DailyRedemptionTask::implementation() {
                     OpenKnapsack();
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品珍宝阁");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮珍宝阁商城");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮珍宝阁搜索");
+                    ClickImageMatch(MatchParams{.similar = 0.6, .y = -130}, nullptr, "按钮珍宝阁绑元商城");
+                    ClickImageMatch(MatchParams{.similar = 0.7}, nullptr, "按钮珍宝阁搜索");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "标志珍宝阁输入名称");
                     input_text("银票礼盒");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮珍宝阁搜索");
+                    ClickImageMatch(MatchParams{.similar = 0.7}, nullptr, "按钮珍宝阁搜索");
                     if(!ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志珍宝阁银票礼盒").empty()) {
                         mouse_down_up({.clickCount = 30}, {988, 694});
                     }

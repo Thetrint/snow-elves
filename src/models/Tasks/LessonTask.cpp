@@ -131,7 +131,7 @@ int LessonTask::implementation() {
 
                 if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买");
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
+                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
                     Close({.similar = 0.5}, 1);
                 }
 

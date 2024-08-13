@@ -55,9 +55,10 @@ int HeroListTask::implementation() {
                 break;
             case 4:
                 if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "标志江湖英雄榜次数").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜晋级赛", "按钮江湖英雄榜匹配");
-                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜确定");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮江湖英雄榜晋级赛", "按钮江湖英雄榜匹配");
+                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮江湖英雄榜确定");
                     objective("等待战斗");
+                    PassLevel();
                     continue;
                 }
                 objective("任务退出");

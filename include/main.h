@@ -68,10 +68,12 @@
 #include "resources/images.h"
 
 
-inline double FACTOR;
+inline double FACTOR = 1.00;
 inline int DELAY  = 1150;
 inline int DELAY_MAGNIFICATION  = 5;
-
+// 副本悬赏接取同步机制
+inline std::array BountyAccess = {true, true, true, true, true, true, true, true, true, true};
+inline std::array BountyFinish = {true, true, true, true, true, true, true, true, true, true};
 
 
 #endif //MAIN_H

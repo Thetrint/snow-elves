@@ -17,12 +17,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(THREADS_PREFER_PTHREAD_FLAG OFF)
 set(CMAKE_PREFIX_PATH "D:/Qt/6.7.2/mingw_64/lib/cmake")
+set(CMAKE_TOOLCHAIN_FILE "D:/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};D:/vcpkg/installed/x64-mingw-dynamic")
+
 
 # 设置CMake找到OpenCV的路径
 set(OpenCV_DIR "D:/opencv")
 find_package(OpenCV REQUIRED)
-
-
 
 
 # 遍历 BMP 图像文件夹并生成图片资源的头文件
@@ -58,9 +59,12 @@ qt6_add_binary_resources(RESOURCE
 )
 
 include(FetchContent)
-FetchContent_Declare(cpr GIT_REPOSITORY https://github.com/libcpr/cpr.git
+FetchContent_Declare(
+        cpr
+        GIT_REPOSITORY https://github.com/libcpr/cpr.git
         GIT_TAG 3b15fa82ea74739b574d705fea44959b58142eb8) # Replace with your desired git commit from: https://github.com/libcpr/cpr/releases
 FetchContent_MakeAvailable(cpr)
+
 
 add_subdirectory(external/spdlog)
 
@@ -148,6 +152,12 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/HouseClockTask.h
         src/QtUtils/CustomLineEdit.cpp
         include/QtUtils/CustomLineEdit.h
+        src/utils/TaskScheduler.cpp
+        include/utils/TaskScheduler.h
+        src/models/Tasks/HexagramDayTask.cpp
+        include/models/Tasks/HexagramDayTask.h
+        src/models/Tasks/UrgentDeliveryTask.cpp
+        include/models/Tasks/UrgentDeliveryTask.h
 
 
 )

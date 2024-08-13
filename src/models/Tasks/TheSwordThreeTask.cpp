@@ -16,7 +16,7 @@ int TheSwordThreeTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(720 * config.value("华山论剑3v3次数").toInt())) {
             return 0;
         }
 
@@ -56,7 +56,7 @@ int TheSwordThreeTask::implementation() {
                 }
                 break;
             case 4:
-                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮论剑取消匹配").empty()) {
+                if (CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑取消匹配").empty()) {
                     ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 1}, nullptr, "按钮论剑匹配");
                 }
                 if (!CoortImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确认").empty()) {
@@ -80,7 +80,7 @@ int TheSwordThreeTask::implementation() {
                     FightStop();
                     PassLevel();
                     Log(std::format("华山论剑 3v3 完成 {} 次", record_num[0]));
-                    if (++record_num[0] >= config.value("华山论剑次数").toInt() + 1) {
+                    if (++record_num[0] > config.value("华山论剑3v3次数").toInt() ) {
                         objective("任务退出");
                         continue;
                     }
