@@ -507,10 +507,26 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["技能8"] = script->ui.lineEdit_10->text();
     root["普攻"] = script->ui.lineEdit_11->text();
     root["绝学"] = script->ui.lineEdit_12->text();
-    root["跳跃"] = script->ui.lineEdit_13->text();
+    root["关山"] = script->ui.lineEdit_13->text();
     root["闪避"] = script->ui.lineEdit_14->text();
 
     root["自定义连招"] = script->ui.textEdit->toPlainText();
+
+    root["自创1"] = script->ui.lineEdit_15->text();
+    root["自创2"] = script->ui.lineEdit_16->text();
+    root["自创3"] = script->ui.lineEdit_17->text();
+    root["自创4"] = script->ui.lineEdit_18->text();
+    root["前"] = script->ui.lineEdit_19->text();
+    root["后"] = script->ui.lineEdit_20->text();
+    root["左"] = script->ui.lineEdit_21->text();
+    root["右"] = script->ui.lineEdit_22->text();
+    root["背包"] = script->ui.lineEdit_23->text();
+    root["帮派"] = script->ui.lineEdit_24->text();
+    root["队伍"] = script->ui.lineEdit_25->text();
+    root["地图"] = script->ui.lineEdit_26->text();
+
+    root["华山论剑3v3次数"] = script->ui.spinBox_7->value();
+
 
 
     return QJsonDocument(root);
@@ -584,6 +600,21 @@ void MainWindow::readUserSettings(const QString& filename) const {
 
         script->ui.textEdit->setText("点击#技能1#2000 点击#普攻#2000 点击#技能2#2000 点击#技能3#2000 点击#技能4#2000 点击#技能5#2000 点击#技能6#2000 点击#技能7#2000 点击#技能8#2000 点击#绝学#2000");
 
+        script->ui.lineEdit_15->setText("");
+        script->ui.lineEdit_16->setText("");
+        script->ui.lineEdit_17->setText("");
+        script->ui.lineEdit_18->setText("");
+        script->ui.lineEdit_19->setText("W");
+        script->ui.lineEdit_20->setText("S");
+        script->ui.lineEdit_21->setText("A");
+        script->ui.lineEdit_22->setText("D");
+        script->ui.lineEdit_23->setText("B");
+        script->ui.lineEdit_24->setText("O");
+        script->ui.lineEdit_25->setText("T");
+        script->ui.lineEdit_26->setText("M");
+
+        script->ui.spinBox_7->setValue(1);
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -648,10 +679,25 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_10->setText(root["技能8"].toString());
         script->ui.lineEdit_11->setText(root["普攻"].toString());
         script->ui.lineEdit_12->setText(root["绝学"].toString());
-        script->ui.lineEdit_13->setText(root["跳跃"].toString());
+        script->ui.lineEdit_13->setText(root["关山"].toString());
         script->ui.lineEdit_14->setText(root["闪避"].toString());
 
         script->ui.textEdit->setText(root["自定义连招"].toString());
+
+        script->ui.lineEdit_15->setText(root["自创1"].toString());
+        script->ui.lineEdit_16->setText(root["自创2"].toString());
+        script->ui.lineEdit_17->setText(root["自创3"].toString());
+        script->ui.lineEdit_18->setText(root["自创4"].toString());
+        script->ui.lineEdit_19->setText(root["前"].toString());
+        script->ui.lineEdit_20->setText(root["后"].toString());
+        script->ui.lineEdit_21->setText(root["左"].toString());
+        script->ui.lineEdit_22->setText(root["右"].toString());
+        script->ui.lineEdit_23->setText(root["背包"].toString());
+        script->ui.lineEdit_24->setText(root["帮派"].toString());
+        script->ui.lineEdit_25->setText(root["队伍"].toString());
+        script->ui.lineEdit_26->setText(root["地图"].toString());
+
+        script->ui.spinBox_7->setValue(root["华山论剑3v3次数"].toInt());
     }
 }
 
@@ -663,6 +709,7 @@ void MainWindow::writeSystemSettings() const {
     root["当前配置"] = script->ui.comboBox->currentText();
     root["全局延迟"] = script->ui.spinBox_4->value();
     root["过图倍率"] = script->ui.spinBox_6->value();
+    root["缩放比例"] = script->ui.comboBox_11->currentIndex();
     const auto settingsDoc =  QJsonDocument(root);
 
 
@@ -724,6 +771,7 @@ void MainWindow::readSystemSettings() const {
     script->ui.comboBox->setCurrentText(root["当前配置"].toString());
     script->ui.spinBox_4->setValue(root["全局延迟"].toInt());
     script->ui.spinBox_6->setValue(root["过图倍率"].toInt());
+    script->ui.comboBox_11->setCurrentIndex(root["缩放比例"].toInt());
 
 
 }

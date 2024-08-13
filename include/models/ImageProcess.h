@@ -61,14 +61,15 @@ struct MatchParams {
     bool convertToGray = true; // 灰度处理开关
     bool applyGaussianBlur = true; // 控制高斯模糊的开关
     bool applyEdgeDetection  = true; // 控制边缘检测
-    EdgeThreshold edgeThreshold = {100, 200}; // 编译检测范围
+    EdgeThreshold edgeThreshold = {50, 150}; // 编译检测范围
     bool Show = false;
 };
 
 class ImageProcessor {
 public:
 
-
+    // 文字识别
+    // static std::string performOCR(const cv::Mat& mat);
 
     // 定义一个函数指针类型
     typedef std::vector<Match> (*FunctionPointer)(const cv::Mat& image, const cv::Mat &templ, MatchParams& match);

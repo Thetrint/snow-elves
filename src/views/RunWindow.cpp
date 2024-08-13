@@ -108,7 +108,7 @@ RunWindow::RunWindow(QWidget *parent):
     });
 
     connect(ui.pushButton_6, &QPushButton::clicked, this, [&](){
-
+        std::vector<int> idsToClear;
         for (const auto&[id, data] : managerDictionary) {
 
             if(QTableWidgetItem* item = ui.tableWidget->item(id, 0)) {
@@ -122,11 +122,14 @@ RunWindow::RunWindow(QWidget *parent):
             LocalServer::getInstance().connections[id]->write("Close");
             LocalServer::getInstance().connections[id]->flush();
 
-
+            idsToClear.push_back(id);
         }
 
         LocalServer::getInstance().connections.clear();
-        managerDictionary.clear();
+        // 清空 managerDictionary
+        for (int id : idsToClear) {
+            managerDictionary.erase(id);
+        }
 
 
     });
@@ -251,7 +254,10 @@ RunWindow::RunWindow(QWidget *parent):
     connect(Signals::instance(), &Signals::setPersion, this, [&](const int id, HWND hwnd) {
         try {
             spdlog::info("设置角色信息");
-            const cv::Mat image = ImageProcessor::HBITMAPToMat(WindowManager::CaptureAnImage(hwnd));
+
+            HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
+            const cv::Mat image = ImageProcessor::HBITMAPToMat(hbitmap);
+            DeleteObject(hbitmap);
             const cv::Rect roi(120, 730, 115, 20);
             cv::Mat persionImage = image(roi);
             // cv::imshow("12", image);
@@ -289,25 +295,20 @@ RunWindow::RunWindow(QWidget *parent):
     //截图
     connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
         std::wstring wintitle;
-        HWND hwnd = WindowManager::getWindowHandle(wintitle);
-        // WindowManager::setWinodw(hwnd);
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        HBITMAP hBitmap = WindowManager::CaptureAnImage(hwnd);
+        HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle(wintitle));
         auto name = std::chrono::system_clock::now().time_since_epoch().count();
         WindowManager::SaveBitmapToFile(hBitmap, std::format(L"Testing/{}.bmp", name).c_str());
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
-
-
         cv::Mat gray;
         cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
 
-        // 应用高斯模糊
+        // // 应用高斯模糊
         cv::Mat blurred;
         cv::GaussianBlur(gray, blurred, cv::Size(3, 3), 1.2);
 
         // 应用 Canny 边缘检测
         cv::Mat edges;
-        cv::Canny(blurred, edges, 100, 200);
+        cv::Canny(blurred, edges, 50, 150);
         cv::imwrite(std::format("Testing/{}_edges.bmp", name), edges);
         // cv::imshow("Source Image", edges);
         // cv::waitKey(0);
@@ -358,6 +359,8 @@ bool RunWindow::detectWin(int &id, HWND &hwnd, std::wstring& wintitle) {
 
     id = getrowindex();
     hwnd = WindowManager::getWindowHandle(wintitle);
+    // std::cout << WindowManager::GetOwnedWindows(hwnd) << std::endl;
+    // return false;
     if (hwnd == nullptr) {
         auto *msgBox = new QMessageBox();
         msgBox->setWindowTitle("提示");

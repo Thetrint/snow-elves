@@ -11,7 +11,7 @@
  * @return
  */
 bool BasicTask::OpenMap() {
-    key_down_up({}, "M");
+    key_down_up({}, config.value("地图").toString().toStdString());
     if (!CoortImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "标志地图当前坐标").empty()) {
 
         return true;
@@ -26,11 +26,13 @@ bool BasicTask::OpenMap() {
  * @return
  */
 bool BasicTask::OpenTeam() {
-    key_down_up({}, "T");
+    if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+        BackInterface();
+        key_down_up({}, config.value("队伍").toString().toStdString());
+    }
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
-
     return false;
 
 }
@@ -53,7 +55,7 @@ bool BasicTask::OpenESC() {
  * @return
  */
 bool BasicTask::OpenKnapsack() {
-    key_down_up({}, "B");
+    key_down_up({}, config.value("背包").toString().toStdString());
     if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
         return true;
     }
@@ -65,8 +67,12 @@ bool BasicTask::OpenKnapsack() {
  * @return
  */
 bool BasicTask::OpenFaction() {
-    key_down_up({}, "O");
-    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+    if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面帮派").empty()) {
+        BackInterface();
+        key_down_up({}, config.value("帮派").toString().toStdString());
+    }
+
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面帮派").empty()) {
         return true;
     }
 
@@ -127,6 +133,23 @@ bool BasicTask::Close(const MatchParams& match, const int &count) {
             break;
         }
     }
+    Defer(1);
+    return false;
+}
+
+bool BasicTask::Close(const int &count) {
+    for (int i = 0; i < count; ++i) {
+        if (ClickImageMatch({.similar = 0.6, .matchCount = 1, .click = FORWARD}, nullptr, "按钮关闭", "按钮关闭1").empty()) {
+            break;
+        }
+    }
+    Defer(1);
+    return false;
+}
+
+bool BasicTask::BackInterface() {
+    Close(1);
+
     return false;
 }
 
@@ -151,7 +174,7 @@ void BasicTask::LocationDetection() {
         ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("484");
 
-        ClickImageMatch({.similar = 0.75}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图前往区域");
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
         Arrive();
 
@@ -162,7 +185,7 @@ void BasicTask::LocationDetection() {
  * 基础功能 双世界喊话
  */
 void BasicTask::Shout(const std::string &text) {
-    mouse_down_up({}, {15, 600});
+    mouse_down_up({}, {305, 600});
 
     ClickImageMatch({.similar = 0.65, .scope = {0, 0, 140, 695}}, nullptr, "按钮大世界世界");
     ClickImageMatch({.similar = 0.5}, nullptr, "标志大世界输入文字");
@@ -186,7 +209,8 @@ void BasicTask::Arrive() {
         if (CoortImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "标志大世界自动寻路中").empty()) {
             count++;
 
-            if (count >= 15) {
+            if (count >= DELAY_MAGNIFICATION) {
+                Log("寻路结束");
                 return;
             }
 
@@ -203,7 +227,9 @@ void BasicTask::Arrive() {
  */
 void BasicTask::LeaveTeam() {
     Log("离开队伍");
-    OpenTeam();
+    if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+        OpenTeam();
+    }
     ClickImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
     Close({.similar = 0.5}, 2);
@@ -212,10 +238,11 @@ void BasicTask::LeaveTeam() {
 
 void BasicTask::OffCard() {
     Log("脱离卡死");
+    key_down_up({}, "space");
     OpenESC();
     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮设置脱离卡死");
     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮设置确定");
-   Close({.similar = 0.5}, 3);;
+    Close({.similar = 0.5}, 3);;
 
 }
 
@@ -236,6 +263,7 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
         HBITMAP hbitmap = WindowManager::CaptureAnImage(hwnd);
         //模板匹配 数据转换类型
         const cv::Mat img = ImageProcessor::HBITMAPToMat(hbitmap);
+        DeleteObject(hbitmap);
 
         const cv::Rect roi(match.scope.x1, match.scope.y1, match.scope.x2 - match.scope.x1, match.scope.y2 - match.scope.y1);
         cv::Mat image = img(roi);
@@ -275,9 +303,8 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
         //模板匹配
         // std::vector<ImageProcessor::Match> matches = ImageProcessor::matchTemplate(image, templ, ImageProcessor::matchTemplate_TM_CCORR_NORMED);
 
-
         matches.insert(matches.end(), matche.begin(), matche.end());
-        DeleteObject(hbitmap);
+
     }
 }
 
