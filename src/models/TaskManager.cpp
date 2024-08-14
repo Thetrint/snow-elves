@@ -33,6 +33,8 @@ TaskManager::TaskManager(const int id, HWND hwnd, const QJsonDocument& configJso
     ));
 
     // scheduler->start();
+    // 等待通知开始
+    pause_event.lock();
 }
 
 TaskManager::~TaskManager() {
@@ -142,9 +144,8 @@ void TaskManager::start(){
         }
         // 复制文件，并使用 overwrite_existing 选项自动覆盖已存在的文件
         std::filesystem::copy(source_file, destination_file, std::filesystem::copy_options::overwrite_existing);
-        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(4000));
         emit Signals::instance()->setPersion(id, hwnd);
-
 
         std::string task;
         while ((task = getTask()).empty() == false && unbind_event){

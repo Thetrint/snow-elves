@@ -53,6 +53,7 @@ struct MatchParams {
     int x = 0; //偏移坐标x
     int y = 0; //偏移坐标y
     int clickCount = 1;
+    int clickDelayNum = 20;
     bool clickDelay = true;
     bool matchDelay = true;
     bool keyDelay = true;

@@ -74,6 +74,8 @@ inline int DELAY_MAGNIFICATION  = 5;
 // 副本悬赏接取同步机制
 inline std::array BountyAccess = {true, true, true, true, true, true, true, true, true, true};
 inline std::array BountyFinish = {true, true, true, true, true, true, true, true, true, true};
+// 江湖行商同步机制
+inline std::array MerchantLakeFinish = {false, false, false, false, false, false, false, false, false, false};
 
 
 #endif //MAIN_H

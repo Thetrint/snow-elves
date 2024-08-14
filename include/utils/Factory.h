@@ -14,6 +14,7 @@
 #include <models/Tasks/HeroListTask.h>
 #include <models/Tasks/HexagramDayTask.h>
 #include <models/Tasks/HouseClockTask.h>
+#include <models/Tasks/MerchantLakeTask.h>
 #include <models/Tasks/RiverTask.h>
 #include <models/Tasks/SectTask.h>
 #include <models/Tasks/TeaStoryTask.h>
@@ -22,8 +23,6 @@
 #include <models/Tasks/UrgentDeliveryTask.h>
 #include <models/Tasks/VientianeTask.h>
 #include "models/Tasks/DailyRedemptionTask.h"
-#include "models//TaskManager.h"
-#include "models/ImageProcess.h"
 #include "models/Tasks/BasicTask.h"
 #include "models/Tasks/LessonTask.h"
 #include "models/Tasks/FactionTask.h"
@@ -85,6 +84,7 @@ private:
         autoRegister<HouseClockTask>("宅邸打卡");
         autoRegister<HexagramDayTask>("每日一卦");
         autoRegister<UrgentDeliveryTask>("江湖急送");
+        autoRegister<MerchantLakeTask>("江湖行商");
 
     }
 

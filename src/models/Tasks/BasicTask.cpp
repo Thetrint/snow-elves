@@ -139,7 +139,7 @@ bool BasicTask::Close(const MatchParams& match, const int &count) {
 
 bool BasicTask::Close(const int &count) {
     for (int i = 0; i < count; ++i) {
-        if (ClickImageMatch({.similar = 0.6, .matchCount = 1, .click = FORWARD}, nullptr, "按钮关闭", "按钮关闭1").empty()) {
+        if (ClickImageMatch({.similar = 0.5, .matchCount = 1, .click = FORWARD}, nullptr, "按钮关闭", "按钮关闭1").empty()) {
             break;
         }
     }
@@ -153,6 +153,49 @@ bool BasicTask::BackInterface() {
     return false;
 }
 
+/**
+ * 基础功能 离线队友检测
+ */
+void BasicTask::OfflineDetection() {
+    if (OpenTeam()) {
+        while (unbind_event) {
+            if(CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍离线").empty()) {
+                break;
+            }
+            for(auto [location, score]: CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍离线")) {
+                mouse_down_up({}, {location.x, location.y});
+                ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍请离队伍");
+                break;
+            }
+        }
+
+    }
+}
+
+bool BasicTask::FollowDetection() {
+    if (OpenTeam()) {
+        if(ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍一键召回").empty()) {
+            return true;
+        }
+        Log("等待队伍跟随");
+        Defer(21, 1000);
+        if(CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍暂离").empty()) {
+            return true;
+        }
+        while (unbind_event) {
+            if(CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍暂离").empty()) {
+                return false;
+            }
+            for(auto [location, score]: CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍暂离")) {
+                mouse_down_up({}, {location.x, location.y});
+                ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍请离队伍");
+                break;
+            }
+        }
+
+    }
+    return false;
+}
 /**
  * 基础功能 位置检查 重置位置
  */
@@ -313,7 +356,7 @@ void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& locatio
         std::lock_guard lock(pause_event);
         for (int i = 1; i <= match.clickCount; i++) {
             WindowManager::MouseDownUp(hwnd, location.x + match.x, location.y + match.y);
-            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+            std::this_thread::sleep_for(std::chrono::milliseconds(match.clickDelayNum));
         }
 
         if (match.clickDelay) {
