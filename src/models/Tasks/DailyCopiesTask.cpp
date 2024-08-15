@@ -155,6 +155,7 @@ int DailyCopiesTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本跳过剧情");
                     }
 
+                    // 副本内判断
                     if(++record_num[1] >= 15) {
                         target = 3;
                     }

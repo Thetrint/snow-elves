@@ -535,6 +535,7 @@ QJsonDocument MainWindow::createJsonDocument() const {
 
 
 
+
     return QJsonDocument(root);
 }
 
@@ -621,7 +622,7 @@ void MainWindow::readUserSettings(const QString& filename) const {
 
         script->ui.spinBox_7->setValue(1);
 
-        script->ui.lineEdit_27->setText("江湖行商来人!!!");
+        script->ui.lineEdit_27->setText("江湖行商/聚义平冤来人!!!");
         script->ui.spinBox_8->setValue(5);
         script->ui.comboBox_12->setCurrentText("带队模式");
         script->ui.spinBox_9->setValue(1);

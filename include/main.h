@@ -76,6 +76,7 @@ inline std::array BountyAccess = {true, true, true, true, true, true, true, true
 inline std::array BountyFinish = {true, true, true, true, true, true, true, true, true, true};
 // 江湖行商同步机制
 inline std::array MerchantLakeFinish = {false, false, false, false, false, false, false, false, false, false};
-
+// 聚义平冤同步机制
+inline std::array PacifyFinish = {false, false, false, false, false, false, false, false, false, false};
 
 #endif //MAIN_H

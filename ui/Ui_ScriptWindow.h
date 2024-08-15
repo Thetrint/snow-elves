@@ -354,7 +354,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 809, 800));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 394, 800));
         scrollAreaWidgetContents->setMinimumSize(QSize(0, 800));
         verticalLayout_10 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_10->setSpacing(0);
@@ -1428,14 +1428,14 @@ public:
         label_51->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_52->setText(QCoreApplication::translate("ScriptWindow", "\346\261\237\346\271\226\350\241\214\345\225\206\346\254\241\346\225\260:", nullptr));
         label_52->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
-        label_53->setText(QCoreApplication::translate("ScriptWindow", "\346\261\237\346\271\226\350\241\214\345\225\206\346\250\241\345\274\217:", nullptr));
+        label_53->setText(QCoreApplication::translate("ScriptWindow", "\350\241\214\345\225\206/\350\201\232\344\271\211\346\250\241\345\274\217:", nullptr));
         label_53->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         comboBox_12->setItemText(0, QCoreApplication::translate("ScriptWindow", "\345\270\246\351\230\237\346\250\241\345\274\217", nullptr));
         comboBox_12->setItemText(1, QCoreApplication::translate("ScriptWindow", "\345\233\272\345\256\232\351\230\237\346\250\241\345\274\217", nullptr));
 
         label_54->setText(QCoreApplication::translate("ScriptWindow", "\351\230\237\351\225\277\347\274\226\345\217\267:", nullptr));
         label_54->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
-        label_55->setText(QCoreApplication::translate("ScriptWindow", "\346\261\237\346\271\226\350\241\214\345\225\206\345\226\212\350\257\235\345\206\205\345\256\271:", nullptr));
+        label_55->setText(QCoreApplication::translate("ScriptWindow", "\350\241\214\345\225\206/\350\201\232\344\271\211\345\226\212\350\257\235\345\206\205\345\256\271:", nullptr));
         label_55->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_6->setText(QCoreApplication::translate("ScriptWindow", "\346\227\245\345\270\270\346\202\254\350\265\217\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_6->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));

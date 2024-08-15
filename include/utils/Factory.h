@@ -15,6 +15,7 @@
 #include <models/Tasks/HexagramDayTask.h>
 #include <models/Tasks/HouseClockTask.h>
 #include <models/Tasks/MerchantLakeTask.h>
+#include <models/Tasks/PacifyInjusticeTask.h>
 #include <models/Tasks/RiverTask.h>
 #include <models/Tasks/SectTask.h>
 #include <models/Tasks/TeaStoryTask.h>
@@ -85,6 +86,7 @@ private:
         autoRegister<HexagramDayTask>("每日一卦");
         autoRegister<UrgentDeliveryTask>("江湖急送");
         autoRegister<MerchantLakeTask>("江湖行商");
+        autoRegister<PacifyInjusticeTask>("聚义平冤");
 
     }
 

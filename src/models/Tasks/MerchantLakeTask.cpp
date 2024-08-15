@@ -22,6 +22,8 @@ int MerchantLakeTask::implementation() {
             switch (target) {
                 // 任务退出
                 case 0: {
+                    // 重置全局资源
+                    MerchantLakeFinish[id] = false;
                     return 0;
                 }
                 // 位置检测
@@ -68,11 +70,10 @@ int MerchantLakeTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品综合入口");
                         ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品活动");
                         ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮活动行当");
-                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮活动江湖行商", "按钮活动江湖行商1");
-                        ClickImageMatch(MatchParams{.similar = 0.65, .scope = {761, 525, 1335, 750}}, nullptr, "按钮江湖行商前往");
+                        ClickImageMatch(MatchParams{.similar = 0.55}, nullptr, "按钮活动江湖行商", "按钮活动江湖行商1");
+                        ClickImageMatch(MatchParams{.similar = 0.65, .scope = {661, 525, 1335, 750}}, nullptr, "按钮江湖行商前往");
                         Arrive();
                         target = 4;
-
                     }else {
                         // 第一次喊话开启自动匹配
                         if(record_event[0]) {
@@ -97,21 +98,16 @@ int MerchantLakeTask::implementation() {
                         continue;
                     }
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮江湖行商确认发起");
+
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮铜钱");
-                    if(!ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志江湖行商等待确认").empty()) {
-                        Defer(20, 1000);
-                        Close(1);
-                        target = 5;
-                    }
+                    Close(2);
+                    Defer(20, 1000);
+                    ClickImageMatch(MatchParams{.similar = 0.75, .scope = {41, 212, 110, 425}}, nullptr, "按钮大世界行商任务");
+                    target = 5;
                     break;
                 }
                 case 5: {
 
-                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[1]).count() > 360) {
-                        ClickImageMatch(MatchParams{.similar = 0.75, .matchCount = 1, .scope = {41, 212, 110, 425}}, nullptr, "按钮大世界行商任务");
-                        // 更新喊话时间
-                        record_time[1] = std::chrono::steady_clock::now();
-                    }
                     // 等待到达商人
                     if(!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .y = 85}, nullptr, "按钮江湖行商威逼交易").empty()) {
                         record_event[2] = false;
@@ -166,13 +162,13 @@ int MerchantLakeTask::implementation() {
                                 // 判断任务是否完成
                                 if (++record_num[1] > config.value("江湖行商次数").toInt()) {
                                     MerchantLakeFinish[id] = true;
+                                    CloseReward(3);
                                     target = 0;
                                     continue;
                                 }
                                 target = 3;
                                 // 重置参数
                                 record_num[2] = 0;
-                                record_time[1] = std::chrono::steady_clock::time_point();
                                 record_event[2] = true;
                                 continue;
                             }
@@ -193,7 +189,6 @@ int MerchantLakeTask::implementation() {
                             target = 3;
                             // 重置参数
                             record_num[2] = 0;
-                            record_time[1] = std::chrono::steady_clock::time_point();
                             record_event[2] = true;
                         }
                     }

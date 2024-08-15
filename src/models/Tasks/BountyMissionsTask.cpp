@@ -70,7 +70,7 @@ int BountyMissionsTask::implementation() {
                         if(!CoortImageMatch(MatchParams{.similar = 0.85, .clickDelay = false}, nullptr, "标志悬赏完成").empty()) {
                             if(record_event[2]) {
                                 record_event[2] = false;
-                                ClickImageMatch(MatchParams{.similar = 0.65, .x = -60, .clickCount = 11}, nullptr, "按钮悬赏上页");
+                                ClickImageMatch(MatchParams{.similar = 0.65, .x = -60, .clickCount = 51}, nullptr, "按钮悬赏上页");
                                 continue;
                             }
                             Close(3);

@@ -37,9 +37,8 @@ private:
     std::vector<int> record_num{0, 1, 0};
     /**
      * 0. 江湖行商世界喊人间隔时间
-     * 1. 定时激活行商任务
      */
-    std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point()};
+    std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point()};
     /**
      * 0. 江湖行商第一次喊话 开启自动匹配标志
      * 1. 江湖行商购买完标志下次出售

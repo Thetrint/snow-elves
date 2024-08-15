@@ -156,7 +156,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>809</width>
+            <width>394</width>
             <height>800</height>
            </rect>
           </property>
@@ -1080,7 +1080,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>江湖行商模式:</string>
+             <string>行商/聚义模式:</string>
             </property>
             <property name="class" stdset="0">
              <string>tip</string>
@@ -1155,7 +1155,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>江湖行商喊话内容:</string>
+             <string>行商/聚义喊话内容:</string>
             </property>
             <property name="class" stdset="0">
              <string>tip</string>
