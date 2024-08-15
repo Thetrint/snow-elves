@@ -141,6 +141,10 @@ protected:
 
     bool BackInterface();
 
+    void OfflineDetection();
+
+    bool FollowDetection();
+
     void LocationDetection();
 
     void Shout(const std::string &text);

@@ -14,6 +14,11 @@ RunWindow::RunWindow(QWidget *parent):
 {
     ui.setupUi(this);  // 初始化界面布局和元素
 
+    // 通知任务开始
+    connect(Signals::instance(), &Signals::TaskStart, this, [&](const int id) {
+        managerDictionary[id].instance->resume();
+    });
+
     // 使用 Lambda 表达式作为槽函数
     // 任务开始
     connect(Signals::instance(), &Signals::Start, this, [&]() {
