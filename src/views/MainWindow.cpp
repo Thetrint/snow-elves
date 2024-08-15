@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent):
 
     setMinimumSize(1100, 650);
 
-
+    setWindowTitle(QString::fromStdString(std::string("时雪") + PROJECT_VERSION));
 
     home = new HomeWindow(this);
     addPageAndButton("主页", home);
@@ -527,6 +527,13 @@ QJsonDocument MainWindow::createJsonDocument() const {
 
     root["华山论剑3v3次数"] = script->ui.spinBox_7->value();
 
+    root["江湖行商喊话内容"] = script->ui.lineEdit_27->text();
+    root["江湖行商次数"] = script->ui.spinBox_8->value();
+    root["江湖行商模式"] = script->ui.comboBox_12->currentText();
+    root["江湖行商队长编号"] = script->ui.spinBox_9->value();
+
+
+
 
 
     return QJsonDocument(root);
@@ -615,6 +622,11 @@ void MainWindow::readUserSettings(const QString& filename) const {
 
         script->ui.spinBox_7->setValue(1);
 
+        script->ui.lineEdit_27->setText("江湖行商/聚义平冤来人!!!");
+        script->ui.spinBox_8->setValue(5);
+        script->ui.comboBox_12->setCurrentText("带队模式");
+        script->ui.spinBox_9->setValue(1);
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -698,6 +710,11 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.lineEdit_26->setText(root["地图"].toString());
 
         script->ui.spinBox_7->setValue(root["华山论剑3v3次数"].toInt());
+
+        script->ui.lineEdit_27->setText(root["江湖行商喊话内容"].toString());
+        script->ui.spinBox_8->setValue(root["江湖行商次数"].toInt());
+        script->ui.comboBox_12->setCurrentText(root["江湖行商模式"].toString());
+        script->ui.spinBox_9->setValue(root["江湖行商队长编号"].toInt());
     }
 }
 

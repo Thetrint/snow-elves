@@ -4,6 +4,7 @@
 #include "utils/LocalServer.h"
 #include <QLocalSocket>
 #include <utility>
+#include <utils/Signals.h>
 
 
 // 静态实例的定义
@@ -37,7 +38,7 @@ void LocalServer::handleNewConnection() {
                 // 存储连接
                 connections[id] = clientSocket;
                 qDebug() << "Connection stored with ID:" << id;
-
+                emit Signals::instance()->TaskStart(id);
                 // // 可以发送确认消息或进行其他处理
                 // clientSocket->write("ID received: " + QByteArray::number(id));
                 // clientSocket->flush();

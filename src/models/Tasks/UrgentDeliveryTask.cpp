@@ -34,7 +34,7 @@ int UrgentDeliveryTask::implementation() {
             case 2: {
                 OpenTeam();
                 if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍创建").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+                    ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
                 Close({.similar = 0.5}, 1);
@@ -49,6 +49,7 @@ int UrgentDeliveryTask::implementation() {
 
                 // 判断是否完成
                 if(!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志江湖急送订单上限").empty()) {
+                    Close(2);
                     target = 0;
                     continue;
                 }
@@ -67,6 +68,8 @@ int UrgentDeliveryTask::implementation() {
                 if(!ClickImageMatch(MatchParams{.similar = 0.55, .matchCount = 1, .scope = {786, 283, 1033, 534}}, nullptr, "按钮江湖急送菜品送达").empty()) {
                     Defer(7, 1000);
                     Close(1);
+                    target = 3;
+                    continue;
                 }
 
                 // 购买
@@ -95,7 +98,8 @@ int UrgentDeliveryTask::implementation() {
                         Close(1);
                         record_event[0] = false;
                     }else {
-                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮江湖急送放弃订单");
+                        record_event[0] = true;
+                        ClickImageMatch(MatchParams{.similar = 0.55}, nullptr, "按钮江湖急送放弃订单");
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                         target = 3;
                     }

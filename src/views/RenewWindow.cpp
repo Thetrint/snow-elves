@@ -24,6 +24,8 @@ RenewWindow::RenewWindow(QWidget *parent):
 
 {
     ui.setupUi(this);  // 初始化界面布局和元素
+    setWindowTitle(QString::fromStdString(std::string("时雪") + PROJECT_VERSION));
+
     ui.progressBar->setRange(0, 0);  // 设置进度条的范围，这里是 0 到 100
     ui.progressBar->setValue(0);
 

@@ -29,7 +29,10 @@ public:
 
 
 private:
-    std::string cause;
+    /**
+     * 0. 银票礼盒
+     * 1. 帮派捐献
+     */
     std::vector<bool> record_event{true, true};
     // std::vector<int> record_num{0};
     // std::vector<std::chrono::steady_clock::time_point> record_time{0};

@@ -13,7 +13,7 @@ LoginWindow::LoginWindow(QWidget *parent):
 
 {
     ui.setupUi(this);  // 初始化界面布局和元素
-
+    setWindowTitle(QString::fromStdString(std::string("时雪") + PROJECT_VERSION));
     connect(ui.pushButton, &QPushButton::clicked, this, &LoginWindow::onLoginClicked);
 }
 
