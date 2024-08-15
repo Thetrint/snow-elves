@@ -222,7 +222,7 @@ int BountyMissionsTask::implementation() {
                 }
                 // 位置检测
                 case 1: {
-                    LocationDetection();
+                    // LocationDetection();
                     break;
                 }
                 // 队伍检测
