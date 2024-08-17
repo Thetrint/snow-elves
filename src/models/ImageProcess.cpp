@@ -257,11 +257,11 @@ void ImageProcessor::nonMaxSuppression(std::vector<Match>& matches, const double
     if (matches.empty()) {
         return;
     }
-
-    // 按得分从高到低排序
-    ranges::sort(matches, [](const Match& a, const Match& b) {
-        return a.score > b.score;
-    });
+    //
+    // // 按得分从高到低排序
+    // ranges::sort(matches, [](const Match& a, const Match& b) {
+    //     return a.score > b.score;
+    // });
 
     std::vector<Match> suppressedMatches;
 
@@ -277,6 +277,11 @@ void ImageProcessor::nonMaxSuppression(std::vector<Match>& matches, const double
             suppressedMatches.push_back(match);
         }
     }
+
+    // 对 suppressedMatches 按照从左到右、从上到下排序
+    ranges::sort(suppressedMatches, [](const Match& a, const Match& b) {
+        return a.location.y < b.location.y || (a.location.y == b.location.y && a.location.x < b.location.x);
+    });
 
     // // 缩放位置
     // for (auto&[location, score] : suppressedMatches) {

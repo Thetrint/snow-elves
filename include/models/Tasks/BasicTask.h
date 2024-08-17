@@ -147,6 +147,20 @@ protected:
 
     void LocationDetection();
 
+    void JNGo();
+
+    void JLGo();
+
+    void FLDGo();
+
+    void ZYGo();
+
+    void SBGo();
+
+    void LocationGO(const std::string &x, const std::string &y);
+
+    void Changeover(const int& count, const int &line);
+
     void Shout(const std::string &text);
 
     void Arrive();
@@ -209,7 +223,7 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, std::unique_ptr
     for(int i = 1; i <= match.matchCount && unbind_event; i++) {
 
         (ImageMatch(templ_names, matches, match), ...);
-        ImageProcessor::nonMaxSuppression(matches, 22 * FACTOR);
+        ImageProcessor::nonMaxSuppression(matches, 22);
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
 
@@ -275,7 +289,7 @@ std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, std::unique_ptr
         (ImageMatch(templ_names, matches, match), ...);
 
 
-        ImageProcessor::nonMaxSuppression(matches, 22 * FACTOR);
+        ImageProcessor::nonMaxSuppression(matches, 13);
 
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;

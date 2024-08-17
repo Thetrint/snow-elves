@@ -5,6 +5,7 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 #include <qwindowdefs_win.h>
+#include <models/Tasks/AcquisitionTask.h>
 #include <models/Tasks/BountyMissionsTask.h>
 #include <models/Tasks/BreakBanTask.h>
 #include <models/Tasks/ChivalryShoutTask.h>
@@ -87,6 +88,7 @@ private:
         autoRegister<UrgentDeliveryTask>("江湖急送");
         autoRegister<MerchantLakeTask>("江湖行商");
         autoRegister<PacifyInjusticeTask>("聚义平冤");
+        autoRegister<AcquisitionTask>("采集任务");
 
     }
 

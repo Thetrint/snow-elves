@@ -33,7 +33,7 @@ int PlaceTask::implementation() {
             case 2: {
                 OpenTeam();
                 if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍创建").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
                 Close({.similar = 0.5}, 1);
@@ -42,6 +42,7 @@ int PlaceTask::implementation() {
             }
             case 3: {
                 Defer(2);
+
                 target = 0;
                 break;
             }

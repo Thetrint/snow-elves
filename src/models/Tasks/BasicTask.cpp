@@ -11,9 +11,12 @@
  * @return
  */
 bool BasicTask::OpenMap() {
-    key_down_up({}, config.value("地图").toString().toStdString());
-    if (!CoortImageMatch(MatchParams{.similar = 0.6, .applyGaussianBlur = false}, nullptr, "标志地图当前坐标").empty()) {
+    if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志地图当前坐标").empty()) {
+        BackInterface();
+        key_down_up({}, config.value("地图").toString().toStdString());
+    }
 
+    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志地图当前坐标").empty()) {
         return true;
     }
 
@@ -55,8 +58,12 @@ bool BasicTask::OpenESC() {
  * @return
  */
 bool BasicTask::OpenKnapsack() {
-    key_down_up({}, config.value("背包").toString().toStdString());
-    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面队伍").empty()) {
+    if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面物品").empty()) {
+        BackInterface();
+        key_down_up({}, config.value("背包").toString().toStdString());
+    }
+
+    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面物品").empty()) {
         return true;
     }
     return false;
@@ -120,7 +127,7 @@ void BasicTask::Defer(const int& count, const int& delay) const {
 
 bool BasicTask::CloseReward(const int &count) {
     for (int i = 0; i < count; ++i) {
-        if (ClickImageMatch({.similar = 0.5, .scope = {842, 173, 1118, 469}}, nullptr, "按钮关闭").empty()) {
+        if (ClickImageMatch({.similar = 0.5, .matchCount = 2, .scope = {842, 173, 1118, 469}}, nullptr, "按钮关闭").empty()) {
             break;
         }
     }
@@ -137,6 +144,10 @@ bool BasicTask::Close(const MatchParams& match, const int &count) {
     return false;
 }
 
+/**
+* 基础功能 关闭
+*/
+
 bool BasicTask::Close(const int &count) {
     for (int i = 0; i < count; ++i) {
         if (ClickImageMatch({.similar = 0.5, .matchCount = 1, .click = FORWARD}, nullptr, "按钮关闭", "按钮关闭1").empty()) {
@@ -146,6 +157,10 @@ bool BasicTask::Close(const int &count) {
     Defer(1);
     return false;
 }
+
+/**
+* 基础功能 返回主界面
+*/
 
 bool BasicTask::BackInterface() {
     Close(1);
@@ -171,6 +186,10 @@ void BasicTask::OfflineDetection() {
 
     }
 }
+
+/**
+* 基础功能 召回队友
+*/
 
 bool BasicTask::FollowDetection() {
     if (OpenTeam()) {
@@ -203,27 +222,289 @@ void BasicTask::LocationDetection() {
     Log("位置检测");
     //打开地图
     if (OpenMap()) {
-        if (!CoortImageMatch({.similar = 0.8}, nullptr, "标志地图金陵坐标").empty()) {
+        if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志地图金陵坐标").empty()) {
             ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
             return;
         }
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
-        ClickImageMatch({.similar = 0.6, .matchCount = 1}, nullptr, "按钮地图停止寻路");
-        ClickImageMatch({.similar = 0.98, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
         ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("571");
 
         ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("484");
 
-        ClickImageMatch({.similar = 0.6}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
         ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
         Arrive();
 
     }
 }
 
+/**
+ * 基础功能 前往江南
+ */
+void BasicTask::JNGo() {
+    //打开地图
+    if (OpenMap()) {
+        if (!CoortImageMatch({.similar = 0.75, .applyGaussianBlur = false}, nullptr, "标志地图江南坐标").empty()) {
+            ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+            return;
+        }
+        Log("前往江南");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
+        ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图江南区域");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        input_text("1095");
+
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        input_text("1117");
+
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        Arrive();
+
+    }
+}
+
+/**
+ * 基础功能 前往金陵
+ */
+void BasicTask::JLGo() {
+    //打开地图
+    if (OpenMap()) {
+        if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志地图金陵坐标").empty()) {
+            ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+            return;
+        }
+        Log("前往金陵");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
+        ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        input_text("571");
+
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        input_text("484");
+
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        Arrive();
+
+    }
+}
+
+/**
+ * 基础功能 前往风雷岛
+ */
+void BasicTask::FLDGo() {
+    //打开地图
+    if (OpenMap()) {
+        if (!CoortImageMatch({.similar = 0.75, .applyGaussianBlur = false}, nullptr, "标志地图风雷岛坐标").empty()) {
+            ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+            return;
+        }
+        Log("前往风雷岛");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
+        ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图风雷岛区域");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        input_text("970");
+
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        input_text("542");
+
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        Arrive();
+
+    }
+}
+
+/**
+ * 基础功能 前往中原
+ */
+void BasicTask::ZYGo() {
+    //打开地图
+    if (OpenMap()) {
+        if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志地图中原坐标").empty()) {
+            ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+            return;
+        }
+        Log("前往中原");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
+        ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图中原区域");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        input_text("1080");
+
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        input_text("996");
+
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        Arrive();
+
+    }
+}
+
+/**
+ * 基础功能 前往塞北
+ */
+void BasicTask::SBGo() {
+    //打开地图
+    if (OpenMap()) {
+        if (!CoortImageMatch({.similar = 0.75, .applyGaussianBlur = false}, nullptr, "标志地图塞北坐标").empty()) {
+            ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+            return;
+        }
+        Log("前往塞北");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮地图世界区域");
+        ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图塞北区域");
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        input_text("1277");
+
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        input_text("718");
+
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        Arrive();
+
+    }
+}
+
+/**
+ * 基础功能 前往指定坐标
+ * @param x 坐标 x
+ * @param y 坐标 y
+ */
+void BasicTask::LocationGO(const std::string& x, const std::string& y) {
+    //打开地图
+    Log(std::format("前往坐标 {} {}", x, y));
+    if (OpenMap()) {
+        ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
+        ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        input_text(x);
+
+        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        input_text(y);
+
+        ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+        ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
+        Arrive();
+    }
+}
+
+void BasicTask::Changeover(const int& count,const int& line) {
+
+    mouse_down_up({}, {1229, 5});
+
+    for (int i = 1; i <= count; i++) {
+        for(auto& [location, score] : CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志分线")) {
+
+            switch (line) {
+                case 1: {
+                    if(!CoortImageMatch({.similar = 0.65, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "1线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 2: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "2线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 3: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "3线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 4: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "4线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 5: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "5线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 6: {
+                    if(CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "5线").empty() &&
+                        !CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "6线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 7: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "7线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 8: {
+                    if(!CoortImageMatch({.similar = 0.75, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "8线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 9: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "9线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                case 10: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "1线").empty() &&
+                        !CoortImageMatch({.similar = 0.65, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15},}, nullptr, "0线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                        }
+                    break;
+                }
+                case 14: {
+                    if(!CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15}}, nullptr, "1线").empty() &&
+                        !CoortImageMatch({.similar = 0.70, .matchCount = 1, .scope = {location.x - 50, location.y - 15, location.x - 10, location.y + 15},}, nullptr, "4线").empty()) {
+                        mouse_down_up({}, {location.x, location.y});
+                        return ;
+                    }
+                    break;
+                }
+                default:
+                    return ;
+            }
+
+        }
+        mouse_move({}, {1055, 560}, {1055, 360});
+    }
+
+    mouse_down_up({}, {0, 0});
+
+}
 /**
  * 基础功能 双世界喊话
  */

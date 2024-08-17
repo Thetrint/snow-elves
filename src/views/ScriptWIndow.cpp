@@ -35,6 +35,16 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_9->setMinimum(1);
     ui.spinBox_9->setMaximum(10);
 
+    // 采集设置
+    ui.spinBox_10->setMinimum(1);
+    ui.spinBox_10->setMaximum(14);
+
+    ui.spinBox_11->setMinimum(1);
+    ui.spinBox_11->setMaximum(9999);
+
+    ui.spinBox_12->setMinimum(1);
+    ui.spinBox_12->setMaximum(10);
+
     ui.scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
@@ -47,7 +57,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
     << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器" << "门客设宴"
     << "破阵设宴" << "每日兑换" << "宗门任务" << "侠缘喊话" << "生死剑冢" << "宅邸打卡"
-    << "每日一卦" << "江湖急送" << "江湖行商" << "聚义平冤";
+    << "每日一卦" << "江湖急送" << "江湖行商" << "聚义平冤" << "采集任务";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);

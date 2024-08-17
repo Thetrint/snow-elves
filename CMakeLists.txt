@@ -162,6 +162,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/MerchantLakeTask.h
         src/models/Tasks/PacifyInjusticeTask.cpp
         include/models/Tasks/PacifyInjusticeTask.h
+        src/models/Tasks/AcquisitionTask.cpp
+        include/models/Tasks/AcquisitionTask.h
 
 
 )
