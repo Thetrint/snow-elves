@@ -49,15 +49,22 @@ int MerchantLakeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍确定");
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
                     Log("队伍检测完成");
+
+                    // 开启互联分线
+                    SwitchInterconnection();
+
                     target = 3;
                     break;
                 }
                 case 3: {
+
                     OpenTeam();
-                    // 离线检查
-                    OfflineDetection();
                     // 检测队伍人数
-                    if(CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍空位").size() <= 5 - 3) {
+                    if(CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍空位").size() <= 10 - 3) {
+                        // 离线检测
+                        if(!OfflineDetection()) {
+                            continue;
+                        }
                         // 跟随召集
                         if(!FollowDetection()) {
                             continue;
@@ -92,6 +99,7 @@ int MerchantLakeTask::implementation() {
                     break;
                 }
                 case 4: {
+
                     if(ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮江湖行商参与行商").empty()) {
                         BackInterface();
                         target = 3;
@@ -102,17 +110,69 @@ int MerchantLakeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮铜钱");
                     Close(2);
                     Defer(20, 1000);
-                    ClickImageMatch(MatchParams{.similar = 0.75, .scope = {41, 212, 110, 425}}, nullptr, "按钮大世界行商任务");
+                    ClickImageMatch(MatchParams{.similar = 0.75, .matchCount = 1, .scope = {41, 212, 110, 425}}, nullptr, "按钮大世界行商任务");
                     target = 5;
                     break;
                 }
                 case 5: {
+                    if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[1]).count() > 30) {
+                        record_time[1] = std::chrono::steady_clock::now();
+                        ClickImageMatch(MatchParams{.similar = 0.75, .matchCount = 1, .scope = {41, 212, 110, 425}}, nullptr, "按钮大世界行商任务");
+                    }
+
+                    // 选择地图
+                    if(!ClickImageMatch({.similar = 0.65, .matchCount = 1}, nullptr, "按钮地图江南区域").empty()) {
+                        if(record_event[1]) {
+                            if(record_num[0] % 2 == 0) {
+                                Log("前往文府别院");
+                                ClickImageMatch({.similar = 0.65, .x = -105, .y = -30}, nullptr, "按钮江湖行商文府别院");
+                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                                record_num[0]++;
+
+                            }else if(record_num[0] % 2 == 1) {
+                                Log("前往全氏山庄");
+                                ClickImageMatch({.similar = 0.65, .x = -82, .y = 20}, nullptr, "按钮江湖行商全氏山庄");
+                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                                record_num[0]++;
+
+                            }
+                        }else {
+                            if(record_num[0] % 2 == 1) {
+                                ClickImageMatch({.similar = 0.65, .x = -105, .y = -30}, nullptr, "按钮江湖行商文府别院");
+                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+
+                            }else if(record_num[0] % 2 == 0) {
+                                ClickImageMatch({.similar = 0.65, .x = -82, .y = 20}, nullptr, "按钮江湖行商全氏山庄");
+                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                            }
+                        }
+
+                    }
+
+                    // 检测是否完成
+                    if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1}, nullptr, "按钮江湖行商一键上缴").empty()) {
+                        // 关闭奖励
+                        CloseReward(3);
+                        Log(std::format("江湖行商完成 {} 次", record_num[1]));
+                        // 判断任务是否完成
+                        if (++record_num[1] > config.value("江湖行商次数").toInt()) {
+                            MerchantLakeFinish[id] = true;
+                            CloseReward(3);
+                            target = 0;
+                            continue;
+                        }
+                        target = 3;
+                        // 重置参数
+                        record_num[2] = 0;
+                        record_event[2] = true;
+                        continue;
+                    }
 
                     // 等待到达商人
                     if(!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .y = 85}, nullptr, "按钮江湖行商威逼交易").empty()) {
                         record_event[2] = false;
                         // 单次购买
-                        if(record_num[0] % 2 == 0 && !record_event[1]) {
+                        if(!record_event[1]) {
                             Log("购买商品");
                             Defer(2);
                             for(auto [x, y] : std::initializer_list<std::pair<int, int>>{{524, 258}, {285, 258}, {524, 178}, {285, 178}}) {
@@ -122,28 +182,6 @@ int MerchantLakeTask::implementation() {
                             }
                             Defer(3);
                             Close(1);
-                            ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图江南区域");
-                            Log("前往文府别院");
-                            ClickImageMatch({.similar = 0.65, .x = -105, .y = -30}, nullptr, "按钮江湖行商文府别院");
-                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                            record_num[0]++;
-                            // 出售标志
-                            record_event[1] = true;
-                        }else if(record_num[0] % 2 == 1 && !record_event[1]) {
-                            Log("购买商品");
-                            Defer(2);
-                            for(auto [x, y] : std::initializer_list<std::pair<int, int>>{{524, 258}, {285, 258}, {524, 178}, {285, 178}}) {
-                                mouse_down_up({}, {x, y});
-                                mouse_keep({}, {1037, 489}, 2000);
-                                ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .scope = {699, 548, 1099, 673}}, nullptr, "按钮江湖行商购买");
-                            }
-                            Defer(3);
-                            Close(1);
-                            ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图江南区域");
-                            Log("前往全氏山庄");
-                            ClickImageMatch({.similar = 0.65, .x = -82, .y = 20}, nullptr, "按钮江湖行商全氏山庄");
-                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                            record_num[0]++;
                             // 出售标志
                             record_event[1] = true;
                         }else {
@@ -154,33 +192,6 @@ int MerchantLakeTask::implementation() {
                             // 出售完成
                             record_event[1] = false;
                             Defer(2);
-                            // 检测是否完成
-                            if (!ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮江湖行商一键上缴").empty()) {
-                                // 关闭奖励
-                                CloseReward(3);
-                                Log(std::format("江湖行商完成 {} 次", record_num[1]));
-                                // 判断任务是否完成
-                                if (++record_num[1] > config.value("江湖行商次数").toInt()) {
-                                    MerchantLakeFinish[id] = true;
-                                    CloseReward(3);
-                                    target = 0;
-                                    continue;
-                                }
-                                target = 3;
-                                // 重置参数
-                                record_num[2] = 0;
-                                record_event[2] = true;
-                                continue;
-                            }
-                            if(record_num[0] % 2 == 1) {
-                                ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图江南区域");
-                                ClickImageMatch({.similar = 0.65, .x = -105, .y = -30}, nullptr, "按钮江湖行商文府别院");
-                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                            }else if (record_num[0] % 2 == 0) {
-                                ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图江南区域");
-                                ClickImageMatch({.similar = 0.65, .x = -82, .y = 20}, nullptr, "按钮江湖行商全氏山庄");
-                                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                            }
                         }
                     }else if(record_event[2]) {
                         // 判断行商开启是否失败

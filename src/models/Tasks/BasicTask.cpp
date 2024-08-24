@@ -127,7 +127,7 @@ void BasicTask::Defer(const int& count, const int& delay) const {
 
 bool BasicTask::CloseReward(const int &count) {
     for (int i = 0; i < count; ++i) {
-        if (ClickImageMatch({.similar = 0.5, .matchCount = 2, .scope = {842, 173, 1118, 469}}, nullptr, "按钮关闭").empty()) {
+        if (ClickImageMatch({.similar = 0.55, .matchCount = 2, .scope = {842, 173, 1118, 469}, .applyGaussianBlur = false}, nullptr, "按钮关闭").empty()) {
             break;
         }
     }
@@ -150,7 +150,7 @@ bool BasicTask::Close(const MatchParams& match, const int &count) {
 
 bool BasicTask::Close(const int &count) {
     for (int i = 0; i < count; ++i) {
-        if (ClickImageMatch({.similar = 0.5, .matchCount = 1, .click = FORWARD}, nullptr, "按钮关闭", "按钮关闭1").empty()) {
+        if (ClickImageMatch({.similar = 0.55, .matchCount = 1, .click = FORWARD}, nullptr, "按钮关闭", "按钮关闭1").empty()) {
             break;
         }
     }
@@ -171,11 +171,15 @@ bool BasicTask::BackInterface() {
 /**
  * 基础功能 离线队友检测
  */
-void BasicTask::OfflineDetection() {
+bool BasicTask::OfflineDetection() {
+    Log("离线队员检测");
     if (OpenTeam()) {
+        if(CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍离线").empty()) {
+            return true;
+        }
         while (unbind_event) {
             if(CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍离线").empty()) {
-                break;
+                return false;
             }
             for(auto [location, score]: CoortImageMatch({.similar = 0.65}, nullptr, "标志队伍离线")) {
                 mouse_down_up({}, {location.x, location.y});
@@ -185,6 +189,7 @@ void BasicTask::OfflineDetection() {
         }
 
     }
+    return false;
 }
 
 /**
@@ -192,6 +197,7 @@ void BasicTask::OfflineDetection() {
 */
 
 bool BasicTask::FollowDetection() {
+    Log("队员跟随检测");
     if (OpenTeam()) {
         if(ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍一键召回").empty()) {
             return true;
@@ -215,6 +221,37 @@ bool BasicTask::FollowDetection() {
     }
     return false;
 }
+
+/**
+* 基础功能 召回队友
+*/
+
+bool BasicTask::FollowDetectionNoWait() {
+    Log("召回队员");
+    if (OpenTeam()) {
+        ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍一键召回");
+        Close(1);
+
+    }
+
+    return false;
+}
+
+/**
+* 基础功能 切换互联
+*/
+
+bool BasicTask::SwitchInterconnection() {
+    Log("切换互联分线");
+    BackInterface();
+    mouse_down_up({}, {1229, 5});
+    if(ClickImageMatch({.similar = 0.65, .x = 24}, nullptr, "按钮大世界互联").empty()) {
+        mouse_down_up({}, {0, 0});
+    }
+    Defer(2);
+    return false;
+}
+
 /**
  * 基础功能 位置检查 重置位置
  */
@@ -249,7 +286,7 @@ void BasicTask::LocationDetection() {
 void BasicTask::JNGo() {
     //打开地图
     if (OpenMap()) {
-        if (!CoortImageMatch({.similar = 0.75, .applyGaussianBlur = false}, nullptr, "标志地图江南坐标").empty()) {
+        if (!CoortImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "标志地图江南坐标").empty()) {
             ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
             return;
         }
@@ -509,6 +546,8 @@ void BasicTask::Changeover(const int& count,const int& line) {
  * 基础功能 双世界喊话
  */
 void BasicTask::Shout(const std::string &text) {
+    // 返回主界面
+    BackInterface();
     mouse_down_up({}, {305, 600});
 
     ClickImageMatch({.similar = 0.65, .scope = {0, 0, 140, 695}}, nullptr, "按钮大世界世界");
@@ -789,4 +828,14 @@ void BasicTask::Fight() {
 void BasicTask::FightStop() {
     fight_ = false;
 }
+
+
+void BasicTask::TimerPause() {
+    timer.pause();
+}
+
+void BasicTask::TimerResume() {
+    timer.resume();
+}
+
 

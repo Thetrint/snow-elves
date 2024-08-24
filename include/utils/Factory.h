@@ -19,6 +19,7 @@
 #include <models/Tasks/PacifyInjusticeTask.h>
 #include <models/Tasks/RiverTask.h>
 #include <models/Tasks/SectTask.h>
+#include <models/Tasks/SweepStallTask.h>
 #include <models/Tasks/TeaStoryTask.h>
 #include <models/Tasks/TheSwordTask.h>
 #include <models/Tasks/TheSwordThreeTask.h>
@@ -77,18 +78,19 @@ private:
         autoRegister<BountyMissionsTask>("悬赏任务");
         autoRegister<TeaStoryTask>("茶馆说书");
         autoRegister<RiverTask>("山河器");
+        autoRegister<FateSwordTask>("生死剑冢");
+        autoRegister<HouseClockTask>("宅邸打卡");
+        autoRegister<HexagramDayTask>("每日一卦");
         autoRegister<DoorBanTask>("门客设宴");
         autoRegister<BreakBanTask>("破阵设宴");
         autoRegister<DailyRedemptionTask>("每日兑换");
         autoRegister<SectTask>("宗门任务");
         autoRegister<ChivalryShoutTask>("侠缘喊话");
-        autoRegister<FateSwordTask>("生死剑冢");
-        autoRegister<HouseClockTask>("宅邸打卡");
-        autoRegister<HexagramDayTask>("每日一卦");
         autoRegister<UrgentDeliveryTask>("江湖急送");
         autoRegister<MerchantLakeTask>("江湖行商");
         autoRegister<PacifyInjusticeTask>("聚义平冤");
         autoRegister<AcquisitionTask>("采集任务");
+        autoRegister<SweepStallTask>("扫摆摊");
 
     }
 

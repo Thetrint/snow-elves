@@ -164,6 +164,8 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/PacifyInjusticeTask.h
         src/models/Tasks/AcquisitionTask.cpp
         include/models/Tasks/AcquisitionTask.h
+        src/models/Tasks/SweepStallTask.cpp
+        include/models/Tasks/SweepStallTask.h
 
 
 )

@@ -45,6 +45,10 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_12->setMinimum(1);
     ui.spinBox_12->setMaximum(10);
 
+    // 日常悬赏队长编号
+    ui.spinBox_13->setMinimum(1);
+    ui.spinBox_13->setMaximum(10);
+
     ui.scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
@@ -57,7 +61,7 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     << "课业任务" << "帮派任务" << "潜神入忆" << "华山论剑" << "华山论剑3v3" << "万象刷赞"
     << "江湖英雄榜" << "日常副本" << "悬赏任务" << "茶馆说书" << "山河器" << "门客设宴"
     << "破阵设宴" << "每日兑换" << "宗门任务" << "侠缘喊话" << "生死剑冢" << "宅邸打卡"
-    << "每日一卦" << "江湖急送" << "江湖行商" << "聚义平冤" << "采集任务";
+    << "每日一卦" << "江湖急送" << "江湖行商" << "聚义平冤" << "采集任务" << "扫摆摊";
 
     foreach (const QString &text, items) {
         auto *item = new QListWidgetItem(text);

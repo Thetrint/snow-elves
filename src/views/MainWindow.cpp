@@ -541,6 +541,27 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["采集物品"] = script->ui.comboBox_14->currentText();
     root["采集模式"] = script->ui.comboBox_13->currentText();
 
+    root["日常悬赏队长编号"] = script->ui.spinBox_13->value();
+
+    root["商品1"] = script->ui.checkBox_12->isChecked();
+    root["商品2"] = script->ui.checkBox_13->isChecked();
+    root["商品3"] = script->ui.checkBox_14->isChecked();
+    root["商品4"] = script->ui.checkBox_15->isChecked();
+    root["商品5"] = script->ui.checkBox_16->isChecked();
+    root["商品6"] = script->ui.checkBox_17->isChecked();
+    root["商品7"] = script->ui.checkBox_18->isChecked();
+    root["商品8"] = script->ui.checkBox_19->isChecked();
+    root["快速购买"] = script->ui.checkBox_20->isChecked();
+    root["优先级1"] = script->ui.comboBox_15->currentIndex() + 1;
+    root["优先级2"] = script->ui.comboBox_16->currentIndex() + 1;
+    root["优先级3"] = script->ui.comboBox_17->currentIndex() + 1;
+    root["优先级4"] = script->ui.comboBox_18->currentIndex() + 1;
+    root["优先级5"] = script->ui.comboBox_19->currentIndex() + 1;
+    root["优先级6"] = script->ui.comboBox_20->currentIndex() + 1;
+    root["优先级7"] = script->ui.comboBox_21->currentIndex() + 1;
+    root["优先级8"] = script->ui.comboBox_22->currentIndex() + 1;
+
+
 
     return QJsonDocument(root);
 }
@@ -739,6 +760,24 @@ void MainWindow::readUserSettings(const QString& filename) const {
          script->ui.textEdit_2->setText(root["采集自定义内容"].toString());
          script->ui.comboBox_14->setCurrentText(root["采集物品"].toString());
          script->ui.comboBox_13->setCurrentText(root["采集模式"].toString());
+
+        script->ui.checkBox_12->setChecked(root["商品1"].toBool());
+        script->ui.checkBox_13->setChecked(root["商品2"].toBool());
+        script->ui.checkBox_14->setChecked(root["商品3"].toBool());
+        script->ui.checkBox_15->setChecked(root["商品4"].toBool());
+        script->ui.checkBox_16->setChecked(root["商品5"].toBool());
+        script->ui.checkBox_17->setChecked(root["商品6"].toBool());
+        script->ui.checkBox_18->setChecked(root["商品7"].toBool());
+        script->ui.checkBox_19->setChecked(root["商品8"].toBool());
+        script->ui.checkBox_20->setChecked(root["快速购买"].toBool());
+        script->ui.comboBox_15->setCurrentIndex(root["优先级1"].toInt() - 1);
+        script->ui.comboBox_16->setCurrentIndex(root["优先级2"].toInt() - 1);
+        script->ui.comboBox_17->setCurrentIndex(root["优先级3"].toInt() - 1);
+        script->ui.comboBox_18->setCurrentIndex(root["优先级4"].toInt() - 1);
+        script->ui.comboBox_19->setCurrentIndex(root["优先级5"].toInt() - 1);
+        script->ui.comboBox_20->setCurrentIndex(root["优先级6"].toInt() - 1);
+        script->ui.comboBox_21->setCurrentIndex(root["优先级7"].toInt() - 1);
+        script->ui.comboBox_22->setCurrentIndex(root["优先级8"].toInt() - 1);
     }
 }
 

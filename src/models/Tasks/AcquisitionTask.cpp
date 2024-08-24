@@ -32,9 +32,9 @@ int AcquisitionTask::implementation() {
             // 队伍检测
             case 2: {
                 // OpenTeam();
-                // if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍创建").empty()) {
-                //     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍退出");
-                //     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                // if (CoortImageMatch({.similar = 0.65}, nullptr, "按钮队伍创建").empty()) {
+                //     ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍退出");
+                //     ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
                 // }
                 // Close({.similar = 0.5}, 1);
                 target = 3;
@@ -106,23 +106,26 @@ int AcquisitionTask::implementation() {
                 mouse_down_up({}, {0, 0});
                 CloseReward(3);
                 // 采集
-                if(!ClickImageMatch(MatchParams{.similar = 0.60, .matchCount = 3, .clickDelay = false}, nullptr, "按钮生活采集挖矿", "按钮生活采集砍伐", "按钮生活采集采集").empty()) {
+                if(!ClickImageMatch({.similar = 0.58, .matchCount = 3, .clickDelay = false, .scope = {786, 283, 1033, 534}, .applyGaussianBlur = false}, nullptr, "按钮生活采集挖矿", "按钮生活采集砍伐", "按钮生活采集采集").empty()) {
                     // 加速
                     record_event[0] = true;
                     Defer(2, 1300);
                     // 工具判断
-                    if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "界面交易", "按钮交易购买").empty() && config.value("采集工具购买").toBool()) {
+                    if (!CoortImageMatch({.similar = 0.65}, nullptr, "界面交易", "按钮交易购买").empty() && config.value("采集工具购买").toBool()) {
                         record_event[0] = false;
-                        if(!ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮交易购买").empty()) {
-                            ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确定");
+                        if(!ClickImageMatch({.similar = 0.65}, nullptr, "按钮交易购买").empty()) {
+                            ClickImageMatch({.similar = 0.6}, nullptr, "按钮确定");
                             Close( 1);
                         }else {
                             target = 0;
+                            Close(2);
                             continue;
                         }
 
-                    }else if(!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()){
+                    }else if(!CoortImageMatch({.similar = 0.5}, nullptr, "界面交易", "按钮交易购买").empty()){
                         target = 0;
+                        Close(2);
+                        continue;
                     }
                     for(int i = 0; i <= 4 && record_event[0]; i++) {
                         Defer(1, 1000);
@@ -134,29 +137,29 @@ int AcquisitionTask::implementation() {
                     if (record_num[1]++ > config.value("采集次数").toInt()) {
                         target = 0;
                     }
-                    Defer(2, 1300);
+                    Defer(2, 1600);
                     continue;
 
                 }
                 // 体力判断
-                if (!CoortImageMatch(MatchParams{.similar = 0.91, .scope = {788, 292, 1132, 596}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "标志生活采集体力耗尽").empty()
+                if (!CoortImageMatch({.similar = 0.91, .scope = {788, 292, 1132, 596}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "标志生活采集体力耗尽").empty()
                     && config.value("采集自动吃鸡蛋").toBool()
                     && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 180) {
                     record_time[0] = std::chrono::steady_clock::now();
                     // 自动吃鸡蛋
                     OpenKnapsack();
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品搜索");
-                    ClickImageMatch(MatchParams{.similar = 0.55}, nullptr, "按钮物品输入名称");
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品搜索");
+                    ClickImageMatch({.similar = 0.55}, nullptr, "按钮物品输入名称");
                     input_text("一筐鸡蛋");
-                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品搜索");
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品搜索");
 
-                    if(CoortImageMatch(MatchParams{.similar = 0.98, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮物品一筐鸡蛋").empty()) {
+                    if(CoortImageMatch({.similar = 0.98, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮物品一筐鸡蛋").empty()) {
                         target = 0;
                         continue;
                     }
                     for(int i = 1; i <= config.value("采集吃鸡蛋数量").toInt() && unbind_event; i++) {
-                        ClickImageMatch(MatchParams{.similar = 0.98, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮物品一筐鸡蛋");
-                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品使用");
+                        ClickImageMatch({.similar = 0.98, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮物品一筐鸡蛋");
+                        ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品使用");
                     }
 
                     BackInterface();
@@ -164,18 +167,19 @@ int AcquisitionTask::implementation() {
                     continue;
                 }
                 // 不吃鸡蛋 结束任务
-                if(!CoortImageMatch(MatchParams{.similar = 0.91, .scope = {788, 292, 1132, 596}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "标志生活采集体力耗尽").empty()
+                if(!CoortImageMatch({.similar = 0.91, .scope = {788, 292, 1132, 596}, .convertToGray = false, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "标志生活采集体力耗尽").empty()
                     && !config.value("采集自动吃鸡蛋").toBool()){
                     target = 0;
                     continue;
                 }
                 // 换线
                 if(config.value("采集换线").toInt() !=1) {
-                    Changeover(3, record_num[0]);
                     if (record_num[0]++ == config.value("采集换线").toInt()) {
                         record_num[0] = 1;
                         target = 4;
                     }
+                    Changeover(3, record_num[0]);
+                    continue;
                 }
 
                 Defer(2);

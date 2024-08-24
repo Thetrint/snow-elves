@@ -26,6 +26,10 @@ protected:
 public:
     virtual ~BasicTask() = default;
 
+    void TimerPause();
+
+    void TimerResume();
+
     // ReSharper disable once CppParameterMayBeConst
     BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : id(id),
         hwnd(hwnd),  pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), ifs(ifs), detect_count(0),
@@ -141,9 +145,13 @@ protected:
 
     bool BackInterface();
 
-    void OfflineDetection();
+    bool OfflineDetection();
 
     bool FollowDetection();
+
+    bool FollowDetectionNoWait();
+
+    bool SwitchInterconnection();
 
     void LocationDetection();
 

@@ -179,6 +179,11 @@ public:
     QLabel *label_9;
     QComboBox *comboBox_3;
     QSpacerItem *horizontalSpacer_2;
+    QWidget *widget_27;
+    QHBoxLayout *horizontalLayout_25;
+    QLabel *label_65;
+    QSpinBox *spinBox_13;
+    QSpacerItem *horizontalSpacer_20;
     QSpacerItem *verticalSpacer_2;
     QWidget *page_4;
     QVBoxLayout *verticalLayout_5;
@@ -264,12 +269,60 @@ public:
     QHBoxLayout *horizontalLayout_23;
     QTextEdit *textEdit_2;
     QSpacerItem *verticalSpacer_8;
+    QWidget *page_9;
+    QVBoxLayout *verticalLayout_12;
+    QLabel *label_62;
+    QWidget *widget_33;
+    QHBoxLayout *horizontalLayout_30;
+    QCheckBox *checkBox_20;
+    QSpacerItem *horizontalSpacer_32;
+    QWidget *widget_29;
+    QHBoxLayout *horizontalLayout_26;
+    QCheckBox *checkBox_12;
+    QLabel *label_63;
+    QComboBox *comboBox_15;
+    QSpacerItem *horizontalSpacer_21;
+    QCheckBox *checkBox_13;
+    QLabel *label_64;
+    QComboBox *comboBox_16;
+    QSpacerItem *horizontalSpacer_28;
+    QWidget *widget_30;
+    QHBoxLayout *horizontalLayout_27;
+    QCheckBox *checkBox_14;
+    QLabel *label_66;
+    QComboBox *comboBox_17;
+    QSpacerItem *horizontalSpacer_22;
+    QCheckBox *checkBox_15;
+    QLabel *label_67;
+    QComboBox *comboBox_18;
+    QSpacerItem *horizontalSpacer_29;
+    QWidget *widget_31;
+    QHBoxLayout *horizontalLayout_28;
+    QCheckBox *checkBox_16;
+    QLabel *label_68;
+    QComboBox *comboBox_19;
+    QSpacerItem *horizontalSpacer_23;
+    QCheckBox *checkBox_17;
+    QLabel *label_69;
+    QComboBox *comboBox_20;
+    QSpacerItem *horizontalSpacer_30;
+    QWidget *widget_32;
+    QHBoxLayout *horizontalLayout_29;
+    QCheckBox *checkBox_18;
+    QLabel *label_70;
+    QComboBox *comboBox_21;
+    QSpacerItem *horizontalSpacer_24;
+    QCheckBox *checkBox_19;
+    QLabel *label_71;
+    QComboBox *comboBox_22;
+    QSpacerItem *horizontalSpacer_31;
+    QSpacerItem *verticalSpacer_9;
 
     void setupUi(QWidget *ScriptWindow)
     {
         if (ScriptWindow->objectName().isEmpty())
             ScriptWindow->setObjectName("ScriptWindow");
-        ScriptWindow->resize(1019, 629);
+        ScriptWindow->resize(1587, 1043);
         gridLayout = new QGridLayout(ScriptWindow);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName("gridLayout");
@@ -379,7 +432,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 394, 800));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1294, 924));
         scrollAreaWidgetContents->setMinimumSize(QSize(0, 800));
         verticalLayout_10 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_10->setSpacing(0);
@@ -1026,6 +1079,31 @@ public:
 
         verticalLayout_4->addWidget(widget_6);
 
+        widget_27 = new QWidget(page_3);
+        widget_27->setObjectName("widget_27");
+        horizontalLayout_25 = new QHBoxLayout(widget_27);
+        horizontalLayout_25->setObjectName("horizontalLayout_25");
+        label_65 = new QLabel(widget_27);
+        label_65->setObjectName("label_65");
+        sizePolicy4.setHeightForWidth(label_65->sizePolicy().hasHeightForWidth());
+        label_65->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_25->addWidget(label_65);
+
+        spinBox_13 = new QSpinBox(widget_27);
+        spinBox_13->setObjectName("spinBox_13");
+        sizePolicy5.setHeightForWidth(spinBox_13->sizePolicy().hasHeightForWidth());
+        spinBox_13->setSizePolicy(sizePolicy5);
+
+        horizontalLayout_25->addWidget(spinBox_13);
+
+        horizontalSpacer_20 = new QSpacerItem(113, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_25->addItem(horizontalSpacer_20);
+
+
+        verticalLayout_4->addWidget(widget_27);
+
         verticalSpacer_2 = new QSpacerItem(20, 576, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 
         verticalLayout_4->addItem(verticalSpacer_2);
@@ -1441,6 +1519,7 @@ public:
         comboBox_14->addItem(QString());
         comboBox_14->addItem(QString());
         comboBox_14->addItem(QString());
+        comboBox_14->addItem(QString());
         comboBox_14->setObjectName("comboBox_14");
 
         horizontalLayout_22->addWidget(comboBox_14);
@@ -1477,13 +1556,306 @@ public:
         verticalLayout_11->addItem(verticalSpacer_8);
 
         stackedWidget->addWidget(page_8);
+        page_9 = new QWidget();
+        page_9->setObjectName("page_9");
+        verticalLayout_12 = new QVBoxLayout(page_9);
+        verticalLayout_12->setObjectName("verticalLayout_12");
+        label_62 = new QLabel(page_9);
+        label_62->setObjectName("label_62");
+        sizePolicy4.setHeightForWidth(label_62->sizePolicy().hasHeightForWidth());
+        label_62->setSizePolicy(sizePolicy4);
+        label_62->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        verticalLayout_12->addWidget(label_62);
+
+        widget_33 = new QWidget(page_9);
+        widget_33->setObjectName("widget_33");
+        horizontalLayout_30 = new QHBoxLayout(widget_33);
+        horizontalLayout_30->setObjectName("horizontalLayout_30");
+        checkBox_20 = new QCheckBox(widget_33);
+        checkBox_20->setObjectName("checkBox_20");
+
+        horizontalLayout_30->addWidget(checkBox_20);
+
+        horizontalSpacer_32 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_30->addItem(horizontalSpacer_32);
+
+
+        verticalLayout_12->addWidget(widget_33);
+
+        widget_29 = new QWidget(page_9);
+        widget_29->setObjectName("widget_29");
+        horizontalLayout_26 = new QHBoxLayout(widget_29);
+        horizontalLayout_26->setObjectName("horizontalLayout_26");
+        checkBox_12 = new QCheckBox(widget_29);
+        checkBox_12->setObjectName("checkBox_12");
+
+        horizontalLayout_26->addWidget(checkBox_12);
+
+        label_63 = new QLabel(widget_29);
+        label_63->setObjectName("label_63");
+        sizePolicy4.setHeightForWidth(label_63->sizePolicy().hasHeightForWidth());
+        label_63->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_26->addWidget(label_63);
+
+        comboBox_15 = new QComboBox(widget_29);
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->addItem(QString());
+        comboBox_15->setObjectName("comboBox_15");
+
+        horizontalLayout_26->addWidget(comboBox_15);
+
+        horizontalSpacer_21 = new QSpacerItem(489, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_26->addItem(horizontalSpacer_21);
+
+        checkBox_13 = new QCheckBox(widget_29);
+        checkBox_13->setObjectName("checkBox_13");
+
+        horizontalLayout_26->addWidget(checkBox_13);
+
+        label_64 = new QLabel(widget_29);
+        label_64->setObjectName("label_64");
+        sizePolicy4.setHeightForWidth(label_64->sizePolicy().hasHeightForWidth());
+        label_64->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_26->addWidget(label_64);
+
+        comboBox_16 = new QComboBox(widget_29);
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->addItem(QString());
+        comboBox_16->setObjectName("comboBox_16");
+
+        horizontalLayout_26->addWidget(comboBox_16);
+
+        horizontalSpacer_28 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_26->addItem(horizontalSpacer_28);
+
+
+        verticalLayout_12->addWidget(widget_29);
+
+        widget_30 = new QWidget(page_9);
+        widget_30->setObjectName("widget_30");
+        horizontalLayout_27 = new QHBoxLayout(widget_30);
+        horizontalLayout_27->setObjectName("horizontalLayout_27");
+        checkBox_14 = new QCheckBox(widget_30);
+        checkBox_14->setObjectName("checkBox_14");
+
+        horizontalLayout_27->addWidget(checkBox_14);
+
+        label_66 = new QLabel(widget_30);
+        label_66->setObjectName("label_66");
+        sizePolicy4.setHeightForWidth(label_66->sizePolicy().hasHeightForWidth());
+        label_66->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_27->addWidget(label_66);
+
+        comboBox_17 = new QComboBox(widget_30);
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->addItem(QString());
+        comboBox_17->setObjectName("comboBox_17");
+
+        horizontalLayout_27->addWidget(comboBox_17);
+
+        horizontalSpacer_22 = new QSpacerItem(489, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_27->addItem(horizontalSpacer_22);
+
+        checkBox_15 = new QCheckBox(widget_30);
+        checkBox_15->setObjectName("checkBox_15");
+
+        horizontalLayout_27->addWidget(checkBox_15);
+
+        label_67 = new QLabel(widget_30);
+        label_67->setObjectName("label_67");
+        sizePolicy4.setHeightForWidth(label_67->sizePolicy().hasHeightForWidth());
+        label_67->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_27->addWidget(label_67);
+
+        comboBox_18 = new QComboBox(widget_30);
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->addItem(QString());
+        comboBox_18->setObjectName("comboBox_18");
+
+        horizontalLayout_27->addWidget(comboBox_18);
+
+        horizontalSpacer_29 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_27->addItem(horizontalSpacer_29);
+
+
+        verticalLayout_12->addWidget(widget_30);
+
+        widget_31 = new QWidget(page_9);
+        widget_31->setObjectName("widget_31");
+        horizontalLayout_28 = new QHBoxLayout(widget_31);
+        horizontalLayout_28->setObjectName("horizontalLayout_28");
+        checkBox_16 = new QCheckBox(widget_31);
+        checkBox_16->setObjectName("checkBox_16");
+
+        horizontalLayout_28->addWidget(checkBox_16);
+
+        label_68 = new QLabel(widget_31);
+        label_68->setObjectName("label_68");
+        sizePolicy4.setHeightForWidth(label_68->sizePolicy().hasHeightForWidth());
+        label_68->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_28->addWidget(label_68);
+
+        comboBox_19 = new QComboBox(widget_31);
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->addItem(QString());
+        comboBox_19->setObjectName("comboBox_19");
+
+        horizontalLayout_28->addWidget(comboBox_19);
+
+        horizontalSpacer_23 = new QSpacerItem(489, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_28->addItem(horizontalSpacer_23);
+
+        checkBox_17 = new QCheckBox(widget_31);
+        checkBox_17->setObjectName("checkBox_17");
+
+        horizontalLayout_28->addWidget(checkBox_17);
+
+        label_69 = new QLabel(widget_31);
+        label_69->setObjectName("label_69");
+        sizePolicy4.setHeightForWidth(label_69->sizePolicy().hasHeightForWidth());
+        label_69->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_28->addWidget(label_69);
+
+        comboBox_20 = new QComboBox(widget_31);
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->addItem(QString());
+        comboBox_20->setObjectName("comboBox_20");
+
+        horizontalLayout_28->addWidget(comboBox_20);
+
+        horizontalSpacer_30 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_28->addItem(horizontalSpacer_30);
+
+
+        verticalLayout_12->addWidget(widget_31);
+
+        widget_32 = new QWidget(page_9);
+        widget_32->setObjectName("widget_32");
+        horizontalLayout_29 = new QHBoxLayout(widget_32);
+        horizontalLayout_29->setObjectName("horizontalLayout_29");
+        checkBox_18 = new QCheckBox(widget_32);
+        checkBox_18->setObjectName("checkBox_18");
+
+        horizontalLayout_29->addWidget(checkBox_18);
+
+        label_70 = new QLabel(widget_32);
+        label_70->setObjectName("label_70");
+        sizePolicy4.setHeightForWidth(label_70->sizePolicy().hasHeightForWidth());
+        label_70->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_29->addWidget(label_70);
+
+        comboBox_21 = new QComboBox(widget_32);
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->addItem(QString());
+        comboBox_21->setObjectName("comboBox_21");
+
+        horizontalLayout_29->addWidget(comboBox_21);
+
+        horizontalSpacer_24 = new QSpacerItem(489, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_29->addItem(horizontalSpacer_24);
+
+        checkBox_19 = new QCheckBox(widget_32);
+        checkBox_19->setObjectName("checkBox_19");
+
+        horizontalLayout_29->addWidget(checkBox_19);
+
+        label_71 = new QLabel(widget_32);
+        label_71->setObjectName("label_71");
+        sizePolicy4.setHeightForWidth(label_71->sizePolicy().hasHeightForWidth());
+        label_71->setSizePolicy(sizePolicy4);
+
+        horizontalLayout_29->addWidget(label_71);
+
+        comboBox_22 = new QComboBox(widget_32);
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->addItem(QString());
+        comboBox_22->setObjectName("comboBox_22");
+
+        horizontalLayout_29->addWidget(comboBox_22);
+
+        horizontalSpacer_31 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_29->addItem(horizontalSpacer_31);
+
+
+        verticalLayout_12->addWidget(widget_32);
+
+        verticalSpacer_9 = new QSpacerItem(20, 678, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        verticalLayout_12->addItem(verticalSpacer_9);
+
+        stackedWidget->addWidget(page_9);
 
         gridLayout->addWidget(stackedWidget, 1, 2, 1, 1);
 
 
         retranslateUi(ScriptWindow);
 
-        stackedWidget->setCurrentIndex(7);
+        stackedWidget->setCurrentIndex(8);
 
 
         QMetaObject::connectSlotsByName(ScriptWindow);
@@ -1626,6 +1998,8 @@ public:
         comboBox_3->setItemText(0, QCoreApplication::translate("ScriptWindow", "\345\270\246\351\230\237\346\250\241\345\274\217", nullptr));
         comboBox_3->setItemText(1, QCoreApplication::translate("ScriptWindow", "\345\233\272\345\256\232\351\230\237\346\250\241\345\274\217", nullptr));
 
+        label_65->setText(QCoreApplication::translate("ScriptWindow", "\351\230\237\351\225\277\347\274\226\345\217\267:", nullptr));
+        label_65->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
         label_10->setText(QCoreApplication::translate("ScriptWindow", "\346\257\217\346\227\245\345\205\221\346\215\242\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_10->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         checkBox_3->setText(QCoreApplication::translate("ScriptWindow", "\351\223\266\347\245\250\347\244\274\347\233\222", nullptr));
@@ -1716,10 +2090,110 @@ public:
         comboBox_14->setItemText(4, QCoreApplication::translate("ScriptWindow", "\346\235\202\350\215\211_\346\261\237\345\215\227", nullptr));
         comboBox_14->setItemText(5, QCoreApplication::translate("ScriptWindow", "\351\207\216\350\212\261_\346\261\237\345\215\227", nullptr));
         comboBox_14->setItemText(6, QCoreApplication::translate("ScriptWindow", "\346\234\261\346\236\234_\346\261\237\345\215\227", nullptr));
-        comboBox_14->setItemText(7, QCoreApplication::translate("ScriptWindow", "\347\242\216\347\237\263_\344\270\255\345\216\237", nullptr));
-        comboBox_14->setItemText(8, QCoreApplication::translate("ScriptWindow", "\351\273\204\351\223\234_\344\270\255\345\216\237", nullptr));
+        comboBox_14->setItemText(7, QCoreApplication::translate("ScriptWindow", "\345\234\260\347\201\265\346\236\234_\345\260\221\346\236\227", nullptr));
+        comboBox_14->setItemText(8, QCoreApplication::translate("ScriptWindow", "\347\242\216\347\237\263_\344\270\255\345\216\237", nullptr));
         comboBox_14->setItemText(9, QCoreApplication::translate("ScriptWindow", "\351\273\204\351\223\234_\344\270\255\345\216\237", nullptr));
-        comboBox_14->setItemText(10, QCoreApplication::translate("ScriptWindow", "\351\207\221\347\237\277_\345\241\236\345\214\227", nullptr));
+        comboBox_14->setItemText(10, QCoreApplication::translate("ScriptWindow", "\347\253\213\351\223\266_\344\270\255\345\216\237", nullptr));
+        comboBox_14->setItemText(11, QCoreApplication::translate("ScriptWindow", "\351\207\221\347\237\277_\345\241\236\345\214\227", nullptr));
+
+        label_62->setText(QCoreApplication::translate("ScriptWindow", "\346\211\253\346\221\206\346\221\212/\346\211\253\351\233\206\345\270\202\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
+        label_62->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
+        checkBox_20->setText(QCoreApplication::translate("ScriptWindow", "\345\277\253\351\200\237\350\264\255\344\271\260", nullptr));
+        checkBox_12->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2011", nullptr));
+        label_63->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_63->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_15->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_15->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_15->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_15->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_15->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_15->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_15->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_15->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_13->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2012", nullptr));
+        label_64->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_64->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_16->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_16->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_16->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_16->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_16->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_16->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_16->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_16->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_14->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2013", nullptr));
+        label_66->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_66->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_17->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_17->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_17->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_17->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_17->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_17->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_17->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_17->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_15->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2014", nullptr));
+        label_67->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_67->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_18->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_18->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_18->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_18->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_18->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_18->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_18->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_18->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_16->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2015", nullptr));
+        label_68->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_68->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_19->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_19->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_19->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_19->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_19->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_19->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_19->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_19->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_17->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2016", nullptr));
+        label_69->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_69->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_20->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_20->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_20->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_20->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_20->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_20->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_20->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_20->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_18->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2017", nullptr));
+        label_70->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_70->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_21->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_21->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_21->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_21->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_21->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_21->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_21->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_21->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
+
+        checkBox_19->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\345\223\2018", nullptr));
+        label_71->setText(QCoreApplication::translate("ScriptWindow", "\344\274\230\345\205\210\347\272\247", nullptr));
+        label_71->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "tip", nullptr)));
+        comboBox_22->setItemText(0, QCoreApplication::translate("ScriptWindow", "1", nullptr));
+        comboBox_22->setItemText(1, QCoreApplication::translate("ScriptWindow", "2", nullptr));
+        comboBox_22->setItemText(2, QCoreApplication::translate("ScriptWindow", "3", nullptr));
+        comboBox_22->setItemText(3, QCoreApplication::translate("ScriptWindow", "4", nullptr));
+        comboBox_22->setItemText(4, QCoreApplication::translate("ScriptWindow", "5", nullptr));
+        comboBox_22->setItemText(5, QCoreApplication::translate("ScriptWindow", "6", nullptr));
+        comboBox_22->setItemText(6, QCoreApplication::translate("ScriptWindow", "7", nullptr));
+        comboBox_22->setItemText(7, QCoreApplication::translate("ScriptWindow", "8", nullptr));
 
     } // retranslateUi
 

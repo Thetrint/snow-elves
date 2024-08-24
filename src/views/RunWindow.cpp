@@ -28,7 +28,7 @@ RunWindow::RunWindow(QWidget *parent):
     connect(ui.pushButton_7, &QPushButton::clicked, this, [&]() {
         HWND hwnd;
         std::wstring wintitle;
-            if (int id; detectWin(id, hwnd, wintitle)) {
+        if (int id; detectWin(id, hwnd, wintitle)) {
             Signals::instance()->emitWriteJson(id);
             std::wcout << wintitle << std::endl;
             if (wintitle == L"一梦江湖") {
@@ -55,18 +55,23 @@ RunWindow::RunWindow(QWidget *parent):
                 // 关闭文件
                 file.close();
 
-                std::string exePath = R"(./GameWindow.exe)";
+                std::string exePath = "GameWindow.exe";
 
 
-                // 构建 PowerShell 命令字符串，添加 -WindowStyle Hidden 来隐藏窗口
-                std::string command = "powershell -Command \"Start-Process '" + exePath + "' -WindowStyle Hidden -Verb RunAs\"";
-                // std::string command = "powershell -Command \"Start-Process '" + exePath + "' -Verb RunAs\"";
-                // 使用 std::system 执行命令
+                // 使用 ShellExecute 启动程序并隐藏窗口，且不等待
+                SHELLEXECUTEINFOA shExecInfo = { 0 };
+                shExecInfo.cbSize = sizeof(shExecInfo);
+                shExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+                shExecInfo.lpVerb = "open";
+                shExecInfo.lpFile = exePath.c_str();
+                shExecInfo.lpParameters = "";
+                shExecInfo.nShow = SW_HIDE;
 
-                if (int result = std::system(command.c_str()); result == 0) {
-                    std::cout << "Process started successfully." << std::endl;
+                if (ShellExecuteExA(&shExecInfo)) {
+                    // 启动成功，不等待直接返回
+                    std::cout << "Process started." << std::endl;
                 } else {
-                    std::cerr << "Failed to start process. Error code: " << result << std::endl;
+                    std::cerr << "Failed to start process. Error: " << GetLastError() << std::endl;
                 }
 
             }
@@ -75,7 +80,7 @@ RunWindow::RunWindow(QWidget *parent):
             // 如果不存在，创建一个新的 MyClass 实例并存储在共享指针中
             const auto instance = std::make_shared<TaskManager>(id, hwnd, mainWindow->createJsonDocument());
             winHwnd.push_back(hwnd);
-            managerDictionary[id] = {instance, std::jthread(&TaskManager::start, instance), hwnd};
+            managerDictionary[id] = {instance, std::jthread(&TaskManager::start, instance), hwnd, true};
 
 
         }
@@ -88,6 +93,11 @@ RunWindow::RunWindow(QWidget *parent):
         if(QTableWidgetItem* item = ui.tableWidget->item(id, 0)) {
             item->setData(Qt::DecorationRole, QVariant());
         }
+
+        if(QTableWidgetItem* item = ui.tableWidget->item(id, 1)) {
+            item->setText("");
+        }
+
 
         if (managerDictionary.contains(id)) {
             managerDictionary[id].instance->stop();
@@ -118,6 +128,10 @@ RunWindow::RunWindow(QWidget *parent):
 
             if(QTableWidgetItem* item = ui.tableWidget->item(id, 0)) {
                 item->setData(Qt::DecorationRole, QVariant());
+            }
+
+            if(QTableWidgetItem* item = ui.tableWidget->item(id, 1)) {
+                item->setText("");
             }
 
             data.instance->stop();
@@ -229,6 +243,13 @@ RunWindow::RunWindow(QWidget *parent):
 
     });
 
+    // 任务状态设置
+    connect(Signals::instance(), &Signals::State, this, [&](const int id, const std::string& message) {
+        const auto item = new QTableWidgetItem();
+        item->setText(QString::fromStdString(message));
+        item->setTextAlignment(Qt::AlignCenter);
+        ui.tableWidget->setItem(id, 1, item);
+    });
 
     //日志更新
     connect(Signals::instance(), &Signals::Log, this, [&](const int id, const std::string& message) {

@@ -29,9 +29,14 @@ public:
 
 
 private:
-    std::string cause;
+    /**
+     * 0. 记录万象刷赞次数
+     */
     std::vector<int> record_num{0};
-    // std::vector<std::chrono::steady_clock::time_point> record_time{0};
+    //
+    // std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point()};
+    //
+    // std::vector<bool> record_event{true};
 
 };
 #endif //VIENTIANETASK_H

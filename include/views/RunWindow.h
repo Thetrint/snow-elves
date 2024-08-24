@@ -52,6 +52,7 @@ private:
         std::shared_ptr<TaskManager> instance;
         std::jthread thread;
         HWND windowHwnd;
+        bool state;
 
     };
     std::list<HWND> winHwnd;
