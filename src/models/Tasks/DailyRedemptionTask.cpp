@@ -36,7 +36,7 @@ int DailyRedemptionTask::implementation() {
             case 2: {
                 OpenTeam();
                 if (CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍创建").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍退出");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
                 }
                 Close({.similar = 0.5}, 1);
@@ -62,7 +62,7 @@ int DailyRedemptionTask::implementation() {
                 }
 
                 // 帮派捐献
-                if (config.value("帮派铜钱捐献").toBool() && config.value("帮派银两捐献").toBool() && record_event[1]) {
+                if ((config.value("帮派铜钱捐献").toBool() || config.value("帮派银两捐献").toBool()) && record_event[1]) {
                     record_event[1] = false;
                     OpenFaction();
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮帮派福利");
@@ -71,9 +71,10 @@ int DailyRedemptionTask::implementation() {
                     if(config.value("帮派铜钱捐献").toBool()) {
 
                         ClickImageMatch(MatchParams{.similar = 0.65, .clickCount = 3, .scope = {132, 203, 448, 655}}, nullptr, "按钮捐献");
+                        Defer(2);
                         if(!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示").empty()) {
                             ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示");
-                            ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮帮派捐献确定");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮帮派捐献确定");
                             ClickImageMatch(MatchParams{.similar = 0.65, .clickCount = 3, .scope = {132, 203, 448, 655}}, nullptr, "按钮捐献");
                         }
 
@@ -83,15 +84,21 @@ int DailyRedemptionTask::implementation() {
                     if(config.value("帮派银两捐献").toBool()) {
 
                         ClickImageMatch(MatchParams{.similar = 0.65, .clickCount = 3, .scope = {514, 212, 811, 646}}, nullptr, "按钮捐献");
+                        Defer(2);
                         if(!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示").empty()) {
                             ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志帮派捐献不在提示");
-                            ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮帮派捐献确定");
+                            ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮帮派捐献确定");
                             ClickImageMatch(MatchParams{.similar = 0.65, .clickCount = 3, .scope = {514, 212, 811, 646}}, nullptr, "按钮捐献");
                         }
 
                     }
                     Close(2);
                     continue;
+                }
+
+                // 鸡蛋 卯眼
+                if ((config.value("帮派铜钱捐献").toBool() || config.value("帮派银两捐献").toBool()) && record_event[1]) {
+                    record_event[1] = false;
                 }
 
                 target = 0;

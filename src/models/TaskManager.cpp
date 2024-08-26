@@ -115,6 +115,7 @@ void TaskManager::stop() {
 void TaskManager::pause() {
     if(!LOCK) {
         std::cout << "锁定" << std::endl;
+        obj->TimerPause();
         pause_event.lock();
         LOCK = true;
     }
@@ -129,6 +130,7 @@ void TaskManager::resume() {
 void TaskManager::setState(const std::string &task) const {
 
     emit Signals::instance()->Log(id, task);
+    emit Signals::instance()->State(id, task);
 
 
 
@@ -153,14 +155,14 @@ void TaskManager::start(){
                 if (task != "占位任务") {
                     //更新状态
                     setState(task);
-                    auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
+                    obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
                     if (const int result = obj->implementation(); result == -1) {
 
                     }
                     emit Signals::instance()->Log(id, task + "结束");
                     obj.reset();
                 }else {
-                    auto obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
+                    obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
                     if (const int result = obj->implementation(); result == -1) {
                     }
                     obj.reset();

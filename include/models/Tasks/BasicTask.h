@@ -26,6 +26,10 @@ protected:
 public:
     virtual ~BasicTask() = default;
 
+    void TimerPause();
+
+    void TimerResume();
+
     // ReSharper disable once CppParameterMayBeConst
     BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : id(id),
         hwnd(hwnd),  pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), ifs(ifs), detect_count(0),
@@ -141,11 +145,33 @@ protected:
 
     bool BackInterface();
 
-    void OfflineDetection();
+    bool OfflineDetection();
 
     bool FollowDetection();
 
+    bool FollowDetectionNoWait();
+
+    bool SwitchInterconnection();
+
     void LocationDetection();
+
+    void JNGo();
+
+    void JLGo();
+
+    void FLDGo();
+
+    void ZYGo();
+
+    void SBGo();
+
+    void HSGo();
+
+    void SLGo();
+
+    void LocationGO(const std::string &x, const std::string &y);
+
+    void Changeover(const int& count, const int &line);
 
     void Shout(const std::string &text);
 
@@ -209,7 +235,7 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, std::unique_ptr
     for(int i = 1; i <= match.matchCount && unbind_event; i++) {
 
         (ImageMatch(templ_names, matches, match), ...);
-        ImageProcessor::nonMaxSuppression(matches, 22 * FACTOR);
+        ImageProcessor::nonMaxSuppression(matches, 22);
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
 
@@ -275,7 +301,7 @@ std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, std::unique_ptr
         (ImageMatch(templ_names, matches, match), ...);
 
 
-        ImageProcessor::nonMaxSuppression(matches, 22 * FACTOR);
+        ImageProcessor::nonMaxSuppression(matches, 13);
 
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;

@@ -22,6 +22,16 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create("windows11"));
 
+
+    // 创建SingleInstanceGuard，确保程序单例运行
+    SingleInstanceGuard guard("SnowElves");
+
+    if (guard.isAnotherInstanceRunning()) {
+        // 如果另一个实例正在运行，弹出警告并退出
+        QMessageBox::warning(nullptr, "Warning", "已有程序正在运行");
+        return 1;
+    }
+
     QPalette win11Palette;
     win11Palette.setColor(QPalette::Window, QColor(255, 255, 255));          // White background
     win11Palette.setColor(QPalette::WindowText, QColor(0, 0, 0));            // Black text
@@ -41,10 +51,6 @@ int main(int argc, char *argv[])
 
     LocalServer::getInstance().startServer("SnowElvesLocalServer");
 
-    if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {
-        QMessageBox::warning(nullptr, "Warning", "Another instance is already running.");
-        return 1; // 退出程序
-    }
 
     // 注册资源文件
     if (QResource::registerResource("RESOURCE.rcc")) {

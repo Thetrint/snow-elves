@@ -41,6 +41,9 @@ private:
     SwitchRolesTask rolesTask;
 
     std::unique_ptr<TaskScheduler> scheduler;
+
+    std::unique_ptr<BasicTask> obj;
+
     struct Task {
         std::string name;
         int priority;

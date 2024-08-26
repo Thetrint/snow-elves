@@ -147,6 +147,16 @@ int BountyMissionsTask::implementation() {
                         // 重置副本内判断次数
                         record_num[0] = 0;
 
+                        // 万劫召回
+                        if (!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, "标志悬赏开始探查").empty()) {
+                            if(++record_num[4] > 5) {
+                                FollowDetectionNoWait();
+                            }
+                            Defer(1);
+                            continue;
+                        }
+                        record_num[4] = 0;
+
                         // 副本完成
                         if (!CoortImageMatch(MatchParams{.similar = 0.5, .scope = {1150, 175, 1335, 250}}, nullptr, "标志副本完成").empty()) {
                             // 副本延迟退出判断
@@ -167,6 +177,8 @@ int BountyMissionsTask::implementation() {
 
                         // 副本激活
                         if (record_event[0]) {
+                            // 队员召回
+                            FollowDetectionNoWait();
                             if (CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务").empty()) {
                                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮大世界任务栏");
                             }
@@ -194,10 +206,16 @@ int BountyMissionsTask::implementation() {
                         record_time[0] = std::chrono::steady_clock::now();
                     }
 
+
                     // 交易界面
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面交易").empty()) {
                         Close({.similar = 0.5}, 1);
                     }
+
+                    if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "界面队伍").empty()) {
+                        Close({.similar = 0.5}, 1);
+                    }
+
 
                     // 跳过剧情
                     if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮副本跳过剧情").empty()) {
@@ -257,7 +275,7 @@ int BountyMissionsTask::implementation() {
                         if(!CoortImageMatch(MatchParams{.similar = 0.85, .clickDelay = false}, nullptr, "标志悬赏完成").empty()) {
                             if(record_event[2]) {
                                 record_event[2] = false;
-                                ClickImageMatch(MatchParams{.similar = 0.65, .x = -60, .clickCount = 11}, nullptr, "按钮悬赏上页");
+                                ClickImageMatch(MatchParams{.similar = 0.65, .x = -60, .clickCount = 51}, nullptr, "按钮悬赏上页");
                                 continue;
                             }
                             BountyAccess[id] = true;
@@ -281,7 +299,7 @@ int BountyMissionsTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.65, .x = 60}, nullptr, "按钮悬赏下页");
                         if (++record_num[1] > 10) {
                             record_num[1] = 0;
-                            ClickImageMatch(MatchParams{.similar = 0.5, .x = -60, .clickCount = 11}, nullptr, "按钮悬赏上页");
+                            ClickImageMatch(MatchParams{.similar = 0.5, .x = -60, .clickCount = 51}, nullptr, "按钮悬赏上页");
                         }
 
                     }

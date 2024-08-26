@@ -29,22 +29,22 @@ public:
 
 
 private:
-    std::string cause;
     /**
-     * 1. 记录开启副本次数
-     * 2. 记录判断是否在副本内次数
-     * 3. 记录副本延迟退出次数
-     * 4. 记录副本脱离卡死次数
+     * 0. 带队模式-进入副本次数记录
+     * 1. 带队模式-判断副本内次数
+     * 2. 带队模式-副本内脱离卡死次数记录
+     * 3. 带队模式-副本退出延迟判断记录
+     * 4. 带队模式-万劫召回次数记录
      */
-    std::vector<int> record_num{0, 0, 0, 0};
+    std::vector<int> record_num{0, 0, 0, 0, 0};
     /**
-     * 1. 副本脱离卡死时间
-     * 2. 世界喊话时间
+     * 0. 带队模式-世界喊话时间记录
+     * 1. 带队模式-副本内脱离卡死时间记录
      */
     std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point(), std::chrono::steady_clock::time_point()};
     /**
-     * 1. 副本内任务激活标志
-     * 2. 副本脱离卡死启动标志
+     * 0. 带队模式-任务激活标志
+     * 1. 带队模式-脱离卡死启动标志
      */
     std::vector<bool> record_event{true, false};
 
