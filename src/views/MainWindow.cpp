@@ -532,7 +532,38 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["江湖行商模式"] = script->ui.comboBox_12->currentText();
     root["江湖行商队长编号"] = script->ui.spinBox_9->value();
 
+    root["采集换线"] = script->ui.spinBox_10->value();
+    root["采集次数"] = script->ui.spinBox_11->value();
+    root["采集工具购买"] = script->ui.checkBox_10->isChecked();
+    root["采集自动吃鸡蛋"] = script->ui.checkBox_9->isChecked();
+    root["采集吃鸡蛋数量"] = script->ui.spinBox_12->value();
+    root["采集自定义内容"] = script->ui.textEdit_2->toPlainText();
+    root["采集物品"] = script->ui.comboBox_14->currentText();
+    root["采集模式"] = script->ui.comboBox_13->currentText();
 
+    root["日常悬赏队长编号"] = script->ui.spinBox_13->value();
+
+    root["商品1"] = script->ui.checkBox_12->isChecked();
+    root["商品2"] = script->ui.checkBox_13->isChecked();
+    root["商品3"] = script->ui.checkBox_14->isChecked();
+    root["商品4"] = script->ui.checkBox_15->isChecked();
+    root["商品5"] = script->ui.checkBox_16->isChecked();
+    root["商品6"] = script->ui.checkBox_17->isChecked();
+    root["商品7"] = script->ui.checkBox_18->isChecked();
+    root["商品8"] = script->ui.checkBox_19->isChecked();
+    root["快速购买"] = script->ui.checkBox_20->isChecked();
+    root["优先级1"] = script->ui.comboBox_15->currentIndex() + 1;
+    root["优先级2"] = script->ui.comboBox_16->currentIndex() + 1;
+    root["优先级3"] = script->ui.comboBox_17->currentIndex() + 1;
+    root["优先级4"] = script->ui.comboBox_18->currentIndex() + 1;
+    root["优先级5"] = script->ui.comboBox_19->currentIndex() + 1;
+    root["优先级6"] = script->ui.comboBox_20->currentIndex() + 1;
+    root["优先级7"] = script->ui.comboBox_21->currentIndex() + 1;
+    root["优先级8"] = script->ui.comboBox_22->currentIndex() + 1;
+
+    root["摆摊延迟1"] = script->ui.spinBox_14->value();
+    root["摆摊延迟2"] = script->ui.spinBox_15->value();
+    root["摆摊延迟3"] = script->ui.spinBox_16->value();
 
 
 
@@ -627,6 +658,38 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.comboBox_12->setCurrentText("带队模式");
         script->ui.spinBox_9->setValue(1);
 
+        script->ui.spinBox_10->setValue(1);
+        script->ui.spinBox_11->setValue(9999);
+        script->ui.checkBox_10->setChecked(false);
+        script->ui.checkBox_9->setChecked(false);
+        script->ui.spinBox_12->setValue(1);
+        script->ui.textEdit_2->setText("");
+        script->ui.comboBox_14->setCurrentText("野花_江南");
+        script->ui.comboBox_13->setCurrentText("默认模式");
+
+        script->ui.checkBox_12->setChecked(false);
+        script->ui.checkBox_13->setChecked(false);
+        script->ui.checkBox_14->setChecked(false);
+        script->ui.checkBox_15->setChecked(false);
+        script->ui.checkBox_16->setChecked(false);
+        script->ui.checkBox_17->setChecked(false);
+        script->ui.checkBox_18->setChecked(false);
+        script->ui.checkBox_19->setChecked(false);
+        script->ui.checkBox_20->setChecked(false);
+        script->ui.comboBox_15->setCurrentIndex(0);
+        script->ui.comboBox_16->setCurrentIndex(0);
+        script->ui.comboBox_17->setCurrentIndex(0);
+        script->ui.comboBox_18->setCurrentIndex(0);
+        script->ui.comboBox_19->setCurrentIndex(0);
+        script->ui.comboBox_20->setCurrentIndex(0);
+        script->ui.comboBox_21->setCurrentIndex(0);
+        script->ui.comboBox_22->setCurrentIndex(0);
+
+        script->ui.spinBox_14->setValue(50);
+        script->ui.spinBox_15->setValue(10);
+        script->ui.spinBox_16->setValue(10);
+
+
         return;
     }
     QJsonDocument settingsDoc;
@@ -715,6 +778,37 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.spinBox_8->setValue(root["江湖行商次数"].toInt());
         script->ui.comboBox_12->setCurrentText(root["江湖行商模式"].toString());
         script->ui.spinBox_9->setValue(root["江湖行商队长编号"].toInt());
+
+         script->ui.spinBox_10->setValue(root["采集换线"].toInt());
+         script->ui.spinBox_11->setValue(root["采集次数"].toInt());
+         script->ui.checkBox_10->setChecked(root["采集工具购买"].toBool());
+         script->ui.checkBox_9->setChecked(root["采集自动吃鸡蛋"].toBool());
+         script->ui.spinBox_12->setValue(root["采集吃鸡蛋数量"].toBool());
+         script->ui.textEdit_2->setText(root["采集自定义内容"].toString());
+         script->ui.comboBox_14->setCurrentText(root["采集物品"].toString());
+         script->ui.comboBox_13->setCurrentText(root["采集模式"].toString());
+
+        script->ui.checkBox_12->setChecked(root["商品1"].toBool());
+        script->ui.checkBox_13->setChecked(root["商品2"].toBool());
+        script->ui.checkBox_14->setChecked(root["商品3"].toBool());
+        script->ui.checkBox_15->setChecked(root["商品4"].toBool());
+        script->ui.checkBox_16->setChecked(root["商品5"].toBool());
+        script->ui.checkBox_17->setChecked(root["商品6"].toBool());
+        script->ui.checkBox_18->setChecked(root["商品7"].toBool());
+        script->ui.checkBox_19->setChecked(root["商品8"].toBool());
+        script->ui.checkBox_20->setChecked(root["快速购买"].toBool());
+        script->ui.comboBox_15->setCurrentIndex(root["优先级1"].toInt() - 1);
+        script->ui.comboBox_16->setCurrentIndex(root["优先级2"].toInt() - 1);
+        script->ui.comboBox_17->setCurrentIndex(root["优先级3"].toInt() - 1);
+        script->ui.comboBox_18->setCurrentIndex(root["优先级4"].toInt() - 1);
+        script->ui.comboBox_19->setCurrentIndex(root["优先级5"].toInt() - 1);
+        script->ui.comboBox_20->setCurrentIndex(root["优先级6"].toInt() - 1);
+        script->ui.comboBox_21->setCurrentIndex(root["优先级7"].toInt() - 1);
+        script->ui.comboBox_22->setCurrentIndex(root["优先级8"].toInt() - 1);
+
+        script->ui.spinBox_14->setValue(root["摆摊延迟1"].toInt());
+        script->ui.spinBox_15->setValue(root["摆摊延迟2"].toInt());
+        script->ui.spinBox_16->setValue(root["摆摊延迟3"].toInt());
     }
 }
 

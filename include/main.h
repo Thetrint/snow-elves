@@ -71,6 +71,8 @@
 inline double FACTOR = 1.00;
 inline int DELAY  = 1150;
 inline int DELAY_MAGNIFICATION  = 5;
+// 日常副本完成同步机制
+inline std::array DailCopiesFinish = {false, false, false, false, false, false, false, false, false, false};
 // 副本悬赏接取同步机制
 inline std::array BountyAccess = {true, true, true, true, true, true, true, true, true, true};
 inline std::array BountyFinish = {true, true, true, true, true, true, true, true, true, true};

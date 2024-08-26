@@ -71,21 +71,23 @@ public:
     }
 };
 
-
 class SingleInstanceGuard {
 public:
     explicit SingleInstanceGuard(const QString &key) : sharedMemory(key) {
         if (sharedMemory.attach()) {
+            // 如果能附加到共享内存，说明已经有一个实例在运行
             spdlog::warn("Another instance is already running.");
             isRunning = true;
         } else {
-            sharedMemory.create(1); // 创建共享内存
+            if (!sharedMemory.create(10240)) { // 创建共享内存
+                spdlog::error("Failed to create shared memory: {}", sharedMemory.errorString().toStdString());
+            }
         }
     }
 
     ~SingleInstanceGuard() {
         if (!isRunning) {
-            sharedMemory.detach();
+            sharedMemory.detach(); // 分离共享内存
         }
     }
 
@@ -97,7 +99,6 @@ private:
     QSharedMemory sharedMemory;
     bool isRunning = false;
 };
-
 
 
 #endif //UTILITIES_H

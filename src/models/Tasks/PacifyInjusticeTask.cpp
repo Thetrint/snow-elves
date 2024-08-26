@@ -48,16 +48,23 @@ int PacifyInjusticeTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮队伍确定");
                     ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮确定");
                     Log("队伍检测完成");
+
+                    // 开启互联分线
+                    SwitchInterconnection();
+
                     target = 3;
                     break;
                 }
                 // 检测队伍人数 开启任务
                 case 3: {
                     OpenTeam();
-                    // 离线检查
-                    OfflineDetection();
                     // 检测队伍人数
-                    if(CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍空位").size() <= 5 - 3) {
+                    if(CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍空位").size() <= 10 - 3) {
+                        // 离线检测
+                        if(!OfflineDetection()) {
+                            continue;
+                        }
+
                         // 跟随召集
                         if(!FollowDetection()) {
                             continue;

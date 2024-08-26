@@ -73,7 +73,7 @@ int BreakBanTask::implementation() {
                             }
                         }else {
 
-                            if(!ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界摆摊购买").empty()) {
+                            if(!ClickImageMatch(MatchParams{.similar = 0.65, .y = -45}, nullptr, "按钮大世界摆摊购买").empty()) {
                                 Defer(2);
                                 ClickImageMatch(MatchParams{.similar = 0.5, .matchCount = 1}, nullptr, "按钮交易查看全服");
 
@@ -83,6 +83,7 @@ int BreakBanTask::implementation() {
                                 }
 
                                 if(!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .scope = {859, 536, 1170, 662}}, nullptr, "按钮交易批量购买").empty()) {
+                                    ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮确认");
                                     ClickImageMatch(MatchParams{.similar = 0.6, .clickCount = 15}, nullptr, "按钮确认");
                                     continue;
                                 }
@@ -91,7 +92,7 @@ int BreakBanTask::implementation() {
 
                             }
 
-                            if(!ClickImageMatch(MatchParams{.similar = 0.5, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
+                            if(!ClickImageMatch(MatchParams{.similar = 0.65, .y = -45}, nullptr, "按钮大世界商城购买").empty()) {
                                 Defer(2);
                                 mouse_down_up({.clickCount = 1}, {988, 694});
                                 Close({.similar = 0.5}, 1);
