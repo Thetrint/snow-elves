@@ -120,6 +120,11 @@ int MerchantLakeTask::implementation() {
                         ClickImageMatch(MatchParams{.similar = 0.75, .matchCount = 1, .scope = {41, 212, 110, 425}}, nullptr, "按钮大世界行商任务");
                     }
 
+                    // 关闭行商界面
+                    if(!CoortImageMatch({.similar = 0.65}, nullptr, "界面江湖行商").empty()) {
+                        Close(1);
+                    }
+
                     // 选择地图
                     if(!ClickImageMatch({.similar = 0.65, .matchCount = 1}, nullptr, "按钮地图江南区域").empty()) {
                         if(record_event[1]) {
@@ -180,18 +185,16 @@ int MerchantLakeTask::implementation() {
                                 mouse_keep({}, {1037, 489}, 2000);
                                 ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .scope = {699, 548, 1099, 673}}, nullptr, "按钮江湖行商购买");
                             }
-                            Defer(3);
-                            Close(1);
+                            Defer(2);
                             // 出售标志
                             record_event[1] = true;
                         }else {
                             Log("出售商品");
                             Defer(2);
                             ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 1, .clickCount = 5, .clickDelayNum = 1000, .scope = {699, 548, 1099, 673}}, nullptr, "按钮江湖行商出售");
-                            Close(1);
+                            Defer(2);
                             // 出售完成
                             record_event[1] = false;
-                            Defer(2);
                         }
                     }else if(record_event[2]) {
                         // 判断行商开启是否失败

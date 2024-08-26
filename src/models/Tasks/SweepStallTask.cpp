@@ -13,7 +13,7 @@ int SweepStallTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(720 * 1000)) {
             return 0;
         }
 
@@ -52,9 +52,39 @@ int SweepStallTask::implementation() {
                 thread = std::jthread(&flushed, this);
 
                 productSet.clear();  // 清空现有的元素
-                for (int i = 1; i <= 8; ++i) {
-                    productSet.emplace(i);  // 插入 1 到 8
+
+                if(config.value("商品1").toBool()) {
+                    productSet.emplace(1);  // 插入 1 到 8
                 }
+
+                if(config.value("商品2").toBool()) {
+                    productSet.emplace(2);  // 插入 1 到 8
+                }
+                if(config.value("商品3").toBool()) {
+                    productSet.emplace(3);  // 插入 1 到 8
+                }
+
+                if(config.value("商品4").toBool()) {
+                    productSet.emplace(4);  // 插入 1 到 8
+                }
+
+                if(config.value("商品5").toBool()) {
+                    productSet.emplace(5);  // 插入 1 到 8
+                }
+
+                if(config.value("商品6").toBool()) {
+                    productSet.emplace(6);  // 插入 1 到 8
+                }
+
+                if(config.value("商品7").toBool()) {
+                    productSet.emplace(7);  // 插入 1 到 8
+                }
+
+                if(config.value("商品8").toBool()) {
+                    productSet.emplace(8);  // 插入 1 到 8
+                }
+
+
                 record_event[0] = true;
                 target = 4;
                 break;
@@ -71,8 +101,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(1);
                             continue;
                         }
-                    }else {
-                        productSet.erase(1);
                     }
 
                     if(config.value("商品2").toBool()) {
@@ -80,8 +108,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(2);
                             continue;
                         }
-                    }else {
-                        productSet.erase(2);
                     }
 
                     if(config.value("商品3").toBool()) {
@@ -89,8 +115,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(3);
                             continue;
                         }
-                    }else {
-                        productSet.erase(3);
                     }
 
                     if(config.value("商品4").toBool()) {
@@ -98,8 +122,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(4);
                             continue;
                         }
-                    }else {
-                        productSet.erase(4);
                     }
 
                     if(config.value("商品5").toBool()) {
@@ -107,8 +129,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(5);
                             continue;
                         }
-                    }else {
-                        productSet.erase(5);
                     }
 
                     if(config.value("商品6").toBool()) {
@@ -116,8 +136,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(6);
                             continue;
                         }
-                    }else {
-                        productSet.erase(6);
                     }
 
                     if(config.value("商品7").toBool()) {
@@ -125,8 +143,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(7);
                             continue;
                         }
-                    }else {
-                        productSet.erase(7);
                     }
 
                     if(config.value("商品8").toBool()) {
@@ -134,8 +150,6 @@ int SweepStallTask::implementation() {
                             productSet.erase(8);
                             continue;
                         }
-                    }else {
-                        productSet.erase(8);
                     }
                 }
 
@@ -160,26 +174,57 @@ int SweepStallTask::implementation() {
                     auto [location, priority] = productQueue.top();
                     mouse_down_up({.clickDelay = false}, location);
                     // 延迟
-                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(config.value("摆摊延迟1").toInt()));
                     while (unbind_event) {
                         // 点击
                         mouse_down_up({.clickDelay = false}, {547, 218});
-
-                        if(!CoortImageMatch({.similar = 0.65}, nullptr, "按钮交易购买").empty()) {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(config.value("摆摊延迟2").toInt()));
+                        if(!ClickImageMatch({.similar = 0.65, .matchCount = 5, .clickDelay = false, .matchDelay = false}, nullptr, "按钮交易购买").empty()) {
                             record_num[0] = 0;
-                            ClickImageMatch({.similar = 0.65, .clickDelay = false, .matchDelay = false}, nullptr, "按钮交易购买");
-                            ClickImageMatch({.similar = 0.6, .matchCount = 35, .clickDelay = false, .matchDelay = false}, nullptr, "按钮确定");
+                            ClickImageMatch({.similar = 0.6, .matchCount = 15, .clickDelay = false, .matchDelay = false}, nullptr, "按钮确定");
+                            std::this_thread::sleep_for(std::chrono::milliseconds(config.value("摆摊延迟3").toInt()));
                         }else {
-                            if(++record_num[0]> 5 && unbind_event) {
+                            if(++record_num[0]> 2 && unbind_event) {
+                                // 启动刷新
+                                record_event[0] = true;
+
                                 // 清空队列
                                 std::priority_queue<Product, std::vector<Product>, Compare> empty;
                                 std::swap(productQueue, empty);  // 快速清空队列
 
                                 productSet.clear();  // 清空现有的元素
-                                for (int i = 1; i <= 8; ++i) {
-                                    productSet.emplace(i);  // 插入 1 到 8
+
+                                if(config.value("商品1").toBool()) {
+                                    productSet.emplace(1);  // 插入 1 到 8
                                 }
-                                record_event[0] = true;
+
+                                if(config.value("商品2").toBool()) {
+                                    productSet.emplace(2);  // 插入 1 到 8
+                                }
+                                if(config.value("商品3").toBool()) {
+                                    productSet.emplace(3);  // 插入 1 到 8
+                                }
+
+                                if(config.value("商品4").toBool()) {
+                                    productSet.emplace(4);  // 插入 1 到 8
+                                }
+
+                                if(config.value("商品5").toBool()) {
+                                    productSet.emplace(5);  // 插入 1 到 8
+                                }
+
+                                if(config.value("商品6").toBool()) {
+                                    productSet.emplace(6);  // 插入 1 到 8
+                                }
+
+                                if(config.value("商品7").toBool()) {
+                                    productSet.emplace(7);  // 插入 1 到 8
+                                }
+
+                                if(config.value("商品8").toBool()) {
+                                    productSet.emplace(8);  // 插入 1 到 8
+                                }
+
                                 std::this_thread::sleep_for(std::chrono::milliseconds(1501));
                                 break;
                             }
@@ -225,7 +270,7 @@ void SweepStallTask::flushed() {
             mouse_down_up({.clickDelay = false}, {175, 292});
             std::this_thread::sleep_for(std::chrono::milliseconds(40));
             record_event[1] = true;
-            std::this_thread::sleep_for(std::chrono::milliseconds(400));
+            std::this_thread::sleep_for(std::chrono::milliseconds(550));
         }
 
 

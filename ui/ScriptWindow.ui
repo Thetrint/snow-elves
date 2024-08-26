@@ -156,8 +156,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>1294</width>
-            <height>924</height>
+            <width>394</width>
+            <height>800</height>
            </rect>
           </property>
           <property name="minimumSize">
@@ -2195,6 +2195,16 @@
             </item>
             <item>
              <property name="text">
+              <string>松木_江南</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>桉木_江南</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>杂草_江南</string>
              </property>
             </item>
@@ -2215,6 +2225,11 @@
             </item>
             <item>
              <property name="text">
+              <string>灵芝_华山</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>碎石_中原</string>
              </property>
             </item>
@@ -2231,6 +2246,16 @@
             <item>
              <property name="text">
               <string>金矿_塞北</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>祖母绿_塞北</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>钨晶_塞北</string>
              </property>
             </item>
            </widget>
@@ -2317,13 +2342,70 @@
        </item>
        <item>
         <widget class="QWidget" name="widget_33" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_30">
+         <layout class="QHBoxLayout" name="horizontalLayout_24">
           <item>
            <widget class="QCheckBox" name="checkBox_20">
             <property name="text">
              <string>快速购买</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_72">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>延迟1:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinBox_14"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_73">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>延迟2:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinBox_15"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_74">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>延迟3:</string>
+            </property>
+            <property name="class" stdset="0">
+             <string>tip</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="spinBox_16"/>
           </item>
           <item>
            <spacer name="horizontalSpacer_32">

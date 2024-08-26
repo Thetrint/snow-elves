@@ -165,6 +165,10 @@ protected:
 
     void SBGo();
 
+    void HSGo();
+
+    void SLGo();
+
     void LocationGO(const std::string &x, const std::string &y);
 
     void Changeover(const int& count, const int &line);

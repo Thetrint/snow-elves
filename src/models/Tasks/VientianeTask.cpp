@@ -50,7 +50,7 @@ int VientianeTask::implementation() {
                     ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
                     input_text("360");
 
-                    ClickImageMatch({.similar = 0.65, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
+                    ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
                     ClickImageMatch({.similar = 0.5}, nullptr, "按钮关闭");
                     Arrive();
 

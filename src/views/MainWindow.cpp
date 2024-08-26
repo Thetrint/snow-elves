@@ -561,6 +561,10 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["优先级7"] = script->ui.comboBox_21->currentIndex() + 1;
     root["优先级8"] = script->ui.comboBox_22->currentIndex() + 1;
 
+    root["摆摊延迟1"] = script->ui.spinBox_14->value();
+    root["摆摊延迟2"] = script->ui.spinBox_15->value();
+    root["摆摊延迟3"] = script->ui.spinBox_16->value();
+
 
 
     return QJsonDocument(root);
@@ -662,6 +666,29 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.textEdit_2->setText("");
         script->ui.comboBox_14->setCurrentText("野花_江南");
         script->ui.comboBox_13->setCurrentText("默认模式");
+
+        script->ui.checkBox_12->setChecked(false);
+        script->ui.checkBox_13->setChecked(false);
+        script->ui.checkBox_14->setChecked(false);
+        script->ui.checkBox_15->setChecked(false);
+        script->ui.checkBox_16->setChecked(false);
+        script->ui.checkBox_17->setChecked(false);
+        script->ui.checkBox_18->setChecked(false);
+        script->ui.checkBox_19->setChecked(false);
+        script->ui.checkBox_20->setChecked(false);
+        script->ui.comboBox_15->setCurrentIndex(0);
+        script->ui.comboBox_16->setCurrentIndex(0);
+        script->ui.comboBox_17->setCurrentIndex(0);
+        script->ui.comboBox_18->setCurrentIndex(0);
+        script->ui.comboBox_19->setCurrentIndex(0);
+        script->ui.comboBox_20->setCurrentIndex(0);
+        script->ui.comboBox_21->setCurrentIndex(0);
+        script->ui.comboBox_22->setCurrentIndex(0);
+
+        script->ui.spinBox_14->setValue(50);
+        script->ui.spinBox_15->setValue(10);
+        script->ui.spinBox_16->setValue(10);
+
 
         return;
     }
@@ -778,6 +805,10 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.comboBox_20->setCurrentIndex(root["优先级6"].toInt() - 1);
         script->ui.comboBox_21->setCurrentIndex(root["优先级7"].toInt() - 1);
         script->ui.comboBox_22->setCurrentIndex(root["优先级8"].toInt() - 1);
+
+        script->ui.spinBox_14->setValue(root["摆摊延迟1"].toInt());
+        script->ui.spinBox_15->setValue(root["摆摊延迟2"].toInt());
+        script->ui.spinBox_16->setValue(root["摆摊延迟3"].toInt());
     }
 }
 
