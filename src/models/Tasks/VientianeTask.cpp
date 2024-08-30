@@ -44,10 +44,10 @@ int VientianeTask::implementation() {
                 if (OpenMap()) {
                     ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
                     ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-                    ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+                    ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
                     input_text("307");
 
-                    ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+                    ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
                     input_text("360");
 
                     ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");

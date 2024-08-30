@@ -29,9 +29,15 @@ public:
 
 
 private:
-    std::string cause;
-    // std::vector<int> record_num{0};
-    // std::vector<std::chrono::steady_clock::time_point> record_time{0};
+    /**
+     * 0. 记录界面匹配失败次数
+     * 1. 记录完成延迟退出
+     */
+    std::vector<int> record_num{0, 0};
+    //
+    // std::vector<std::chrono::steady_clock::time_point> record_time{std::chrono::steady_clock::time_point()};
+    //
+    // std::vector<bool> record_event{true};
 
 };
 #endif //TEASTORYTASK_H

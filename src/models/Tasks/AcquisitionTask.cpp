@@ -112,7 +112,7 @@ int AcquisitionTask::implementation() {
                 mouse_down_up({}, {0, 0});
                 CloseReward(3);
                 // 采集
-                if(!ClickImageMatch({.similar = 0.58, .matchCount = 3, .clickDelay = false, .scope = {786, 283, 1033, 534}, .applyGaussianBlur = false}, nullptr, "按钮生活采集挖矿", "按钮生活采集砍伐", "按钮生活采集采集").empty()) {
+                if(!ClickImageMatch({.similar = 0.56, .matchCount = 2, .clickDelay = false, .scope = {786, 283, 1033, 534}, .applyGaussianBlur = false}, nullptr, "按钮生活采集挖矿", "按钮生活采集砍伐", "按钮生活采集采集").empty()) {
                     // 加速
                     record_event[0] = true;
                     Defer(2, 1300);

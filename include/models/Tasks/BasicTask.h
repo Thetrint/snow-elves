@@ -151,6 +151,10 @@ protected:
 
     bool FollowDetectionNoWait();
 
+    bool FlagImageMatchCount(const std::string& fileName, int& count);
+
+    bool RepeatVerification(const std::string &fileName, int &count);
+
     bool SwitchInterconnection();
 
     void LocationDetection();
@@ -238,7 +242,7 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, std::unique_ptr
         ImageProcessor::nonMaxSuppression(matches, 22);
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
-
+            emit Signals::instance()->View(std::format("Locatiion: {}, {}, Score: {}", location.x, location.y, score));
         }
 
         // 初始化随机数种子
@@ -305,7 +309,7 @@ std::vector<Match> BasicTask::CoortImageMatch(MatchParams match, std::unique_ptr
 
         for (const auto&[location, score] : matches) {
             std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
-
+            emit Signals::instance()->View(std::format("Locatiion: {}, {}, Score: {}", location.x, location.y, score));
         }
 
 

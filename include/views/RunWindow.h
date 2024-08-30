@@ -37,12 +37,6 @@ protected:
     }
 private:
     const MainWindow* mainWindow;
-    // 结构体保存窗口属性
-    struct WindowAttributes {
-        RECT geometry;
-        std::wstring title;
-        LONG style;
-    };
 
     int getrowindex() const;
 
@@ -55,6 +49,9 @@ private:
         bool state;
 
     };
+    // 创建一个存储 pair<id, handle> 的队列
+    std::queue<std::pair<int, HWND>> idHWNDQueue;
+
     std::list<HWND> winHwnd;
     std::map<int, ManagerData> managerDictionary;
     std::mutex mtx; // 保护映射的互斥锁

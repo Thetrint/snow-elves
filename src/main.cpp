@@ -24,9 +24,7 @@ int main(int argc, char *argv[])
 
 
     // 创建SingleInstanceGuard，确保程序单例运行
-    SingleInstanceGuard guard("SnowElves");
-
-    if (guard.isAnotherInstanceRunning()) {
+    if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {
         // 如果另一个实例正在运行，弹出警告并退出
         QMessageBox::warning(nullptr, "Warning", "已有程序正在运行");
         return 1;

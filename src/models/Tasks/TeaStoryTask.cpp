@@ -3,9 +3,9 @@
 //
 #include "models/Tasks/TeaStoryTask.h"
 
+
 int TeaStoryTask::implementation() {
-    std::vector<Match> matchs;
-    objective("位置检测");
+    int target = 1;
     timer.start();
     while (unbind_event) {
 
@@ -14,58 +14,68 @@ int TeaStoryTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720 * 5)) {
+        if (timer.read() >= std::chrono::seconds(720)) {
             return 0;
         }
 
-        switch (determine()) {
-            case 0:
-               Close({.similar = 0.5}, 3);;
-                return 0; // 任务正常退出
-            case -1:
-                Close({.similar = 0.5}, 1);
-                break;
-            case 1:
+        // ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
+        switch (target) {
+            // 任务退出
+            case 0: {
+                return 0;
+            }
+            // 位置检测
+            case 1: {
                 LocationDetection();
-                objective("队伍检测");
+                target = 2;
                 break;
-            case 2:
+            }
+            // 队伍检测
+            case 2: {
+                Log("检测队伍");
                 OpenTeam();
-                if (CoortImageMatch(MatchParams{.similar = 0.75}, nullptr, "按钮队伍创建").empty()) {
-                    ClickImageMatch(MatchParams{.similar = 0.5, .applyGaussianBlur = false}, nullptr, "按钮队伍退出");
-                    ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
+                if (CoortImageMatch({.similar = 0.65}, nullptr, "按钮队伍创建").empty()) {
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍退出");
+                    ClickImageMatch({.similar = 0.5}, nullptr, "按钮确定");
                 }
-                Close({.similar = 0.5}, 1);
-                objective("开始任务");
+                Close( 1);
+                Log("队伍检测完成");
+                target = 3;
                 break;
-            case 3:
+            }
+            case 3: {
                 OpenKnapsack();
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品综合入口");
-                ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮物品活动");
+                ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品综合入口");
+                ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮物品活动");
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮活动江湖");
-                if (ClickImageMatch(MatchParams{.similar = 0.5, .y = 45}, nullptr, "按钮活动茶馆说书").empty()) {
-                    objective("任务退出");
+                if (ClickImageMatch(MatchParams{.similar = 0.55, .y = 45}, nullptr, "按钮活动茶馆说书").empty()) {
+                    target = 0;
                     continue;
                 }
                 Arrive();
                 ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书进入茶馆");
                 PassLevel();
-                objective("等待完成");
+                target = 4;
                 break;
-            case 4:
-                if (!ClickImageMatch(MatchParams{.similar = 0.65}, std::make_unique<CAUSE>(cause, "开始任务"), "界面茶馆").empty()) {
+            }
+            case 4: {
+                if(FlagImageMatchCount("界面茶馆", record_num[0])) {
+
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书甲", "按钮茶馆说书乙", "按钮茶馆说书丙", "按钮茶馆说书丁");
 
-                    if (!CoortImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆").empty()) {
-                        Defer(1);
-                        ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮茶馆说书退出茶馆");
-                        objective("任务退出");
-                    }
-                }
 
-                break;
-            default:
-                break;;
+                    if(RepeatVerification("按钮茶馆说书退出茶馆", record_num[1])) {
+                        ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮茶馆说书退出茶馆");
+                        CloseReward(3);
+                        target = 0;
+                    }
+
+                    Defer(1);
+                }else {
+                    target = 3;
+                }
+            }
+
         }
 
     }
@@ -76,75 +86,15 @@ int TeaStoryTask::implementation() {
 }
 
 void TeaStoryTask::objective(const std::string ve) {
-    cause = ve;
+
 }
 
 int TeaStoryTask::determine() {
-    const int sw = detect();
-    if (sw == -5) {
-        if (++detect_count >= 10) {
-            return -1;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
-    }else {
-        detect_count = 0;
-    }
-
-
-    if (cause == "任务退出") {
-        switch (sw) {
-            case 1:
-                return 0;
-            default:
-                return -1;
-        }
-    }
-
-    if (cause == "位置检测") {
-        switch (sw) {
-            case 1:
-                return 1;
-            default:
-                return -1;
-        }
-    }
-
-    if (cause == "队伍检测") {
-        switch (sw) {
-            case 1:
-                return 2;
-            default:
-                return -1;
-        }
-    }
-
-    if (cause == "开始任务") {
-        switch (sw) {
-            case 1:
-                return 3;
-            default:
-                return -1;
-        }
-    }
-
-    if (cause == "等待完成") {
-        switch (sw) {
-            case 1:
-                return 4;
-            default:
-                return -1;
-        }
-    }
-
 
     return 307;
 }
 
 int TeaStoryTask::detect() {
-    if (!CoortImageMatch(MatchParams{.similar = 0.65, .applyGaussianBlur = false}, nullptr, "界面大世界1", "界面大世界2").empty()) {
-        return 1;
-    }
-
 
     return -5;
 
