@@ -24,7 +24,6 @@ signals:
     void setPersion(int id, HWND hwnd);
     void Start();
     void Close();
-    void TaskStart(int id);
 
 
 

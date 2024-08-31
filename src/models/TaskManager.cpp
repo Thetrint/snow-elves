@@ -8,20 +8,16 @@
 #include <utils/signals.h>
 
 #include "models/WindowManager.h"
-#include "models/TaskSchedul.h"
 #include "utils/Factory.h"
-#include "utils/LoadJsonFile.h"
+
 #include "utils/FunctionLibrary.h"
 
 
 TaskManager::TaskManager(const int id, HWND hwnd, const QJsonDocument& configJson)
-    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false), rolesTask(id, hwnd, pause_event, unbind_event, disrupted, ifs) {
+    : id(id), hwnd(hwnd), disrupted(false), unbind_event(true), LOCK(false), rolesTask(id, hwnd, pause_event, unbind_event, disrupted, ifs, config) {
+
     this->config = configJson.object();
-
-    LoadJsonFile::instance().LoadFile(id);
-
     scheduler = std::make_unique<TaskScheduler>();
-
     scheduler->addTask(TaskScheduler::TimerTask(
         "宅邸农场任务",
         TaskScheduler::TaskMode::Interval,
@@ -33,13 +29,8 @@ TaskManager::TaskManager(const int id, HWND hwnd, const QJsonDocument& configJso
     ));
 
     // scheduler->start();
-    // 等待通知开始
-    pause_event.lock();
 }
 
-TaskManager::~TaskManager() {
-    LoadJsonFile::instance().jsonFiles.erase(id);
-}
 
 /**
  * 任务队列初始化
@@ -57,31 +48,31 @@ void TaskManager::Init() {
  */
 std::string TaskManager::getTask() {
     if (taskQueue.empty()) {
-        if (LoadJsonFile::instance().jsonFiles[id].value("切角色1").toBool() && rolesTask.roles[1]) {
+        if (config.value("切角色1").toBool() && rolesTask.roles[1]) {
             // switch_rol.roles(1);
             rolesTask.roles[1] = false;
             Init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().jsonFiles[id].value("切角色2").toBool() && rolesTask.roles[2]) {
+        if (config.value("切角色2").toBool() && rolesTask.roles[2]) {
             // switch_rol.roles(2);
             rolesTask.roles[2] = false;
             Init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().jsonFiles[id].value("切角色3").toBool() && rolesTask.roles[3]) {
+        if (config.value("切角色3").toBool() && rolesTask.roles[3]) {
             // switch_rol.roles(3);
             rolesTask.roles[3] = false;
             Init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().jsonFiles[id].value("切角色4").toBool() && rolesTask.roles[4]) {
+        if (config.value("切角色4").toBool() && rolesTask.roles[4]) {
             // switch_rol.roles(4);
             rolesTask.roles[4] = false;
             Init();
             return "占位任务";
         }
-        if (LoadJsonFile::instance().jsonFiles[id].value("切角色5").toBool() && rolesTask.roles[5]) {
+        if (config.value("切角色5").toBool() && rolesTask.roles[5]) {
             // switch_rol.roles(5);
             rolesTask.roles[5] = false;
             Init();
@@ -155,14 +146,14 @@ void TaskManager::start(){
                 if (task != "占位任务") {
                     //更新状态
                     setState(task);
-                    obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
+                    obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs, config);
                     if (const int result = obj->implementation(); result == -1) {
 
                     }
                     emit Signals::instance()->Log(id, task + "结束");
                     obj.reset();
                 }else {
-                    obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs);
+                    obj = Factory::instance().create(task, id, hwnd, pause_event, unbind_event, disrupted, ifs, config);
                     if (const int result = obj->implementation(); result == -1) {
                     }
                     obj.reset();
@@ -176,7 +167,7 @@ void TaskManager::start(){
         // // 创建一个 vector 用于存储解码后的值
         // std::vector<std::string> tasks;
         //
-        // for (const auto& task : LoadJsonFile::instance().jsonFiles[id].value("执行任务").toArray()) {
+        // for (const auto& task : config.value("执行任务").toArray()) {
         //     tasks.push_back(task.toString().toStdString());
         //     std::cout << task.toString().toStdString() << std::endl;
         // }

@@ -8,15 +8,10 @@
 
 class HouseClockTask final : public BasicTask{
 
-protected:
-    int id; // 任务ID
-    HWND hwnd; //
-    std::mutex& pause_event;
-    bool& unbind_event;
-    std::ifstream& ifs;
 
 public:
-    HouseClockTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted, ifs), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), ifs(ifs) {}
+    HouseClockTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs, const QJsonObject& config)
+        : BasicTask(id, hwnd, pause_event, unbind_event, disrupted, ifs, config) {}
 
     // 实现基类的纯虚函数
     int implementation() override;

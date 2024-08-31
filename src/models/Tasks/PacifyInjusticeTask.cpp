@@ -127,7 +127,7 @@ int PacifyInjusticeTask::implementation() {
                     }
 
                     // 判断副本内次数
-                    if(++record_num[0] >= 15) {
+                    if(++record_num[0] >= 35) {
                         target = 3;
                     }
                     Defer(3, 2000);

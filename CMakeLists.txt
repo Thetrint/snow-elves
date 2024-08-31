@@ -90,14 +90,10 @@ add_executable(SnowElvesScript WIN32
         src/models/Tasks/BasicTask.cpp
         src/models/Tasks/FactionTask.cpp
         include/models/Tasks/FactionTask.h
-        src/models/TaskSchedul.cpp
-        include/models/TaskSchedul.h
         src/utils/signals.cpp
         include/utils/signals.h
         src/utils/Factory.cpp
         include/utils/Factory.h
-        src/utils/LoadJsonFile.cpp
-        include/utils/LoadJsonFile.h
         src/utils/FunctionLibrary.cpp
         include/utils/FunctionLibrary.h
         ${RESOURCE}

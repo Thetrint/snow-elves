@@ -3,8 +3,6 @@
 //
 #include "models/Tasks/DailyRedemptionTask.h"
 
-#include <utils/LoadJsonFile.h>
-
 
 int DailyRedemptionTask::implementation() {
     int target = 1;

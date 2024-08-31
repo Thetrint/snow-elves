@@ -5,7 +5,7 @@
 #ifndef BASICTASK_H
 #define BASICTASK_H
 
-#include <utils/LoadJsonFile.h>
+
 #include "main.h"
 #include "models/ImageProcess.h"
 #include "utils/Utilities.h"
@@ -21,7 +21,7 @@ protected:
     bool& unbind_event;
     bool& disrupted;
     std::ifstream& ifs;
-    QJsonObject config = LoadJsonFile::instance().jsonFiles[id];
+    QJsonObject config;
 
 public:
     virtual ~BasicTask() = default;
@@ -31,9 +31,8 @@ public:
     void TimerResume();
 
     // ReSharper disable once CppParameterMayBeConst
-    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : id(id),
-        hwnd(hwnd),  pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), ifs(ifs), detect_count(0),
-        fight_(false) {
+    BasicTask(int id, HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs, const QJsonObject& config)
+    : id(id), hwnd(hwnd),  pause_event(pause_event), unbind_event(unbind_event), disrupted(disrupted), ifs(ifs), config(config), detect_count(0), fight_(false) {
         skillMap["技能1"] = config.value("技能1").toString().toStdString();
         skillMap["技能2"] = config.value("技能2").toString().toStdString();
         skillMap["技能3"] = config.value("技能3").toString().toStdString();

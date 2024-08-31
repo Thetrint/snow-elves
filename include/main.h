@@ -67,7 +67,7 @@
 
 #include "resources/images.h"
 
-
+inline bool Shouct = false;
 inline double FACTOR = 1.00;
 inline int DELAY  = 1150;
 inline int DELAY_MAGNIFICATION  = 5;

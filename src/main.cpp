@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     // Apply the palette to your application
     QApplication::setPalette(win11Palette);
 
-    LocalServer::getInstance().startServer("SnowElvesLocalServer");
+    LocalServer::instance().startServer("SnowElvesLocalServer");
 
 
     // 注册资源文件
