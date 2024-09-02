@@ -148,7 +148,7 @@ int AcquisitionTask::implementation() {
 
                 }
                 // 体力判断
-                if (!CoortImageMatch({.similar = 0.75, .scope = {788, 292, 1132, 596}}, nullptr, "标志生活采集体力耗尽").empty()
+                if (!CoortImageMatch({.similar = 0.70, .scope = {788, 292, 1132, 596}}, nullptr, "标志生活采集体力耗尽").empty()
                     && config.value("采集自动吃鸡蛋").toBool()
                     && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - record_time[0]).count() > 180) {
                     record_time[0] = std::chrono::steady_clock::now();
@@ -174,7 +174,7 @@ int AcquisitionTask::implementation() {
                     continue;
                 }
                 // 不吃鸡蛋 结束任务
-                if(!CoortImageMatch({.similar = 0.75, .scope = {788, 292, 1132, 596}}, nullptr, "标志生活采集体力耗尽").empty()
+                if(!CoortImageMatch({.similar = 0.70, .scope = {788, 292, 1132, 596}}, nullptr, "标志生活采集体力耗尽").empty()
                     && !config.value("采集自动吃鸡蛋").toBool()){
                     Log("体力耗尽 -> 结束");
                     target = 0;

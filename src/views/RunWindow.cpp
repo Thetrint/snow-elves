@@ -39,8 +39,9 @@ RunWindow::RunWindow(QWidget *parent):
     // 使用 Lambda 表达式作为槽函数
     // 任务开始
     connect(Signals::instance(), &Signals::Start, this, [&]() {
-        Shouct = true;
+        SHOUCT = true;
         emit ui.pushButton_7->click();
+        SHOUCT = false;
     });
 
     connect(ui.pushButton_7, &QPushButton::clicked, this, [&]() {
@@ -272,8 +273,9 @@ RunWindow::RunWindow(QWidget *parent):
 
     //截图
     connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
-        std::wstring wintitle;
-        HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle(wintitle));
+        // std::wstring wintitle;
+        // HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle(wintitle));
+        HBITMAP hBitmap = WindowManager::CaptureAnImage(mapManagerData[getrowindex()].hwnd);
         auto name = std::chrono::system_clock::now().time_since_epoch().count();
         WindowManager::SaveBitmapToFile(hBitmap, std::format(L"Testing/{}.bmp", name).c_str());
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);

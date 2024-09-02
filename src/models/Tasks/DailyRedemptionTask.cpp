@@ -129,6 +129,21 @@ int DailyRedemptionTask::implementation() {
 
                 }
 
+                if(config.value("锦芳绣残片").toBool() && record_event[3]) {
+                    record_event[3] = false;
+                    OpenKnapsack();
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品积分");
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品兑换商店");
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮兑换商店道具名称");
+                    input_text("锦芳绣残片");
+                    ClickImageMatch({.similar = 0.65}, nullptr, "按钮兑换商店搜索");
+                    if(!CoortImageMatch({.similar = 0.65}, nullptr, "标志兑换商店锦芳绣残片").empty()) {
+                        mouse_down_up({.clickCount = 12}, {1150, 693});
+                    }
+
+                    Close(2);
+                }
+
                 target = 0;
                 break;
             }

@@ -13,7 +13,7 @@ int PacifyInjusticeTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(720 * 10)) {
             return 0;
         }
         if (config.value("江湖行商模式").toString() == "带队模式") {
@@ -127,7 +127,7 @@ int PacifyInjusticeTask::implementation() {
                     }
 
                     // 判断副本内次数
-                    if(++record_num[0] >= 35) {
+                    if(++record_num[0] >= 25) {
                         target = 3;
                     }
                     Defer(3, 2000);

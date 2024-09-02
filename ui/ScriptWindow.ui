@@ -1499,6 +1499,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="checkBox_22">
+            <property name="text">
+             <string>锦芳绣残片</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>

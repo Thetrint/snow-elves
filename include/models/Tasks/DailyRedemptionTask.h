@@ -26,8 +26,11 @@ private:
     /**
      * 0. 银票礼盒
      * 1. 帮派捐献
+     * 2. 商会购买
+     * 3. 锦芳绣残片
+     * 4. 神厨食材
      */
-    std::vector<bool> record_event{true, true};
+    std::vector<bool> record_event{true, true, true, true, true};
     // std::vector<int> record_num{0};
     // std::vector<std::chrono::steady_clock::time_point> record_time{0};
 

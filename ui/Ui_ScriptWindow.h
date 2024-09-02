@@ -197,6 +197,7 @@ public:
     QCheckBox *checkBox_5;
     QCheckBox *checkBox_11;
     QCheckBox *checkBox_21;
+    QCheckBox *checkBox_22;
     QSpacerItem *horizontalSpacer_3;
     QSpacerItem *verticalSpacer_3;
     QWidget *page_5;
@@ -1170,6 +1171,11 @@ public:
 
         horizontalLayout_4->addWidget(checkBox_21);
 
+        checkBox_22 = new QCheckBox(widget_7);
+        checkBox_22->setObjectName("checkBox_22");
+
+        horizontalLayout_4->addWidget(checkBox_22);
+
         horizontalSpacer_3 = new QSpacerItem(565, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         horizontalLayout_4->addItem(horizontalSpacer_3);
@@ -2078,6 +2084,7 @@ public:
         checkBox_5->setText(QCoreApplication::translate("ScriptWindow", "\345\270\256\346\264\276\351\223\266\344\270\244\346\215\220\347\214\256", nullptr));
         checkBox_11->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\344\274\232\351\270\241\350\233\213", nullptr));
         checkBox_21->setText(QCoreApplication::translate("ScriptWindow", "\346\246\253\345\244\264\345\215\257\347\234\274", nullptr));
+        checkBox_22->setText(QCoreApplication::translate("ScriptWindow", "\351\224\246\350\212\263\347\273\243\346\256\213\347\211\207", nullptr));
         label_11->setText(QCoreApplication::translate("ScriptWindow", "\345\256\227\351\227\250\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_11->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         label_12->setText(QCoreApplication::translate("ScriptWindow", "\345\256\227\351\227\250\350\257\225\347\202\274:", nullptr));

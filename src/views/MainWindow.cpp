@@ -567,6 +567,7 @@ QJsonDocument MainWindow::createJsonDocument() const {
 
     root["商会鸡蛋"] = script->ui.checkBox_11->isChecked();
     root["榫头卯眼"] = script->ui.checkBox_21->isChecked();
+    root["锦芳绣残片"] = script->ui.checkBox_22->isChecked();
 
 
     return QJsonDocument(root);
@@ -693,6 +694,7 @@ void MainWindow::readUserSettings(const QString& filename) const {
 
         script->ui.checkBox_11->setChecked(false);
         script->ui.checkBox_21->setChecked(false);
+        script->ui.checkBox_22->setChecked(false);
 
 
         return;
@@ -817,6 +819,7 @@ void MainWindow::readUserSettings(const QString& filename) const {
 
         script->ui.checkBox_11->setChecked(root["商会鸡蛋"].toBool());
         script->ui.checkBox_21->setChecked(root["榫头卯眼"].toBool());
+        script->ui.checkBox_22->setChecked(root["锦芳绣残片"].toBool());
     }
 }
 

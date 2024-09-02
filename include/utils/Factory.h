@@ -49,7 +49,7 @@ public:
     }
 
     std::unique_ptr<BasicTask> create(const std::string& className, const int& id, const HWND& hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs, const QJsonObject& config) const {
-        if (auto it = registry_.find(className); it != registry_.end()) {
+        if (const auto it = registry_.find(className); it != registry_.end()) {
             return it->second(id, hwnd, pause_event, unbind_event, disrupted, ifs, config);
         }
         return nullptr; // or throw an exception for unknown className

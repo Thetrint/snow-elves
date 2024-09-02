@@ -110,8 +110,7 @@ HWND WindowManager::GetOwnedWindows(HWND owner) {
 
 HWND WindowManager::getWindowHandle(std::wstring& wintitle)
 {
-    if(!Shouct) {
-        Shouct = false;
+    if(!SHOUCT) {
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     }
 
@@ -157,12 +156,6 @@ HWND WindowManager::getWindowHandle(std::wstring& wintitle)
         //
         //         return TRUE; // 继续枚举
         //     }, reinterpret_cast<LPARAM>(&childHwnd));
-        //
-        //     if (childHwnd) {
-        //         std::wcout << L"Found child window with title '一梦江湖': " << childHwnd << std::endl;
-        //     } else {
-        //         std::wcout << L"Child window with title '一梦江湖' not found." << std::endl;
-        //     }
         //
         //     return childHwnd; // 返回找到的子窗口句柄，或者 nullptr 如果没有找到
         // }
