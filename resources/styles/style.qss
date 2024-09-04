@@ -35,7 +35,6 @@
 }
 
 #MainWindow #menu QPushButton:checked{
-    color: #abef9;
     background:#a7e6ff;
     border-right:0px solid #aaaaaa;
     border-bottom:0px solid #aaaaaa;
@@ -63,7 +62,6 @@
 
 
 #MainWindow #menu QPushButton:!checked{
-    color: #abef9;
     background-color: #ffffff;
     border-right:0px solid #aaaaaa;
     border-bottom:0px solid #aaaaaa;
@@ -128,7 +126,6 @@ QScrollArea {
     border: none; /* 无边框 */
     border-radius: 6px; /* 圆角边框 */
     padding: 8px; /* 内边距 */
-    box-shadow: none; /* 去除阴影效果 */
 
 }
 
@@ -139,8 +136,7 @@ QScrollArea {
     border: none; /* 无边框 */
     border-radius: 6px; /* 圆角边框 */
     padding: 8px; /* 内边距 */
-    box-shadow: none; /* 去除阴影效果 */
-     min-width: 50px; /* 最小宽度 */
+    min-width: 50px; /* 最小宽度 */
 
 }
 
@@ -253,6 +249,16 @@ QLineEdit:focus {
     max-width: 65px;
 }
 
+.key {
+    border: 2px solid #B0B0B0;       /* 边框颜色 */
+    border-radius: 5px;              /* 圆角半径 */
+    padding: 5px;                    /* 内边距 */
+    background-color: #FFFFFF;       /* 背景颜色 */
+    color: #000000;                  /* 字体颜色 */
+    min-width: 45px;
+    max-width: 65px;
+}
+
 .button {
     background-color: #ffffff;
     border: 1px solid #d1d1d1;
@@ -261,7 +267,6 @@ QLineEdit:focus {
     font-size: 16px;
     padding: 1px 2px;
     min-width: 100px;
-    transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .button:hover {

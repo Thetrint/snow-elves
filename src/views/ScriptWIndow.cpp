@@ -3,8 +3,6 @@
 //
 #include <iostream>
 #include <QFileDialog>
-#include <QMessageBox>
-#include <QTextEdit>
 #include <utils/Signals.h>
 
 #include "views/ScriptWindow.h"
@@ -29,6 +27,10 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_6->setMinimum(5);
     ui.spinBox_6->setMaximum(30);
 
+    // 论剑3v3
+    ui.spinBox_7->setMinimum(1);
+    ui.spinBox_7->setMaximum(9999);
+
     // 江湖行商次数
     ui.spinBox_8->setMinimum(1);
     ui.spinBox_8->setMaximum(5);
@@ -52,9 +54,6 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_13->setMaximum(10);
 
     ui.scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
-
 
 
     QStringList items;

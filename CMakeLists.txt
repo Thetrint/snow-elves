@@ -162,6 +162,10 @@ add_executable(SnowElvesScript WIN32
         include/models/Tasks/AcquisitionTask.h
         src/models/Tasks/SweepStallTask.cpp
         include/models/Tasks/SweepStallTask.h
+        src/QtUtils/ShortcutKeyLineEdit.cpp
+        include/QtUtils/ShortcutKeyLineEdit.h
+        src/views/SettingWindow.cpp
+        include/views/SettingWindow.h
 
 
 )

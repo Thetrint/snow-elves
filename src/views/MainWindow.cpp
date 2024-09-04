@@ -4,9 +4,13 @@
 
 #include "main.h"
 #include "views/MainWindow.h"
+
+
+
 #include "views/HomeWindow.h"
 #include "views/RunWindow.h"
 #include "views/ScriptWindow.h"
+#include "views/SettingWindow.h"
 #include "utils/signals.h"
 
 
@@ -32,17 +36,44 @@ MainWindow::MainWindow(QWidget *parent):
     run->setMainWindow(this);
     addPageAndButton("运行", run);
 
+    setting = new SettingWindow(this);
+    addPageAndButton("设置", setting);
+
     // connect(RunWindow)
     buttonGroup.setExclusive(true);
 
+    connect(setting->ui.lineEdit, &QLineEdit::textChanged, this, [&](const QString& textKey) {
+        // 初始化修饰符和按键
+        UINT modifiers = 0;
+        UINT key = 0;
+
+        // 将输入字符串按 '+' 拆分
+        QStringList keyParts = textKey.split('+');
+
+        // 遍历每一部分
+        for (const QString& part : keyParts) {
+            if (part == "Ctrl") {
+                modifiers |= MOD_CONTROL;  // Ctrl 键
+            } else if (part == "Shift") {
+                modifiers |= MOD_SHIFT;    // Shift 键
+            } else if (part == "Alt") {
+                modifiers |= MOD_ALT;      // Alt 键
+            } else if (part.length() == 1 && part[0].isLetterOrNumber()) {
+                // 如果是字母或数字，取其大写形式的 ASCII 值
+                key = part[0].toUpper().unicode();
+            }
+        }
+        UnregisterHotKey(reinterpret_cast<HWND>(this->winId()), 1);
+        // 注册热键
+        if (RegisterHotKey(reinterpret_cast<HWND>(this->winId()), 1, modifiers, key)) {
+            std::cout << "热键注册成功: " << textKey.toStdString() << std::endl;
+        } else {
+            std::cout << "热键注册失败: " << textKey.toStdString() << std::endl;
+        }
+    });
+
     connect(Signals::instance(), &Signals::writejson, this, &MainWindow::writeWinConfig);
 
-    // 注册热键 (示例：Ctrl+Shift+1)
-    if (RegisterHotKey(reinterpret_cast<HWND>(this->winId()), 1, MOD_SHIFT, 'Q')) {
-        std::cout << "热键注册成功" << std::endl;
-    } else {
-        std::cout << "热键注册失败" << std::endl;
-    }
 
     //保存配置文件
     connect(script->ui.pushButton_2, &QPushButton::clicked, this, [&](){
@@ -372,7 +403,9 @@ MainWindow::MainWindow(QWidget *parent):
     qApp->installNativeEventFilter(eventFilter);
 
 
+    script->ui.comboBox->addItem("默认配置");
     readSystemSettings();
+
     // writeUserSettings();
     // exportConfig();
 
@@ -568,6 +601,11 @@ QJsonDocument MainWindow::createJsonDocument() const {
     root["商会鸡蛋"] = script->ui.checkBox_11->isChecked();
     root["榫头卯眼"] = script->ui.checkBox_21->isChecked();
     root["锦芳绣残片"] = script->ui.checkBox_22->isChecked();
+    root["神厨食材购买"] = script->ui.checkBox_23->isChecked();
+    root["神厨食材购买清单"] = script->ui.lineEdit_28->text();
+    root["商票上缴"] = script->ui.checkBox_24->isChecked();
+    root["生活技能-艾草"] = script->ui.checkBox_25->isChecked();
+    root["生活技能-莲子"] = script->ui.checkBox_26->isChecked();
 
 
     return QJsonDocument(root);
@@ -695,7 +733,12 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.checkBox_11->setChecked(false);
         script->ui.checkBox_21->setChecked(false);
         script->ui.checkBox_22->setChecked(false);
+        script->ui.checkBox_23->setChecked(false);
+        script->ui.lineEdit_28->setText("猪肉# 土鸡蛋# 精致面粉#");
 
+        script->ui.checkBox_24->setChecked(false);
+        script->ui.checkBox_25->setChecked(false);
+        script->ui.checkBox_26->setChecked(false);
 
         return;
     }
@@ -820,6 +863,14 @@ void MainWindow::readUserSettings(const QString& filename) const {
         script->ui.checkBox_11->setChecked(root["商会鸡蛋"].toBool());
         script->ui.checkBox_21->setChecked(root["榫头卯眼"].toBool());
         script->ui.checkBox_22->setChecked(root["锦芳绣残片"].toBool());
+        script->ui.checkBox_23->setChecked(root["神厨食材购买"].toBool());
+        script->ui.lineEdit_28->setText(root["神厨食材购买清单"].toString());
+
+        script->ui.checkBox_24->setChecked(root["商票上缴"].toBool());
+        script->ui.checkBox_25->setChecked(root["生活技能-艾草"].toBool());
+        script->ui.checkBox_26->setChecked(root["生活技能-莲子"].toBool());
+
+
     }
 }
 
@@ -832,6 +883,7 @@ void MainWindow::writeSystemSettings() const {
     root["全局延迟"] = script->ui.spinBox_4->value();
     root["过图倍率"] = script->ui.spinBox_6->value();
     root["缩放比例"] = script->ui.comboBox_11->currentIndex();
+    root["开始快捷键"] = setting->ui.lineEdit->text();
     const auto settingsDoc =  QJsonDocument(root);
 
 
@@ -879,8 +931,6 @@ void MainWindow::readSystemSettings() const {
     }
     QJsonObject root = settingsDoc.object();
 
-    script->ui.comboBox->addItem("默认配置");
-
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     const QStringList filters = {"*.json"};
     const QDir dir(configPath);
@@ -894,6 +944,7 @@ void MainWindow::readSystemSettings() const {
     script->ui.spinBox_4->setValue(root["全局延迟"].toInt());
     script->ui.spinBox_6->setValue(root["过图倍率"].toInt());
     script->ui.comboBox_11->setCurrentIndex(root["缩放比例"].toInt());
+    setting->ui.lineEdit->setText(root["开始快捷键"].toString());
 
 
 }

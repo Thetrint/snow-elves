@@ -62,6 +62,7 @@
 #include <QApplication>
 #include <QThread>
 #include <QLocalSocket>
+#include <QMenu>
 #include <regex>
 
 

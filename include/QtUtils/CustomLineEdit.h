@@ -9,7 +9,7 @@ class CustomLineEdit final : public QLineEdit {
     Q_OBJECT
 
 public:
-    explicit CustomLineEdit(QWidget* parent = nullptr);
+    explicit CustomLineEdit(QWidget* parent = nullptr)  : QLineEdit(parent) {};
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
