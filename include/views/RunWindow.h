@@ -37,12 +37,6 @@ protected:
     }
 private:
     const MainWindow* mainWindow;
-    // 结构体保存窗口属性
-    struct WindowAttributes {
-        RECT geometry;
-        std::wstring title;
-        LONG style;
-    };
 
     int getrowindex() const;
 
@@ -51,13 +45,22 @@ private:
     struct ManagerData {
         std::shared_ptr<TaskManager> instance;
         std::jthread thread;
-        HWND windowHwnd;
-        bool state;
+        HWND hwnd;
+        bool isActive;
+
+        ManagerData()
+       : instance(nullptr), thread(), hwnd(nullptr), isActive(true) {}
 
     };
-    std::list<HWND> winHwnd;
-    std::map<int, ManagerData> managerDictionary;
+    std::map<int, ManagerData> mapManagerData;
+
+    // 创建一个存储 pair<id, handle> 的队列
+    std::queue<std::pair<int, HWND>> idHWNDQueue;
+    std::set<HWND> hwndSet;
+    std::mutex mtxQueue; // 保护映射的互斥锁
+
     std::mutex mtx; // 保护映射的互斥锁
+
 
 };
 

@@ -3,9 +3,6 @@
 //
 #include "models/Tasks/DailyCopiesTask.h"
 
-#include <utils/LoadJsonFile.h>
-
-
 
 int DailyCopiesTask::implementation() {
     int target = 1;
@@ -50,7 +47,7 @@ int DailyCopiesTask::implementation() {
                     ClickImageMatch({.similar = 0.65, .scope = {110, 510, 438, 632}}, nullptr, "按钮队伍自动匹配");
                     ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍确定");
                     ClickImageMatch({.similar = 0.65}, nullptr, "按钮确定");
-                    if(LoadJsonFile::instance().jsonFiles[id].value("副本人数").toInt() != 1) {
+                    if(config.value("副本人数").toInt() != 1) {
                         ClickImageMatch({.similar = 0.65}, nullptr, "按钮队伍自动匹配1");
                     }
                     Log("队伍检测完成");

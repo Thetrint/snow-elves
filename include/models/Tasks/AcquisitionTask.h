@@ -14,9 +14,11 @@ protected:
     std::mutex& pause_event;
     bool& unbind_event;
     std::ifstream& ifs;
-
+    const QJsonObject& config;
 public:
-    AcquisitionTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs) : BasicTask(id, hwnd, pause_event, unbind_event, disrupted, ifs), id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), ifs(ifs) {}
+    AcquisitionTask(const int id, const HWND hwnd, std::mutex& pause_event, bool& unbind_event, bool& disrupted, std::ifstream& ifs, const QJsonObject& config)
+    : BasicTask(id, hwnd, pause_event, unbind_event, disrupted, ifs, config),
+    id(id), hwnd(hwnd), pause_event(pause_event), unbind_event(unbind_event), ifs(ifs), config(config) {}
 
     // 实现基类的纯虚函数
     int implementation() override;

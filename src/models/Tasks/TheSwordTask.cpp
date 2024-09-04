@@ -3,7 +3,6 @@
 //
 #include "models/Tasks/TheSwordTask.h"
 
-#include <utils/LoadJsonFile.h>
 
 int TheSwordTask::implementation() {
     std::vector<Match> matchs;
@@ -91,7 +90,7 @@ int TheSwordTask::implementation() {
                 if (!record_event[0]) {
                     continue;
                 }
-                if (LoadJsonFile::instance().jsonFiles[id].value("华山论剑秒退").toBool()) {
+                if (config.value("华山论剑秒退").toBool()) {
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑退出");
                     ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮论剑确定");
                     PassLevel();

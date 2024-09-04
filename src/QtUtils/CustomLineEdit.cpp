@@ -16,32 +16,26 @@ QMap<int, QString> CustomLineEdit::keyDict = {
     {Qt::Key_R, "R"}, {Qt::Key_S, "S"}, {Qt::Key_T, "T"},
     {Qt::Key_U, "U"}, {Qt::Key_V, "V"}, {Qt::Key_W, "W"},
     {Qt::Key_X, "X"}, {Qt::Key_Y, "Y"}, {Qt::Key_Z, "Z"},
-    {Qt::Key_Shift, "shift"}, {Qt::Key_Return, "Enter"},
-    {Qt::Key_Control, "ctrl"}, {Qt::Key_Escape, "ESC"},
-    {Qt::Key_Space, "space"}
+    {Qt::Key_Shift, "Shift"}, {Qt::Key_Return, "Enter"},
+    {Qt::Key_Control, "Ctrl"}, {Qt::Key_Escape, "ESC"},
+    {Qt::Key_Space, "Space"}
 };
 
-CustomLineEdit::CustomLineEdit(QWidget* parent)
-    : QLineEdit(parent) {}
 
 void CustomLineEdit::keyPressEvent(QKeyEvent* event) {
+    // 清除当前文本
     this->clear();
-    QString keyText;
-    int keyCode = event->key();
 
-    if (keyDict.contains(keyCode)) {
-        keyText = keyDict[keyCode];
-    } else {
-        keyText = QString();
+    // 获取按键代码
+    const int keyCode = event->key();
+
+    // 查找按键对应的文本，找不到则为空字符串
+    QString keyText = keyDict.value(keyCode, QString());
+
+    // 如果按下的是小键盘的按键，前面加上 "Num"
+    if (event->modifiers() & Qt::KeypadModifier && !keyText.isEmpty()) {
+        keyText.prepend("Num");
     }
-
-    Qt::KeyboardModifiers modifiers = event->modifiers();
-    if (modifiers & Qt::KeypadModifier) {
-        keyText = "Num" + keyText;
-    }
-
-    // 使用 spdlog 记录日志
-    // spdlog::info("CustomLineEdit - Key pressed: {} {} {}", keyCode, keyText.toStdString(), modifiers);
 
     // 设置文本
     if (!keyText.isEmpty()) {

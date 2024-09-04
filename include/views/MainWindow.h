@@ -13,10 +13,11 @@
 #include "utils/Utilities.h"
 #include <utils/signals.h>
 
+#include "views/SettingWindow.h"
+
 namespace Ui {
     class MainWindow;
 }
-
 
 
 class MainWindow final: public QWidget
@@ -57,6 +58,7 @@ private:
     HomeWindow *home;
     ScriptWindow *script;
     RunWindow *run;
+    SettingWindow *setting;
 
     QButtonGroup buttonGroup{ui.menu};
     void addPageAndButton(const QString &buttonText, QWidget *page);

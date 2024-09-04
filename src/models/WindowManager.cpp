@@ -23,13 +23,13 @@ std::map<std::string, int> WindowManager::VkCode = {
     {"back", 0x08},
     {"Tab", 0x09},
     {"return", 0x0D},
-    {"shift", 0x10},
+    {"Shift", 0x10},
     {"control", 0x11},
     {"menu", 0x12},
     {"pause", 0x13},
     {"capital", 0x14},
     {"ESC", 0x1B},
-    {"space", 0x20},
+    {"Space", 0x20},
     {"end", 0x23},
     {"home", 0x24},
     {"left", 0x25},
@@ -74,7 +74,7 @@ std::map<std::string, int> WindowManager::VkCode = {
     {"scroll", 0x91},
     {"lshift", 0xA0},
     {"rshift", 0xA1},
-    {"lcontrol", 0xA2},
+    {"Ctrl", 0xA2},
     {"rcontrol", 0xA3},
     {"lmenu", 0xA4},
     {"rmenu", 0xA5},
@@ -110,7 +110,10 @@ HWND WindowManager::GetOwnedWindows(HWND owner) {
 
 HWND WindowManager::getWindowHandle(std::wstring& wintitle)
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+    if(!SHOUCT) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    }
+
     POINT pt;
     if (GetCursorPos(&pt))
     {
@@ -125,43 +128,37 @@ HWND WindowManager::getWindowHandle(std::wstring& wintitle)
 
             return hwnd;
         }
-        if (std::wstring(title) == L"一梦江湖-时雪") {
-            wintitle = std::wstring(title);
-            std::cout << childHandle << std::endl;
-
-            // 枚举找到的主窗口的子窗口
-            HWND childHwnd = nullptr;
-            EnumChildWindows(hwnd, [](HWND hWnd, LPARAM lParam) -> BOOL {
-                // 获取窗口标题长度
-                const int length = GetWindowTextLength(hWnd);
-                if (length == 0) {
-                    return TRUE; // 没有标题，继续下一个子窗口
-                }
-
-                // 获取窗口标题
-                auto* buffer = new wchar_t[length + 1];
-                GetWindowText(hWnd, buffer, length + 1);
-
-                std::wstring windowTitle(buffer);
-                delete[] buffer;
-
-                // 检查标题是否为 "一梦江湖"
-                if (windowTitle == L"一梦江湖") {
-                    *reinterpret_cast<HWND *>(lParam) = hWnd; // 存储找到的子窗口句柄
-                    return FALSE; // 找到目标窗口，停止枚举
-                }
-
-                return TRUE; // 继续枚举
-            }, reinterpret_cast<LPARAM>(&childHwnd));
-
-            if (childHwnd) {
-                std::wcout << L"Found child window with title '一梦江湖': " << childHwnd << std::endl;
-            } else {
-                std::wcout << L"Child window with title '一梦江湖' not found." << std::endl;
-            }
-
-            return childHwnd; // 返回找到的子窗口句柄，或者 nullptr 如果没有找到
-        }
+        // if (std::wstring(title) == L"一梦江湖-时雪") {
+        //     wintitle = std::wstring(title);
+        //     std::cout << childHandle << std::endl;
+        //
+        //     // 枚举找到的主窗口的子窗口
+        //     HWND childHwnd = nullptr;
+        //     EnumChildWindows(hwnd, [](HWND hWnd, LPARAM lParam) -> BOOL {
+        //         // 获取窗口标题长度
+        //         const int length = GetWindowTextLength(hWnd);
+        //         if (length == 0) {
+        //             return TRUE; // 没有标题，继续下一个子窗口
+        //         }
+        //
+        //         // 获取窗口标题
+        //         auto* buffer = new wchar_t[length + 1];
+        //         GetWindowText(hWnd, buffer, length + 1);
+        //
+        //         std::wstring windowTitle(buffer);
+        //         delete[] buffer;
+        //
+        //         // 检查标题是否为 "一梦江湖"
+        //         if (windowTitle == L"一梦江湖") {
+        //             *reinterpret_cast<HWND *>(lParam) = hWnd; // 存储找到的子窗口句柄
+        //             return FALSE; // 找到目标窗口，停止枚举
+        //         }
+        //
+        //         return TRUE; // 继续枚举
+        //     }, reinterpret_cast<LPARAM>(&childHwnd));
+        //
+        //     return childHwnd; // 返回找到的子窗口句柄，或者 nullptr 如果没有找到
+        // }
 
         return nullptr;
 

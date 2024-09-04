@@ -39,6 +39,8 @@ public:
     QLabel *label_2;
     QListWidget *listWidget_2;
     QWidget *widget;
+    QHBoxLayout *horizontalLayout_30;
+    QTextEdit *textEdit_3;
     QWidget *widget_2;
     QHBoxLayout *horizontalLayout;
     QPushButton *pushButton;
@@ -193,7 +195,21 @@ public:
     QCheckBox *checkBox_3;
     QCheckBox *checkBox_4;
     QCheckBox *checkBox_5;
+    QCheckBox *checkBox_11;
+    QCheckBox *checkBox_21;
+    QCheckBox *checkBox_22;
     QSpacerItem *horizontalSpacer_3;
+    QWidget *widget_34;
+    QHBoxLayout *horizontalLayout_32;
+    QCheckBox *checkBox_24;
+    QCheckBox *checkBox_25;
+    QCheckBox *checkBox_26;
+    QSpacerItem *horizontalSpacer_25;
+    QWidget *widget_28;
+    QHBoxLayout *horizontalLayout_31;
+    QCheckBox *checkBox_23;
+    QLineEdit *lineEdit_28;
+    QSpacerItem *horizontalSpacer_19;
     QSpacerItem *verticalSpacer_3;
     QWidget *page_5;
     QVBoxLayout *verticalLayout_6;
@@ -328,7 +344,7 @@ public:
     {
         if (ScriptWindow->objectName().isEmpty())
             ScriptWindow->setObjectName("ScriptWindow");
-        ScriptWindow->resize(1587, 1043);
+        ScriptWindow->resize(840, 472);
         gridLayout = new QGridLayout(ScriptWindow);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName("gridLayout");
@@ -363,6 +379,16 @@ public:
         sizePolicy1.setVerticalStretch(1);
         sizePolicy1.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
         widget->setSizePolicy(sizePolicy1);
+        horizontalLayout_30 = new QHBoxLayout(widget);
+        horizontalLayout_30->setSpacing(0);
+        horizontalLayout_30->setObjectName("horizontalLayout_30");
+        horizontalLayout_30->setContentsMargins(0, 0, 0, 0);
+        textEdit_3 = new QTextEdit(widget);
+        textEdit_3->setObjectName("textEdit_3");
+        textEdit_3->setReadOnly(true);
+
+        horizontalLayout_30->addWidget(textEdit_3);
+
 
         gridLayout->addWidget(widget, 0, 0, 1, 2);
 
@@ -438,12 +464,10 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 394, 800));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 412, 800));
         scrollAreaWidgetContents->setMinimumSize(QSize(0, 800));
         verticalLayout_10 = new QVBoxLayout(scrollAreaWidgetContents);
-        verticalLayout_10->setSpacing(0);
         verticalLayout_10->setObjectName("verticalLayout_10");
-        verticalLayout_10->setContentsMargins(0, 0, 0, 0);
         widget_13 = new QWidget(scrollAreaWidgetContents);
         widget_13->setObjectName("widget_13");
         horizontalLayout_10 = new QHBoxLayout(widget_13);
@@ -1146,12 +1170,79 @@ public:
 
         horizontalLayout_4->addWidget(checkBox_5);
 
+        checkBox_11 = new QCheckBox(widget_7);
+        checkBox_11->setObjectName("checkBox_11");
+
+        horizontalLayout_4->addWidget(checkBox_11);
+
+        checkBox_21 = new QCheckBox(widget_7);
+        checkBox_21->setObjectName("checkBox_21");
+
+        horizontalLayout_4->addWidget(checkBox_21);
+
+        checkBox_22 = new QCheckBox(widget_7);
+        checkBox_22->setObjectName("checkBox_22");
+
+        horizontalLayout_4->addWidget(checkBox_22);
+
         horizontalSpacer_3 = new QSpacerItem(565, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         horizontalLayout_4->addItem(horizontalSpacer_3);
 
 
         verticalLayout_5->addWidget(widget_7);
+
+        widget_34 = new QWidget(page_4);
+        widget_34->setObjectName("widget_34");
+        horizontalLayout_32 = new QHBoxLayout(widget_34);
+        horizontalLayout_32->setObjectName("horizontalLayout_32");
+        checkBox_24 = new QCheckBox(widget_34);
+        checkBox_24->setObjectName("checkBox_24");
+
+        horizontalLayout_32->addWidget(checkBox_24);
+
+        checkBox_25 = new QCheckBox(widget_34);
+        checkBox_25->setObjectName("checkBox_25");
+
+        horizontalLayout_32->addWidget(checkBox_25);
+
+        checkBox_26 = new QCheckBox(widget_34);
+        checkBox_26->setObjectName("checkBox_26");
+
+        horizontalLayout_32->addWidget(checkBox_26);
+
+        horizontalSpacer_25 = new QSpacerItem(565, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_32->addItem(horizontalSpacer_25);
+
+
+        verticalLayout_5->addWidget(widget_34);
+
+        widget_28 = new QWidget(page_4);
+        widget_28->setObjectName("widget_28");
+        horizontalLayout_31 = new QHBoxLayout(widget_28);
+        horizontalLayout_31->setObjectName("horizontalLayout_31");
+        checkBox_23 = new QCheckBox(widget_28);
+        checkBox_23->setObjectName("checkBox_23");
+
+        horizontalLayout_31->addWidget(checkBox_23);
+
+        lineEdit_28 = new QLineEdit(widget_28);
+        lineEdit_28->setObjectName("lineEdit_28");
+        QSizePolicy sizePolicy6(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(lineEdit_28->sizePolicy().hasHeightForWidth());
+        lineEdit_28->setSizePolicy(sizePolicy6);
+
+        horizontalLayout_31->addWidget(lineEdit_28);
+
+        horizontalSpacer_19 = new QSpacerItem(565, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        horizontalLayout_31->addItem(horizontalSpacer_19);
+
+
+        verticalLayout_5->addWidget(widget_28);
 
         verticalSpacer_3 = new QSpacerItem(20, 576, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 
@@ -1551,11 +1642,11 @@ public:
         horizontalLayout_23->setObjectName("horizontalLayout_23");
         textEdit_2 = new QTextEdit(widget_26);
         textEdit_2->setObjectName("textEdit_2");
-        QSizePolicy sizePolicy6(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(textEdit_2->sizePolicy().hasHeightForWidth());
-        textEdit_2->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy7(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(textEdit_2->sizePolicy().hasHeightForWidth());
+        textEdit_2->setSizePolicy(sizePolicy7);
 
         horizontalLayout_23->addWidget(textEdit_2);
 
@@ -1902,7 +1993,7 @@ public:
 
         retranslateUi(ScriptWindow);
 
-        stackedWidget->setCurrentIndex(8);
+        stackedWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(ScriptWindow);
@@ -2052,6 +2143,13 @@ public:
         checkBox_3->setText(QCoreApplication::translate("ScriptWindow", "\351\223\266\347\245\250\347\244\274\347\233\222", nullptr));
         checkBox_4->setText(QCoreApplication::translate("ScriptWindow", "\345\270\256\346\264\276\351\223\234\351\222\261\346\215\220\347\214\256", nullptr));
         checkBox_5->setText(QCoreApplication::translate("ScriptWindow", "\345\270\256\346\264\276\351\223\266\344\270\244\346\215\220\347\214\256", nullptr));
+        checkBox_11->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\344\274\232\351\270\241\350\233\213", nullptr));
+        checkBox_21->setText(QCoreApplication::translate("ScriptWindow", "\346\246\253\345\244\264\345\215\257\347\234\274", nullptr));
+        checkBox_22->setText(QCoreApplication::translate("ScriptWindow", "\351\224\246\350\212\263\347\273\243\346\256\213\347\211\207", nullptr));
+        checkBox_24->setText(QCoreApplication::translate("ScriptWindow", "\345\225\206\347\245\250\344\270\212\347\274\264", nullptr));
+        checkBox_25->setText(QCoreApplication::translate("ScriptWindow", "\347\224\237\346\264\273\346\212\200\350\203\275-\350\211\276\350\215\211", nullptr));
+        checkBox_26->setText(QCoreApplication::translate("ScriptWindow", "\347\224\237\346\264\273\346\212\200\350\203\275-\350\216\262\345\255\220", nullptr));
+        checkBox_23->setText(QCoreApplication::translate("ScriptWindow", "\347\245\236\345\216\250\351\243\237\346\235\220\350\264\255\344\271\260", nullptr));
         label_11->setText(QCoreApplication::translate("ScriptWindow", "\345\256\227\351\227\250\344\273\273\345\212\241\350\256\276\347\275\256", nullptr));
         label_11->setProperty("class", QVariant(QCoreApplication::translate("ScriptWindow", "page", nullptr)));
         label_12->setText(QCoreApplication::translate("ScriptWindow", "\345\256\227\351\227\250\350\257\225\347\202\274:", nullptr));

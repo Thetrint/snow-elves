@@ -127,7 +127,7 @@ void BasicTask::Defer(const int& count, const int& delay) const {
 
 bool BasicTask::CloseReward(const int &count) {
     for (int i = 0; i < count; ++i) {
-        if (ClickImageMatch({.similar = 0.55, .matchCount = 2, .scope = {842, 173, 1118, 469}, .applyGaussianBlur = false}, nullptr, "按钮关闭").empty()) {
+        if (ClickImageMatch({.similar = 0.55, .matchCount = 2, .scope = {842, 153, 1178, 469}, .applyGaussianBlur = false}, nullptr, "按钮关闭").empty()) {
             break;
         }
     }
@@ -155,6 +155,28 @@ bool BasicTask::Close(const int &count) {
         }
     }
     Defer(1);
+    return false;
+}
+
+bool BasicTask::FlagImageMatchCount(const std::string& fileName, int& count) {
+    if(CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, fileName).empty()) {
+        if (++count >= 5) {
+            return false;
+        }
+    }
+    count = 0;
+    return true;
+
+}
+
+bool BasicTask::RepeatVerification(const std::string& fileName, int& count) {
+    if(!CoortImageMatch(MatchParams{.similar = 0.65}, nullptr, fileName).empty()) {
+        if (++count >= 5) {
+            return true;
+        }
+        return false;
+    }
+    count = 0;
     return false;
 }
 
@@ -267,10 +289,10 @@ void BasicTask::LocationDetection() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("571");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("484");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -295,10 +317,10 @@ void BasicTask::JNGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图江南区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("1095");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("1117");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -323,10 +345,10 @@ void BasicTask::JLGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图金陵区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("571");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("484");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -351,10 +373,10 @@ void BasicTask::FLDGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图风雷岛区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("970");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("542");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -379,10 +401,10 @@ void BasicTask::ZYGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图中原区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("1080");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("996");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -407,10 +429,10 @@ void BasicTask::SBGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图塞北区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("1277");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("718");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -435,10 +457,10 @@ void BasicTask::HSGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图华山区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("344");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("206");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -463,10 +485,10 @@ void BasicTask::SLGo() {
         ClickImageMatch({.similar = 0.65}, nullptr, "按钮地图少林区域");
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text("239");
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text("326");
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -487,10 +509,10 @@ void BasicTask::LocationGO(const std::string& x, const std::string& y) {
     if (OpenMap()) {
         ClickImageMatch({.similar = 0.6, .matchCount = 1, .scope = {0, 614, 440, 750}}, nullptr, "按钮地图停止寻路");
         ClickImageMatch({.similar = 0.98, .matchCount = 1, .convertToGray = true, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "按钮地图坐标展开");
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图横坐标");
         input_text(x);
 
-        ClickImageMatch({.similar = 0.65, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
+        ClickImageMatch({.similar = 0.55, .applyGaussianBlur = false}, nullptr, "按钮地图纵坐标");
         input_text(y);
 
         ClickImageMatch({.similar = 0.55, .scope = {337, 609, 463, 750}}, nullptr, "按钮地图前往区域");
@@ -676,6 +698,7 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
         std::lock_guard lock(pause_event);
         spdlog::info("图片匹配 {}", templ_name);
         std::cout << templ_name << std::endl;
+        emit Signals::instance()->View(templ_name);
         //读取模板图片
         cv::Mat templ = ImageProcessor::imread(templ_name, id, ifs);
 

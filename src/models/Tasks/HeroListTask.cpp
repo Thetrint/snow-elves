@@ -3,8 +3,6 @@
 //
 #include "models//Tasks/HeroListTask.h"
 
-#include <utils/LoadJsonFile.h>
-
 int HeroListTask::implementation() {
 
     std::vector<Match> matchs;
@@ -65,7 +63,7 @@ int HeroListTask::implementation() {
                 break;
             case 5:
                 if (!ClickImageMatch(MatchParams{.similar = 0.65, .matchCount = 20, .click = NoTap}, std::make_unique<CAUSE>(cause, "开始任务"), "标志江湖英雄榜战斗时间", "标志江湖英雄榜准备时间").empty()) {
-                    if (LoadJsonFile::instance().jsonFiles[id].value("江湖英雄榜秒退").toBool()) {
+                    if (config.value("江湖英雄榜秒退").toBool()) {
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出");
                         ClickImageMatch(MatchParams{.similar = 0.6}, nullptr, "按钮江湖英雄榜退出副本");
                         ClickImageMatch(MatchParams{.similar = 0.6, .matchCount = 400}, nullptr, "按钮论剑离开");

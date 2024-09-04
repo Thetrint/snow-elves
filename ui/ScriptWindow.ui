@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1587</width>
-    <height>1043</height>
+    <width>840</width>
+    <height>472</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,6 +62,30 @@
        <verstretch>1</verstretch>
       </sizepolicy>
      </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_30">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QTextEdit" name="textEdit_3">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="0" column="2">
@@ -142,7 +166,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>8</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -156,7 +180,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>394</width>
+            <width>412</width>
             <height>800</height>
            </rect>
           </property>
@@ -170,21 +194,6 @@
            <string>scroll</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
            <item>
             <widget class="QWidget" name="widget_13" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -1461,7 +1470,104 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="checkBox_11">
+            <property name="text">
+             <string>商会鸡蛋</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_21">
+            <property name="text">
+             <string>榫头卯眼</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_22">
+            <property name="text">
+             <string>锦芳绣残片</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>565</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_34" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_32">
+          <item>
+           <widget class="QCheckBox" name="checkBox_24">
+            <property name="text">
+             <string>商票上缴</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_25">
+            <property name="text">
+             <string>生活技能-艾草</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_26">
+            <property name="text">
+             <string>生活技能-莲子</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_25">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>565</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_28" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_31">
+          <item>
+           <widget class="QCheckBox" name="checkBox_23">
+            <property name="text">
+             <string>神厨食材购买</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_28">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_19">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
             </property>

@@ -62,12 +62,13 @@
 #include <QApplication>
 #include <QThread>
 #include <QLocalSocket>
+#include <QMenu>
 #include <regex>
 
 
 #include "resources/images.h"
 
-
+inline bool SHOUCT = false;
 inline double FACTOR = 1.00;
 inline int DELAY  = 1150;
 inline int DELAY_MAGNIFICATION  = 5;
