@@ -3,7 +3,6 @@
 //
 #include "models/Tasks/TheSwordThreeTask.h"
 
-#include <utils/LoadJsonFile.h>
 
 int TheSwordThreeTask::implementation() {
     std::vector<Match> matchs;

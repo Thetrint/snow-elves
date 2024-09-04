@@ -14,7 +14,7 @@ int UrgentDeliveryTask::implementation() {
             return -1; //任务调度中止任务
         }
 
-        if (timer.read() >= std::chrono::seconds(720)) {
+        if (timer.read() >= std::chrono::seconds(720 * 5)) {
             return 0;
         }
 
@@ -67,7 +67,7 @@ int UrgentDeliveryTask::implementation() {
                 // 送达
                 if(!ClickImageMatch(MatchParams{.similar = 0.55, .matchCount = 1, .scope = {786, 283, 1033, 534}}, nullptr, "按钮江湖急送菜品送达").empty()) {
                     Defer(7, 1000);
-                    Close(2);
+                    ClickImageMatch(MatchParams{.similar = 0.65}, nullptr, "按钮江湖急送确认");
                     target = 3;
                     continue;
                 }

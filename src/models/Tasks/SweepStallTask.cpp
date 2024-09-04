@@ -84,6 +84,8 @@ int SweepStallTask::implementation() {
                     productSet.emplace(8);  // 插入 1 到 8
                 }
 
+                std::priority_queue<Product, std::vector<Product>, Compare> empty;
+                std::swap(productQueue, empty);  // 快速清空队列
 
                 record_event[0] = true;
                 target = 4;
@@ -96,61 +98,25 @@ int SweepStallTask::implementation() {
                 }
                 record_event[1] = false;
                 for(auto [location, score] :CoortImageMatch({.similar = 0.95, .applyGaussianBlur = false, .applyEdgeDetection = false}, nullptr, "标志交易商品")) {
-                    if(config.value("商品1").toBool()) {
-                        if (547 - 8 <= location.x && location.x <= 547 + 8 && 218 - 8 <= location.y && location.y <= 218 +8) {
-                            productSet.erase(1);
-                            continue;
-                        }
+
+                    if (547 - 8 <= location.x && location.x <= 547 + 8 && 218 - 8 <= location.y && location.y <= 218 +8) {
+                        productSet.erase(1);
+                    }else if (960 - 8 <= location.x && location.x <= 960 + 8 && 218 - 8 <= location.y && location.y <= 218 +8) {
+                        productSet.erase(2);
+                    }else if (547 - 8 <= location.x && location.x <= 547 + 8 && 326 - 8 <= location.y && location.y <= 326 +8) {
+                        productSet.erase(3);
+                    }else if (960 - 8 <= location.x && location.x <= 960 + 8 && 326 - 8 <= location.y && location.y <= 326 +8) {
+                        productSet.erase(4);
+                    }else if (547 - 8 <= location.x && location.x <= 547 + 8 && 434 - 8 <= location.y && location.y <= 434 +8) {
+                        productSet.erase(5);
+                    }else if (960 - 8 <= location.x && location.x <= 960 + 8 && 434 - 8 <= location.y && location.y <= 434 +8) {
+                        productSet.erase(6);
+                    }else if (547 - 8 <= location.x && location.x <= 547 + 8 && 542 - 8 <= location.y && location.y <= 542 +8) {
+                        productSet.erase(7);
+                    }else if (960 - 8 <= location.x && location.x <= 960 + 8 && 542 - 8 <= location.y && location.y <= 542 +8) {
+                        productSet.erase(8);
                     }
 
-                    if(config.value("商品2").toBool()) {
-                        if (960 - 8 <= location.x && location.x <= 960 + 8 && 218 - 8 <= location.y && location.y <= 218 +8) {
-                            productSet.erase(2);
-                            continue;
-                        }
-                    }
-
-                    if(config.value("商品3").toBool()) {
-                        if (547 - 8 <= location.x && location.x <= 547 + 8 && 326 - 8 <= location.y && location.y <= 326 +8) {
-                            productSet.erase(3);
-                            continue;
-                        }
-                    }
-
-                    if(config.value("商品4").toBool()) {
-                        if (960 - 8 <= location.x && location.x <= 960 + 8 && 326 - 8 <= location.y && location.y <= 326 +8) {
-                            productSet.erase(4);
-                            continue;
-                        }
-                    }
-
-                    if(config.value("商品5").toBool()) {
-                        if (547 - 8 <= location.x && location.x <= 547 + 8 && 434 - 8 <= location.y && location.y <= 434 +8) {
-                            productSet.erase(5);
-                            continue;
-                        }
-                    }
-
-                    if(config.value("商品6").toBool()) {
-                        if (960 - 8 <= location.x && location.x <= 960 + 8 && 434 - 8 <= location.y && location.y <= 434 +8) {
-                            productSet.erase(6);
-                            continue;
-                        }
-                    }
-
-                    if(config.value("商品7").toBool()) {
-                        if (547 - 8 <= location.x && location.x <= 547 + 8 && 542 - 8 <= location.y && location.y <= 542 +8) {
-                            productSet.erase(7);
-                            continue;
-                        }
-                    }
-
-                    if(config.value("商品8").toBool()) {
-                        if (960 - 8 <= location.x && location.x <= 960 + 8 && 542 - 8 <= location.y && location.y <= 542 +8) {
-                            productSet.erase(8);
-                            continue;
-                        }
-                    }
                 }
 
                 // 计算需要购买商品
@@ -165,6 +131,37 @@ int SweepStallTask::implementation() {
 
                 }else {
                     record_event[0] = true;
+                    if(config.value("商品1").toBool()) {
+                        productSet.emplace(1);  // 插入 1 到 8
+                    }
+
+                    if(config.value("商品2").toBool()) {
+                        productSet.emplace(2);  // 插入 1 到 8
+                    }
+                    if(config.value("商品3").toBool()) {
+                        productSet.emplace(3);  // 插入 1 到 8
+                    }
+
+                    if(config.value("商品4").toBool()) {
+                        productSet.emplace(4);  // 插入 1 到 8
+                    }
+
+                    if(config.value("商品5").toBool()) {
+                        productSet.emplace(5);  // 插入 1 到 8
+                    }
+
+                    if(config.value("商品6").toBool()) {
+                        productSet.emplace(6);  // 插入 1 到 8
+                    }
+
+                    if(config.value("商品7").toBool()) {
+                        productSet.emplace(7);  // 插入 1 到 8
+                    }
+
+                    if(config.value("商品8").toBool()) {
+                        productSet.emplace(8);  // 插入 1 到 8
+                    }
+
                     continue;
                 }
 

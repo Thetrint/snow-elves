@@ -3,8 +3,8 @@
 //
 #include <iostream>
 #include <QFileDialog>
-#include <QMessageBox>
-#include <QTextEdit>
+#include <utils/Signals.h>
+
 #include "views/ScriptWindow.h"
 #include "QtUtils/CustomLineEdit.h"
 #include "main.h"
@@ -26,6 +26,10 @@ ScriptWindow::ScriptWindow(QWidget *parent):
 
     ui.spinBox_6->setMinimum(5);
     ui.spinBox_6->setMaximum(30);
+
+    // 论剑3v3
+    ui.spinBox_7->setMinimum(1);
+    ui.spinBox_7->setMaximum(9999);
 
     // 江湖行商次数
     ui.spinBox_8->setMinimum(1);
@@ -50,9 +54,6 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.spinBox_13->setMaximum(10);
 
     ui.scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
-
 
 
     QStringList items;
@@ -86,6 +87,9 @@ ScriptWindow::ScriptWindow(QWidget *parent):
     ui.listWidget_2->setDefaultDropAction(Qt::MoveAction);
     ui.listWidget_2->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui.listWidget_2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    ui.textEdit_3->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui.textEdit_3->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(ui.comboBox_11, &QComboBox::currentIndexChanged, [&]() {
         std::cout << FACTOR << std::endl;
@@ -126,6 +130,19 @@ ScriptWindow::ScriptWindow(QWidget *parent):
             ui.stackedWidget->setCurrentIndex(it->second);
 
         }
+    });
+
+    // 运行视图
+    connect(Signals::instance(), &Signals::View, this, [&](const std::string& message) {
+        // 获取当前时间
+        try {
+
+            ui.textEdit_3->append(QString::fromUtf8(message.c_str()));
+        } catch (const std::exception& e) {
+            spdlog::error("用户视图错误: {}", e.what());
+        }
+
+
     });
 
     //添加信号

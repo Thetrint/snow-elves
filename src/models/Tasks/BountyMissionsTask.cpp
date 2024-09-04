@@ -3,8 +3,6 @@
 //
 #include "models/Tasks/BountyMissionsTask.h"
 
-#include <utils/LoadJsonFile.h>
-
 
 int BountyMissionsTask::implementation() {
     int target = 1;
@@ -47,7 +45,7 @@ int BountyMissionsTask::implementation() {
                     ClickImageMatch(MatchParams{.similar = 0.5, .scope = {110, 510, 438, 632}}, nullptr, "按钮队伍自动匹配");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍确定");
                     ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮确定");
-                    if(LoadJsonFile::instance().jsonFiles[id].value("副本人数").toInt() != 1) {
+                    if(config.value("副本人数").toInt() != 1) {
                         ClickImageMatch(MatchParams{.similar = 0.5}, nullptr, "按钮队伍自动匹配1");
                     }
                     break;

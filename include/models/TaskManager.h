@@ -17,7 +17,7 @@ class TaskManager {
 public:
     explicit TaskManager(int id, HWND hwnd, const QJsonDocument& configJson);
 
-    ~TaskManager();
+    ~TaskManager() = default;
 
     void start();
 
@@ -30,7 +30,7 @@ public:
     void setState(const std::string &task) const;
 
 private:
-    QJsonObject  config;
+    QJsonObject config;
     int id;
     HWND hwnd;
     bool disrupted;

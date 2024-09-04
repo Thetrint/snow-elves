@@ -1,6 +1,5 @@
 #include "main.h"
 #include "views/RunWindow.h"
-#include <QProcess>
 #include <utils/LocalServer.h>
 #include <views/MainWindow.h>
 
@@ -14,75 +13,66 @@ RunWindow::RunWindow(QWidget *parent):
 {
     ui.setupUi(this);  // 初始化界面布局和元素
 
-    // 通知任务开始
-    connect(Signals::instance(), &Signals::TaskStart, this, [&](const int id) {
-        managerDictionary[id].instance->resume();
+    // 游戏窗口启动完成
+    connect(&LocalServer::instance(), &LocalServer::newClientConnected, this, [&](QLocalSocket *clientSocket) {
+        std::lock_guard<std::mutex> lock(mtxQueue);
+        // 取出正在等待任务
+        auto [id, hwnd] = idHWNDQueue.front();
+        // 移除已处理的任务
+        idHWNDQueue.pop();
+        // 建立连接映射
+        LocalServer::instance().setConnect(id, clientSocket);
+        // 回传 id_hwnd_factor
+        LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("id_hwnd_factor#{}:{}:{}", id, reinterpret_cast<uintptr_t>(hwnd), FACTOR)));
+
+    });
+
+    // 启动任务
+    connect(&LocalServer::instance(), &LocalServer::Start, this, [&](const int& id, const HWND& hwnd) {
+        const auto instance = std::make_shared<TaskManager>(id, hwnd, mainWindow->createJsonDocument());
+        mapManagerData[id].instance = instance;
+        mapManagerData[id].thread = std::jthread(&TaskManager::start, instance);
+        mapManagerData[id].hwnd = hwnd;
+        std::cout << "任务启动" << std::endl;
     });
 
     // 使用 Lambda 表达式作为槽函数
     // 任务开始
     connect(Signals::instance(), &Signals::Start, this, [&]() {
+        SHOUCT = true;
         emit ui.pushButton_7->click();
+        SHOUCT = false;
     });
 
     connect(ui.pushButton_7, &QPushButton::clicked, this, [&]() {
         HWND hwnd;
         std::wstring wintitle;
         if (int id; detectWin(id, hwnd, wintitle)) {
-            Signals::instance()->emitWriteJson(id);
-            std::wcout << wintitle << std::endl;
-            if (wintitle == L"一梦江湖") {
-                std::stringstream ss;
-                ss << std::hex << std::setw(8) << std::setfill('0') << reinterpret_cast<uintptr_t>(hwnd);
-                std::string hwndStr = ss.str();
 
-                QString filePath = "./id.txt";
+            // 游戏窗口路径
+            const std::string exePath = "GameWindow.exe";
 
-                // 打开文件
-                std::ofstream file(filePath.toStdString(), std::ios::out);
-                if (!file.is_open()) {
-                    std::cerr << "无法打开文件 " << filePath.toStdString() << std::endl;
-                    return;
-                }
+            // 使用 ShellExecute 启动程序并隐藏窗口，且不等待
+            SHELLEXECUTEINFOA shExecInfo = { 0 };
+            shExecInfo.cbSize = sizeof(shExecInfo);
+            shExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+            shExecInfo.lpVerb = "open";
+            shExecInfo.lpFile = exePath.c_str();
+            shExecInfo.lpParameters = "";
+            shExecInfo.nShow = SW_HIDE;
 
-                file << id << std::endl;
-
-                file << hwndStr << std::endl; // 添加换行符
-
-                // 写入 FACTOR
-                file << FACTOR << std::endl;
-
-                // 关闭文件
-                file.close();
-
-                std::string exePath = "GameWindow.exe";
-
-
-                // 使用 ShellExecute 启动程序并隐藏窗口，且不等待
-                SHELLEXECUTEINFOA shExecInfo = { 0 };
-                shExecInfo.cbSize = sizeof(shExecInfo);
-                shExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-                shExecInfo.lpVerb = "open";
-                shExecInfo.lpFile = exePath.c_str();
-                shExecInfo.lpParameters = "";
-                shExecInfo.nShow = SW_HIDE;
-
-                if (ShellExecuteExA(&shExecInfo)) {
-                    // 启动成功，不等待直接返回
-                    std::cout << "Process started." << std::endl;
-                } else {
-                    std::cerr << "Failed to start process. Error: " << GetLastError() << std::endl;
-                }
-
+            if (ShellExecuteExA(&shExecInfo)) {
+                // 启动成功，不等待直接返回
+                std::cout << "Process started." << std::endl;
+            } else {
+                std::cerr << "Failed to start process. Error: " << GetLastError() << std::endl;
             }
 
+            hwndSet.insert(hwnd);
 
-            // 如果不存在，创建一个新的 MyClass 实例并存储在共享指针中
-            const auto instance = std::make_shared<TaskManager>(id, hwnd, mainWindow->createJsonDocument());
-            winHwnd.push_back(hwnd);
-            managerDictionary[id] = {instance, std::jthread(&TaskManager::start, instance), hwnd, true};
-
-
+            // 进入队列等待任务开始
+            idHWNDQueue.emplace(id, hwnd);
+            mapManagerData[id] = ManagerData();
         }
 
     });
@@ -90,6 +80,7 @@ RunWindow::RunWindow(QWidget *parent):
     //任务解绑
     connect(ui.pushButton_5, &QPushButton::clicked, this, [&](){
         const int id = getrowindex();
+        // 清楚状态信息
         if(QTableWidgetItem* item = ui.tableWidget->item(id, 0)) {
             item->setData(Qt::DecorationRole, QVariant());
         }
@@ -99,21 +90,12 @@ RunWindow::RunWindow(QWidget *parent):
         }
 
 
-        if (managerDictionary.contains(id)) {
-            managerDictionary[id].instance->stop();
-            // restoreWindowAttributes(managerDictionary[id].windowHwnd, managerDictionary[id].originalAttributes);
-            winHwnd.remove(managerDictionary[id].windowHwnd);
-            // 从游戏窗口映射中删除
-            managerDictionary.erase(id);
-
-            LocalServer::getInstance().connections[id]->write("Close");
-            LocalServer::getInstance().connections[id]->flush();
-
-            LocalServer::getInstance().connections.erase(id);
-
+        if (mapManagerData.contains(id)) {
+            mapManagerData[id].instance->stop();
+            mapManagerData[id].isActive = false;
+            hwndSet.erase(mapManagerData[id].hwnd);
+            LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#Close")));
         }
-
-
     });
 
 
@@ -123,8 +105,7 @@ RunWindow::RunWindow(QWidget *parent):
     });
 
     connect(ui.pushButton_6, &QPushButton::clicked, this, [&](){
-        std::vector<int> idsToClear;
-        for (const auto&[id, data] : managerDictionary) {
+        for (auto&[id, data] : mapManagerData) {
 
             if(QTableWidgetItem* item = ui.tableWidget->item(id, 0)) {
                 item->setData(Qt::DecorationRole, QVariant());
@@ -135,21 +116,10 @@ RunWindow::RunWindow(QWidget *parent):
             }
 
             data.instance->stop();
-            // restoreWindowAttributes(managerDictionary[id].windowHwnd, managerDictionary[id].originalAttributes);
-            winHwnd.remove(data.windowHwnd);
-
-            LocalServer::getInstance().connections[id]->write("Close");
-            LocalServer::getInstance().connections[id]->flush();
-
-            idsToClear.push_back(id);
+            data.isActive = false;
+            hwndSet.erase(mapManagerData[id].hwnd);
+            LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#Close")));
         }
-
-        LocalServer::getInstance().connections.clear();
-        // 清空 managerDictionary
-        for (int id : idsToClear) {
-            managerDictionary.erase(id);
-        }
-
 
     });
 
@@ -157,14 +127,14 @@ RunWindow::RunWindow(QWidget *parent):
     //任务暂停
     connect(ui.pushButton, &QPushButton::clicked, this, [&](){
 
-        if (const int id = getrowindex(); managerDictionary.contains(id)) {
-            managerDictionary[id].instance->pause();
+        if (const int id = getrowindex(); mapManagerData.contains(id)) {
+            mapManagerData[id].instance->pause();
         }
     });
 
     //任务全部暂停
     connect(ui.pushButton_2, &QPushButton::clicked, this, [&](){
-        for (const auto&[id, data] : managerDictionary) {
+        for (const auto&[id, data] : mapManagerData) {
             data.instance->pause();
         }
 
@@ -172,75 +142,58 @@ RunWindow::RunWindow(QWidget *parent):
 
     //任务恢复
     connect(ui.pushButton_3, &QPushButton::clicked, this, [&](){
-        if (const int id = getrowindex(); managerDictionary.contains(id)) {
-            managerDictionary[id].instance->resume();
+        if (const int id = getrowindex(); mapManagerData.contains(id)) {
+            mapManagerData[id].instance->resume();
         }
     });
 
     //任务全部恢复
     connect(ui.pushButton_4, &QPushButton::clicked, this, [&](){
-        for (const auto&[id, data] : managerDictionary) {
+        for (const auto&[id, data] : mapManagerData) {
             data.instance->resume();
         }
-
     });
 
     //任务隐藏
     connect(ui.pushButton_9, &QPushButton::clicked, this, [&](){
-        if (const int id = getrowindex(); LocalServer::getInstance().connections.contains(id)) {
-            LocalServer::getInstance().connections[id]->write("Hide");
-            LocalServer::getInstance().connections[id]->flush();
-
-        }
-
+        const int id = getrowindex();
+        LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#Hide")));
     });
 
     //任务全部隐藏
     connect(ui.pushButton_10, &QPushButton::clicked, this, [&](){
-        for (const auto& [id, connection] : LocalServer::getInstance().connections) {
-            connection->write("Hide");
-            connection->flush();
+        for (const auto& [id, data] : mapManagerData) {
+            LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#Hide")));
         }
 
     });
 
     //任务虚化
     connect(ui.pushButton_13, &QPushButton::clicked, this, [&](){
-        if (const int id = getrowindex(); LocalServer::getInstance().connections.contains(id)) {
-            LocalServer::getInstance().connections[id]->write("De_Focusing");
-            LocalServer::getInstance().connections[id]->flush();
-
-        }
-
+        const int id = getrowindex();
+        LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#De_Focusing")));
     });
 
     //任务全部虚化
     connect(ui.pushButton_14, &QPushButton::clicked, this, [&](){
-        for (const auto& [id, connection] : LocalServer::getInstance().connections) {
-            connection->write("De_Focusing");
-            connection->flush();
+        for (const auto& [id, data] : mapManagerData) {
+            LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#De_Focusing")));
         }
-
 
     });
 
     //任务显示
     connect(ui.pushButton_11, &QPushButton::clicked, this, [&](){
-        if (const int id = getrowindex(); LocalServer::getInstance().connections.contains(id)) {
-            LocalServer::getInstance().connections[id]->write("Show");
-            LocalServer::getInstance().connections[id]->flush();
+        const int id = getrowindex();
+        LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#Show")));
 
-        }
     });
 
-    //任务全部虚化
+    //任务全部显示
     connect(ui.pushButton_12, &QPushButton::clicked, this, [&](){
-        for (const auto& [id, connection] : LocalServer::getInstance().connections) {
-            connection->write("Show");
-            connection->flush();
+        for (const auto& [id, data] : mapManagerData) {
+            LocalServer::instance().sendMessage(id, QString::fromStdString(std::format("command#Show")));
         }
-
-
     });
 
     // 任务状态设置
@@ -277,7 +230,7 @@ RunWindow::RunWindow(QWidget *parent):
     });
 
     //设置角色信息
-    connect(Signals::instance(), &Signals::setPersion, this, [&](const int id, HWND hwnd) {
+    connect(Signals::instance(), &Signals::setPersion, this, [&](const int id, const HWND& hwnd) {
         try {
             spdlog::info("设置角色信息");
 
@@ -320,8 +273,9 @@ RunWindow::RunWindow(QWidget *parent):
 
     //截图
     connect(ui.pushButton_8, &QPushButton::clicked, this, [&](){
-        std::wstring wintitle;
-        HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle(wintitle));
+        // std::wstring wintitle;
+        // HBITMAP hBitmap = WindowManager::CaptureAnImage(WindowManager::getWindowHandle(wintitle));
+        HBITMAP hBitmap = WindowManager::CaptureAnImage(mapManagerData[getrowindex()].hwnd);
         auto name = std::chrono::system_clock::now().time_since_epoch().count();
         WindowManager::SaveBitmapToFile(hBitmap, std::format(L"Testing/{}.bmp", name).c_str());
         const cv::Mat mat = ImageProcessor::HBITMAPToMat(hBitmap);
@@ -385,8 +339,7 @@ bool RunWindow::detectWin(int &id, HWND &hwnd, std::wstring& wintitle) {
 
     id = getrowindex();
     hwnd = WindowManager::getWindowHandle(wintitle);
-    // std::cout << WindowManager::GetOwnedWindows(hwnd) << std::endl;
-    // return false;
+
     if (hwnd == nullptr) {
         auto *msgBox = new QMessageBox();
         msgBox->setWindowTitle("提示");
@@ -400,13 +353,13 @@ bool RunWindow::detectWin(int &id, HWND &hwnd, std::wstring& wintitle) {
         return false;
     }
 
-    if (const auto it = std::ranges::find(winHwnd, hwnd); it == winHwnd.end()) {
-        if (!managerDictionary.contains(id)) {
+    if (!hwndSet.contains(hwnd)) {
+        if (!mapManagerData.contains(id) || (mapManagerData.contains(id) && !mapManagerData[id].isActive)) {
             return true;
         }
 
         for (int i = 0; i < 10; i++) {
-            if (!managerDictionary.contains(i)) {
+            if (!mapManagerData.contains(i) || (mapManagerData.contains(id) && !mapManagerData[id].isActive)) {
                 id = i;
                 return true;
             }
