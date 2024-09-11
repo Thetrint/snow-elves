@@ -188,6 +188,8 @@ protected:
 
     void ImageMatch(const std::string &templ_name, std::vector<Match> &matches, MatchParams &match) const;
 
+    void MaskImageMatch(const std::string& templName, const MatchParams& match, std::vector<Match>& matches) const;
+
     void mouse_down_up(const MatchParams &match, const cv::Point &location) const;
 
     void mouse_wheel(const MatchParams &match, const cv::Point &location, int delta) const;
@@ -222,6 +224,9 @@ protected:
 
     template <typename... Args>
     std::vector<Match> CoortImageMatch(MatchParams match, std::unique_ptr<CAUSE> cause, Args... templ_names);
+
+    template <typename... Args>
+    std::vector<Match> ClickMaskImageMatch(MatchParams match, Args... templ_names);
 private:
     std::jthread fight;
     std::vector<Skill> skills;
@@ -292,6 +297,69 @@ std::vector<Match> BasicTask::ClickImageMatch(MatchParams match, std::unique_ptr
     }
     return matches;
 
+
+}
+
+
+template <typename... Args>
+std::vector<Match> BasicTask::ClickMaskImageMatch(MatchParams match, Args... templ_names) {
+    std::vector<Match> matches;
+
+
+    //定义循环控制匹配失败最大匹配次数
+    for(int i = 1; i <= match.matchCount && unbind_event; i++) {
+
+        (MaskImageMatch(templ_names, match, matches), ...);
+        ImageProcessor::nonMaxSuppression(matches, 22);
+        for (const auto&[location, score] : matches) {
+            std::cout << "Location: (" << location.x << ", " << location.y << "), Score: " << score << std::endl;
+            emit Signals::instance()->View(std::format("Locatiion: {}, {}, Score: {}", location.x, location.y, score));
+        }
+
+        // 初始化随机数种子
+        std::uniform_int_distribution<std::vector<Match>::size_type> dis(0, matches.size() - 1);
+
+        if (!matches.empty()) {
+            std::random_device rd;
+            //不为空直接返回
+            switch (match.click) {
+                case NoTap:
+                    break;
+                case RANDOM:
+                    mouse_down_up(match, matches[dis(rd)].location);
+                    break;
+                case FIRST:
+                    // 取出第一个元素
+                    mouse_down_up(match,  matches.front().location);
+                    break;
+                case LAST:
+                    mouse_down_up(match, matches.back().location);
+                    break;
+                case FORWARD:
+                    for (const auto& [location, score] : matches) {
+                        mouse_down_up(match, location);
+                    }
+                    break;
+                case BACKWARD:
+                    for (auto &[location, score] : std::ranges::reverse_view(matches)) {
+                        mouse_down_up(match, location);
+                    }
+                    break;
+                default:
+                    break;;
+            }
+
+            return matches;
+        }
+
+
+        if (match.matchDelay) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+        }
+
+    }
+
+    return matches;
 
 }
 

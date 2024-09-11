@@ -166,6 +166,12 @@ add_executable(SnowElvesScript WIN32
         include/QtUtils/ShortcutKeyLineEdit.h
         src/views/SettingWindow.cpp
         include/views/SettingWindow.h
+        src/models/TempMatcher.cpp
+        include/models/TempMatcher.h
+        src/models/ReadTemp.cpp
+        include/models/ReadTemp.h
+        src/models/ScreenShotImage.cpp
+        include/models/ScreenShotImage.h
 
 
 )

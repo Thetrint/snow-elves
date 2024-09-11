@@ -3,6 +3,8 @@
 //
 #include "main.h"
 #include "models//Tasks/BasicTask.h"
+
+#include <models/TempMatcher.h>
 #include <utils/signals.h>
 #include "models/WindowManager.h"
 
@@ -749,6 +751,49 @@ void BasicTask::ImageMatch(const std::string& templ_name, std::vector<Match>& ma
 
     }
 }
+
+void BasicTask::MaskImageMatch(const std::string& templName, const MatchParams& match, std::vector<Match>& matches) const {
+    emit Signals::instance()->View(templName);
+    TempMatcher tem;
+
+    // 读取模板并截屏
+    tem.readTemplate(templName);
+    tem.screenShotImage(hwnd);
+
+    // 如果需要灰度转换
+    if (match.convertToGray) {
+        tem.convertToGrayScale();
+    }
+
+    // 如果需要高斯模糊
+    if (match.applyGaussianBlur) {
+        tem.applyGaussianBlur(match.gauss.width, match.gauss.height, match.gauss.sigmaX);
+    }
+
+    // 如果需要边缘检测
+    if (match.applyEdgeDetection) {
+        tem.detectEdges(match.edgeThreshold.threshold1, match.edgeThreshold.threshold2);
+    }
+
+    // 生成掩码（如果四角颜色相同）
+    tem.createMaskIfCornersMatch();
+
+    // 进行模板匹配
+    tem.matchTemplate(match.similar);
+
+    // 显示匹配结果
+    if (match.Show) {
+        tem.showMatches();
+    }
+
+    // 将匹配结果存储到传入的 matches 中
+    for (auto [location, score] : tem.getMatchLocations()) {
+        matches.push_back({location, score});
+    }
+
+
+}
+
 
 void BasicTask::mouse_down_up(const MatchParams &match, const cv::Point& location) const {
     if (unbind_event) {

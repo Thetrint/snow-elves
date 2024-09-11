@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
         QApplication app(argc, argv);
         QApplication::setStyle(QStyleFactory::create("windows11"));
 
+        Logger::init(); // 初始化日志
+
         // 创建SingleInstanceGuard，确保程序单例运行
         if (const SingleInstanceGuard guard("SnowElves"); guard.isAnotherInstanceRunning()) {
             // 如果另一个实例正在运行，弹出警告并退出
@@ -73,7 +75,6 @@ int main(int argc, char *argv[])
         }
 
 
-        Logger::init(); // 初始化日志
 
         LocalServer::instance().startServer("SnowElvesLocalServer");
 

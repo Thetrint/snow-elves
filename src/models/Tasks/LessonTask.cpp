@@ -46,7 +46,7 @@ int LessonTask::implementation() {
                 OpenKnapsack();
                 ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品综合入口");
                 ClickImageMatch({.similar = 0.65}, nullptr, "按钮物品活动");
-                ClickImageMatch({.similar = 0.65}, nullptr, "按钮活动江湖");
+                ClickImageMatch({.similar = 0.55}, nullptr, "按钮活动江湖");
 
                 if (ClickImageMatch({.similar = 0.5, .y = 45}, nullptr, "按钮活动吟风", "按钮活动含灵", "按钮活动寻道", "按钮活动归义", "按钮活动悟禅", "按钮活动止杀", "按钮活动漱尘", "按钮活动濯剑", "按钮活动观梦", "按钮活动锻心", "按钮活动问卜").empty()) {
                     target = 0;

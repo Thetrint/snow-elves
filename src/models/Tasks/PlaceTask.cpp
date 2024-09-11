@@ -44,7 +44,7 @@ int PlaceTask::implementation() {
             }
             case 3: {
                 Defer(2);
-
+                ClickMaskImageMatch({.similar = 0.6}, "按钮大世界对话1");
                 target = 0;
                 break;
             }
